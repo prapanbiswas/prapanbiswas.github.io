@@ -3,43 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prapan Biswas - Personal Website</title>
+    <title>Prapan Biswas - Personal Portfolio</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <div id="skeleton-loader">
-        <div class="skeleton-avatar"></div>
-        <div class="skeleton-text"></div>
-        <div class="skeleton-text"></div>
-        <div class="skeleton-text"></div>
+    <div class="loader-wrapper" id="loader">
+        <svg
+            aria-label="loader being flipped clockwise and circled by three white curves fading in and out"
+            role="img"
+            height="56px"
+            width="56px"
+            viewBox="0 0 56 56"
+            class="loader-animation"
+        >
+            <clipPath id="sand-mound-top">
+                <path
+                    d="M 14.613 13.087 C 15.814 12.059 19.3 8.039 20.3 6.539 C 21.5 4.789 21.5 2.039 21.5 2.039 L 3 2.039 C 3 2.039 3 4.789 4.2 6.539 C 5.2 8.039 8.686 12.059 9.887 13.087 C 11 14.039 12.25 14.039 12.25 14.039 C 12.25 14.039 13.5 14.039 14.613 13.087 Z"
+                    class="loader__sand-mound-top"
+                ></path>
+            </clipPath>
+            <clipPath id="sand-mound-bottom">
+                <path
+                    d="M 14.613 20.452 C 15.814 21.48 19.3 25.5 20.3 27 C 21.5 28.75 21.5 31.5 21.5 31.5 L 3 31.5 C 3 31.5 3 28.75 4.2 27 C 5.2 25.5 8.686 21.48 9.887 20.452 C 11 19.5 12.25 19.5 12.25 19.5 C 12.25 19.5 13.5 19.5 14.613 20.452 Z"
+                    class="loader__sand-mound-bottom"
+                ></path>
+            </clipPath>
+            <g transform="translate(2,2)">
+                <g
+                    transform="rotate(-90,26,26)"
+                    stroke-linecap="round"
+                    stroke-dashoffset="153.94"
+                    stroke-dasharray="153.94 153.94"
+                    stroke="hsl(0,0%,100%)"
+                    fill="none"
+                >
+                    <circle
+                        transform="rotate(0,26,26)"
+                        r="24.5"
+                        cy="26"
+                        cx="26"
+                        stroke-width="2.5"
+                        class="loader__motion-thick"
+                    ></circle>
+                    <circle
+                        transform="rotate(90,26,26)"
+                        r="24.5"
+                        cy="26"
+                        cx="26"
+                        stroke-width="1.75"
+                        class="loader__motion-medium"
+                    ></circle>
+                    <circle
+                        transform="rotate(180,26,26)"
+                        r="24.5"
+                        cy="26"
+                        cx="26"
+                        stroke-width="1"
+                        class="loader__motion-thin"
+                    ></circle>
+                </g>
+                <g transform="translate(13.75,9.25)" class="loader__model">
+                    <path
+                        d="M 1.5 2 L 23 2 C 23 2 22.5 8.5 19 12 C 16 15.5 13.5 13.5 13.5 16.75 C 13.5 20 16 18 19 21.5 C 22.5 25 23 31.5 23 31.5 L 1.5 31.5 C 1.5 31.5 2 25 5.5 21.5 C 8.5 18 11 20 11 16.75 C 11 13.5 8.5 15.5 5.5 12 C 2 8.5 1.5 2 1.5 2 Z"
+                        fill="hsl(var(--hue),90%,85%)"
+                    ></path>
+
+                    <g stroke-linecap="round" stroke="hsl(35,90%,90%)">
+                        <line
+                            y2="20.75"
+                            x2="12"
+                            y1="15.75"
+                            x1="12"
+                            stroke-dasharray="0.25 33.75"
+                            stroke-width="1"
+                            class="loader__sand-grain-left"
+                        ></line>
+                        <line
+                            y2="21.75"
+                            x2="12.5"
+                            y1="16.75"
+                            x1="12.5"
+                            stroke-dasharray="0.25 33.75"
+                            stroke-width="1"
+                            class="loader__sand-grain-right"
+                        ></line>
+                        <line
+                            y2="31.5"
+                            x2="12.25"
+                            y1="18"
+                            x1="12.25"
+                            stroke-dasharray="0.5 107.5"
+                            stroke-width="1"
+                            class="loader__sand-drop"
+                        ></line>
+                        <line
+                            y2="31.5"
+                            x2="12.25"
+                            y1="14.75"
+                            x1="12.25"
+                            stroke-dasharray="54 54"
+                            stroke-width="1.5"
+                            class="loader__sand-fill"
+                        ></line>
+                        <line
+                            y2="31.5"
+                            x2="12"
+                            y1="16"
+                            x1="12"
+                            stroke-dasharray="1 107"
+                            stroke-width="1"
+                            stroke="hsl(35,90%,83%)"
+                            class="loader__sand-line-left"
+                        ></line>
+                        <line
+                            y2="31.5"
+                            x2="12.5"
+                            y1="16"
+                            x1="12.5"
+                            stroke-dasharray="12 96"
+                            stroke-width="1"
+                            stroke="hsl(35,90%,83%)"
+                            class="loader__sand-line-right"
+                        ></line>
+
+                        <g stroke-width="0" fill="hsl(35,90%,90%)">
+                            <path
+                                d="M 12.25 15 L 15.392 13.486 C 21.737 11.168 22.5 2 22.5 2 L 2 2.013 C 2 2.013 2.753 11.046 9.009 13.438 L 12.25 15 Z"
+                                clip-path="url(#sand-mound-top)"
+                            ></path>
+                            <path
+                                d="M 12.25 18.5 L 15.392 20.014 C 21.737 22.332 22.5 31.5 22.5 31.5 L 2 31.487 C 2 31.487 2.753 22.454 9.009 20.062 Z"
+                                clip-path="url(#sand-mound-bottom)"
+                            ></path>
+                        </g>
+                    </g>
+
+                    <g stroke-width="2" stroke-linecap="round" opacity="0.7" fill="none">
+                        <path
+                            d="M 19.437 3.421 C 19.437 3.421 19.671 6.454 17.914 8.846 C 16.157 11.238 14.5 11.5 14.5 11.5"
+                            stroke="hsl(0,0%,100%)"
+                            class="loader__glare-top"
+                        ></path>
+                        <path
+                            transform="rotate(180,12.25,16.75)"
+                            d="M 19.437 3.421 C 19.437 3.421 19.671 6.454 17.914 8.846 C 16.157 11.238 14.5 11.5 14.5 11.5"
+                            stroke="hsla(0,0%,100%,0)"
+                            class="loader__glare-bottom"
+                        ></path>
+                    </g>
+
+                    <rect height="2" width="24.5" fill="hsl(var(--hue),90%,50%)"></rect>
+                    <rect
+                        height="1"
+                        width="19.5"
+                        y="0.5"
+                        x="2.5"
+                        ry="0.5"
+                        rx="0.5"
+                        fill="hsl(var(--hue),90%,57.5%)"
+                    ></rect>
+                    <rect
+                        height="2"
+                        width="24.5"
+                        y="31.5"
+                        fill="hsl(var(--hue),90%,50%)"
+                    ></rect>
+                    <rect
+                        height="1"
+                        width="19.5"
+                        y="32"
+                        x="2.5"
+                        ry="0.5"
+                        rx="0.5"
+                        fill="hsl(var(--hue),90%,57.5%)"
+                    ></rect>
+                </g>
+            </g>
+        </svg>
     </div>
-    <div id="content" class="container" style="display: none;">
-        <header>
-            <img src="images/profile.jpg" alt="Prapan Biswas" class="profile-photo">
-            <h1>Prapan Biswas</h1>
-            <p>Aspiring Civil Engineer</p>
+    
+    <div class="container">
+        <header class="hero">
+            <div class="hero-content">
+                <div class="profile-image-container">
+                    <img src="attached_assets/profile_1763407607038.jpg" alt="Prapan Biswas" class="profile-image">
+                </div>
+                <h1 class="name">Prapan Biswas</h1>
+                <p class="tagline">Civil Engineering Student & Tech Enthusiast</p>
+                <p class="location">Khulna, Bangladesh</p>
+                
+                <div class="social-links">
+                    <a href="https://www.instagram.com/prapanbiswas" target="_blank" class="social-link" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="https://github.com/prapanbiswas" target="_blank" class="social-link" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.facebook.com/prapan.biswas.arko" target="_blank" class="social-link" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </header>
+
         <main>
-            <section id="about">
-                <h2>About Me</h2>
-                <p>My name is Prapan Biswas. I am <span id="age">19</span> years old. I was born on February 15th, 2006.</p>
-                <p>I have passed high school and I am currently studying civil engineering in Khulna.</p>
-                <p>I am single.</p>
+            <section class="about-section">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <div class="info-card">
+                        <div class="info-item">
+                            <span class="label">Age</span>
+                            <span class="value" id="age">19</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Birthday</span>
+                            <span class="value">February 15, 2006</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Location</span>
+                            <span class="value">Khulna, Bangladesh</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Education</span>
+                            <span class="value">High School Graduate</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Current Study</span>
+                            <span class="value">Diploma in Civil Engineering</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Email</span>
+                            <span class="value">prapanbiswas@gmail.com</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bio-text">
+                        <p>Hello! I'm Prapan Biswas, a 19-year-old Civil Engineering student based in Khulna, Bangladesh. Currently, my primary focus is dedicated to my studies, working towards achieving my diploma in Civil Engineering. I'm passionate about understanding the principles of structural integrity and urban development.</p>
+                        
+                        <p>Beyond my engineering pursuits, I am a dedicated tech enthusiast and a self-driven learner in the digital space. While these are currently hobbies, I have actively developed skills in various areas of technology and design.</p>
+                        
+                        <p>I believe in continuous learning and applying my diverse skill set to create and innovate, whether it's sketching a building plan or coding a new application. I'm always open to new challenges and opportunities to grow.</p>
+                    </div>
+                </div>
             </section>
-            <section id="contact">
-                <h2>Contact</h2>
-                <p><i class="material-icons">email</i> <a href="mailto:prapanbiswas@gmail.com">prapanbiswas@gmail.com</a></p>
-                <p><i class="material-icons">email</i> <a href="mailto:prapanbiswas1@gmail.com">prapanbiswas1@gmail.com</a></p>
+
+            <section class="skills-section">
+                <h2 class="section-title">Skills & Expertise</h2>
+                <div class="skills-grid">
+                    <div class="skill-card" data-skill="web">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 18 22 12 16 6"></polyline>
+                                <polyline points="8 6 2 12 8 18"></polyline>
+                                <line x1="12" y1="2" x2="12" y2="22"></line>
+                            </svg>
+                        </div>
+                        <h3 class="skill-title">Web Development</h3>
+                        <p class="skill-description">Crafting user-friendly and functional websites with modern technologies and best practices.</p>
+                    </div>
+
+                    <div class="skill-card" data-skill="app">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                                <line x1="12" y1="18" x2="12.01" y2="18"/>
+                            </svg>
+                        </div>
+                        <h3 class="skill-title">App Development</h3>
+                        <p class="skill-description">Designing and building mobile applications that solve real-world problems.</p>
+                    </div>
+
+                    <div class="skill-card" data-skill="uiux">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                        </div>
+                        <h3 class="skill-title">UI/UX Design</h3>
+                        <p class="skill-description">Focusing on intuitive and engaging user experiences with attention to detail.</p>
+                    </div>
+
+                    <div class="skill-card" data-skill="graphic">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                                <circle cx="12" cy="12" r="2"/>
+                                <path d="M12 2v6"/>
+                            </svg>
+                        </div>
+                        <h3 class="skill-title">Graphic Design</h3>
+                        <p class="skill-description">Creating visual content and branding elements that communicate effectively.</p>
+                    </div>
+
+                    <div class="skill-card" data-skill="programming">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <h3 class="skill-title">Programming</h3>
+                        <p class="skill-description">Proficient in various programming languages to bring digital ideas to life.</p>
+                    </div>
+
+                    <div class="skill-card" data-skill="civil">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                        </div>
+                        <h3 class="skill-title">Civil Engineering</h3>
+                        <p class="skill-description">Understanding structural integrity and urban development principles.</p>
+                    </div>
+                </div>
             </section>
-            <section id="social">
-                <h2>Social Media</h2>
-                <a href="https://www.instagram.com/prapanbiswas" target="_blank"><i class="material-icons">camera_alt</i></a>
-                <a href="https://github.com/prapanbiswas" target="_blank"><i class="material-icons">code</i></a>
-                <a href="https://www.facebook.com/prapan.biswas.arko" target="_blank"><i class="material-icons">people</i></a>
+
+            <section class="countdown-section">
+                <h2 class="section-title">Next Birthday Countdown</h2>
+                <div class="countdown-container">
+                    <div class="countdown-display" id="countdown">
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="days">0</span>
+                            <span class="countdown-label">Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="hours">0</span>
+                            <span class="countdown-label">Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="minutes">0</span>
+                            <span class="countdown-label">Minutes</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="seconds">0</span>
+                            <span class="countdown-label">Seconds</span>
+                        </div>
+                    </div>
+                    <p class="birthday-message" id="birthdayMessage"></p>
+                </div>
             </section>
         </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Prapan Biswas. All rights reserved.</p>
+        </footer>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
