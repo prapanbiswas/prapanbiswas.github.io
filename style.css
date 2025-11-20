@@ -593,83 +593,172 @@ body::before {
 .fluid-blob {
     position: absolute;
     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-    filter: blur(60px);
-    opacity: 0.5;
+    filter: blur(70px);
+    opacity: 0.6;
     mix-blend-mode: multiply;
-    animation: fluidMorph 20s ease-in-out infinite;
+    animation: fluidMorph 35s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    will-change: transform, border-radius;
 }
 
 :root.dark-mode .fluid-blob {
     mix-blend-mode: screen;
-    opacity: 0.4;
+    opacity: 0.45;
 }
 
 .blob-1 {
-    width: 400px;
-    height: 400px;
+    width: 450px;
+    height: 450px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     top: 10%;
     left: 10%;
-    animation-duration: 25s;
-    animation-delay: 0s;
+    animation-name: fluidMorph1;
+    animation-duration: 40s;
 }
 
 .blob-2 {
-    width: 500px;
-    height: 500px;
+    width: 550px;
+    height: 550px;
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    top: 60%;
-    right: 10%;
-    animation-duration: 30s;
-    animation-delay: -5s;
+    top: 55%;
+    right: 8%;
+    animation-name: fluidMorph2;
+    animation-duration: 45s;
 }
 
 .blob-3 {
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    bottom: 20%;
-    left: 40%;
-    animation-duration: 22s;
-    animation-delay: -10s;
+    bottom: 15%;
+    left: 35%;
+    animation-name: fluidMorph3;
+    animation-duration: 38s;
 }
 
 .blob-4 {
-    width: 450px;
-    height: 450px;
+    width: 480px;
+    height: 480px;
     background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    top: 40%;
-    left: 5%;
-    animation-duration: 28s;
-    animation-delay: -15s;
+    top: 35%;
+    left: 3%;
+    animation-name: fluidMorph4;
+    animation-duration: 42s;
 }
 
 .blob-5 {
-    width: 380px;
-    height: 380px;
+    width: 420px;
+    height: 420px;
     background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    top: 20%;
-    right: 30%;
-    animation-duration: 26s;
-    animation-delay: -20s;
+    top: 18%;
+    right: 25%;
+    animation-name: fluidMorph5;
+    animation-duration: 44s;
 }
 
-@keyframes fluidMorph {
+@keyframes fluidMorph1 {
     0%, 100% {
-        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-        transform: translate(0, 0) rotate(0deg) scale(1);
+        border-radius: 42% 58% 70% 30% / 45% 50% 50% 55%;
+        transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    20% {
+        border-radius: 65% 35% 55% 45% / 35% 60% 40% 65%;
+        transform: translate(30px, -40px) rotate(36deg) scale(1.08);
+    }
+    40% {
+        border-radius: 48% 52% 35% 65% / 55% 45% 55% 45%;
+        transform: translate(-35px, 35px) rotate(72deg) scale(0.95);
+    }
+    60% {
+        border-radius: 38% 62% 58% 42% / 62% 38% 62% 38%;
+        transform: translate(42px, 28px) rotate(108deg) scale(1.05);
+    }
+    80% {
+        border-radius: 55% 45% 48% 52% / 48% 55% 45% 52%;
+        transform: translate(-28px, -32px) rotate(144deg) scale(1.02);
+    }
+}
+
+@keyframes fluidMorph2 {
+    0%, 100% {
+        border-radius: 55% 45% 60% 40% / 50% 48% 52% 50%;
+        transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    20% {
+        border-radius: 38% 62% 48% 52% / 65% 42% 58% 35%;
+        transform: translate(-38px, 32px) rotate(-40deg) scale(1.06);
+    }
+    40% {
+        border-radius: 62% 38% 42% 58% / 48% 58% 42% 52%;
+        transform: translate(35px, -38px) rotate(-80deg) scale(0.93);
+    }
+    60% {
+        border-radius: 48% 52% 58% 42% / 40% 52% 48% 60%;
+        transform: translate(-42px, -30px) rotate(-120deg) scale(1.08);
+    }
+    80% {
+        border-radius: 52% 48% 45% 55% / 58% 38% 62% 42%;
+        transform: translate(30px, 40px) rotate(-160deg) scale(0.98);
+    }
+}
+
+@keyframes fluidMorph3 {
+    0%, 100% {
+        border-radius: 48% 52% 65% 35% / 42% 55% 45% 58%;
+        transform: translate(0px, 0px) rotate(0deg) scale(1);
     }
     25% {
-        border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
-        transform: translate(50px, -80px) rotate(90deg) scale(1.1);
+        border-radius: 60% 40% 42% 58% / 55% 38% 62% 45%;
+        transform: translate(40px, 35px) rotate(50deg) scale(1.04);
     }
     50% {
-        border-radius: 50% 50% 30% 70% / 50% 70% 30% 60%;
-        transform: translate(-60px, 60px) rotate(180deg) scale(0.9);
+        border-radius: 42% 58% 55% 45% / 48% 62% 38% 52%;
+        transform: translate(-45px, -40px) rotate(100deg) scale(0.96);
     }
     75% {
-        border-radius: 30% 70% 60% 40% / 60% 40% 60% 40%;
-        transform: translate(80px, 40px) rotate(270deg) scale(1.05);
+        border-radius: 58% 42% 38% 62% / 60% 45% 55% 40%;
+        transform: translate(38px, -35px) rotate(150deg) scale(1.06);
+    }
+}
+
+@keyframes fluidMorph4 {
+    0%, 100% {
+        border-radius: 52% 48% 48% 52% / 58% 42% 58% 42%;
+        transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    25% {
+        border-radius: 42% 58% 62% 38% / 48% 58% 42% 52%;
+        transform: translate(-32px, 38px) rotate(-45deg) scale(1.07);
+    }
+    50% {
+        border-radius: 58% 42% 45% 55% / 62% 40% 60% 38%;
+        transform: translate(40px, -42px) rotate(-90deg) scale(0.94);
+    }
+    75% {
+        border-radius: 45% 55% 58% 42% / 45% 52% 48% 55%;
+        transform: translate(-38px, -28px) rotate(-135deg) scale(1.03);
+    }
+}
+
+@keyframes fluidMorph5 {
+    0%, 100% {
+        border-radius: 58% 42% 52% 48% / 48% 58% 42% 52%;
+        transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    20% {
+        border-radius: 48% 52% 42% 58% / 58% 45% 55% 42%;
+        transform: translate(35px, -30px) rotate(45deg) scale(1.05);
+    }
+    40% {
+        border-radius: 62% 38% 58% 42% / 42% 52% 48% 58%;
+        transform: translate(-40px, 42px) rotate(90deg) scale(0.97);
+    }
+    60% {
+        border-radius: 42% 58% 48% 52% / 55% 48% 52% 45%;
+        transform: translate(38px, 30px) rotate(135deg) scale(1.04);
+    }
+    80% {
+        border-radius: 55% 45% 62% 38% / 48% 62% 38% 52%;
+        transform: translate(-30px, -35px) rotate(180deg) scale(1.01);
     }
 }
 
