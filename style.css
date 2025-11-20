@@ -579,6 +579,100 @@ body::before {
     }
 }
 
+.fluid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.fluid-blob {
+    position: absolute;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    animation: fluidMorph 20s ease-in-out infinite;
+}
+
+:root.dark-mode .fluid-blob {
+    mix-blend-mode: screen;
+    opacity: 0.4;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    top: 10%;
+    left: 10%;
+    animation-duration: 25s;
+    animation-delay: 0s;
+}
+
+.blob-2 {
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    top: 60%;
+    right: 10%;
+    animation-duration: 30s;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 350px;
+    height: 350px;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    bottom: 20%;
+    left: 40%;
+    animation-duration: 22s;
+    animation-delay: -10s;
+}
+
+.blob-4 {
+    width: 450px;
+    height: 450px;
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    top: 40%;
+    left: 5%;
+    animation-duration: 28s;
+    animation-delay: -15s;
+}
+
+.blob-5 {
+    width: 380px;
+    height: 380px;
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    top: 20%;
+    right: 30%;
+    animation-duration: 26s;
+    animation-delay: -20s;
+}
+
+@keyframes fluidMorph {
+    0%, 100% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    25% {
+        border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+        transform: translate(50px, -80px) rotate(90deg) scale(1.1);
+    }
+    50% {
+        border-radius: 50% 50% 30% 70% / 50% 70% 30% 60%;
+        transform: translate(-60px, 60px) rotate(180deg) scale(0.9);
+    }
+    75% {
+        border-radius: 30% 70% 60% 40% / 60% 40% 60% 40%;
+        transform: translate(80px, 40px) rotate(270deg) scale(1.05);
+    }
+}
+
 body::after {
     content: '';
     position: fixed;
