@@ -157,10 +157,81 @@ function initDarkMode() {
     });
 }
 
+async function fetchBlogPosts() {
+    const blogContainer = document.getElementById('blog-container');
+    
+    try {
+        const response = await fetch('blog-data.json');
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch blog posts');
+        }
+        
+        const posts = await response.json();
+        
+        blogContainer.innerHTML = '';
+        
+        posts.forEach((post, index) => {
+            const blogCard = createBlogCard(post, index);
+            blogContainer.appendChild(blogCard);
+        });
+    } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        blogContainer.innerHTML = `
+            <div class="blog-loading">
+                <p>Unable to load blog posts. Please try again later.</p>
+            </div>
+        `;
+    }
+}
+
+function createBlogCard(post, index) {
+    const card = document.createElement('a');
+    card.href = `blog-posts/${post.filename}`;
+    card.className = 'blog-card';
+    card.style.animationDelay = `${index * 0.1}s`;
+    
+    const formattedDate = formatDate(post.date);
+    
+    card.innerHTML = `
+        <img src="${post.thumbnail_url}" alt="${post.title}" class="blog-card-image" loading="lazy">
+        <div class="blog-card-content">
+            <span class="blog-card-category">${post.category}</span>
+            <h4 class="blog-card-title">${post.title}</h4>
+            <div class="blog-card-date">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                ${formattedDate}
+            </div>
+            <p class="blog-card-summary">${post.summary}</p>
+            <span class="blog-card-read-more">
+                Read More
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </span>
+        </div>
+    `;
+    
+    return card;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
 function initializeWebsite() {
     updateAge();
     hideLoader();
     initDarkMode();
+    fetchBlogPosts();
     
     setTimeout(() => {
         initScrollAnimations();
