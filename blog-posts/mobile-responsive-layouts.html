@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Mobile-Responsive Layouts - Prapan Biswas</title>
+    <meta name="description" content="Master responsive web design with CSS Grid, Flexbox, and media queries">
+    <meta name="author" content="Prapan Biswas">
+    <link rel="icon" type="image/png" href="/attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-text: #1a202c; --medium-text: #4a5568; --light-text: #718096;
+            --white: #ffffff; --body-bg: #0a0118; --container-bg: rgba(255, 255, 255, 0.95);
+        }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--body-bg);
+            min-height: 100vh; padding: 20px; line-height: 1.7; color: var(--dark-text); }
+        .back-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 12px; color: white;
+            text-decoration: none; margin-bottom: 30px; transition: all 0.3s ease; font-weight: 500; }
+        .back-button:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
+        .container { max-width: 900px; margin: 0 auto; background: var(--container-bg);
+            backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+        .blog-header { background: var(--primary-gradient); color: white; padding: 60px 40px; text-align: center; }
+        .blog-category { display: inline-block; padding: 6px 16px; background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px; font-size: 0.875rem; margin-bottom: 16px; font-weight: 500; }
+        .blog-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+        .blog-meta { display: flex; align-items: center; justify-content: center; gap: 20px;
+            font-size: 0.95rem; opacity: 0.9; }
+        .blog-meta span { display: flex; align-items: center; gap: 6px; }
+        .blog-content { padding: 50px 40px; }
+        .blog-content h2 { color: var(--dark-text); font-size: 1.875rem; margin-top: 40px;
+            margin-bottom: 16px; font-weight: 600; }
+        .blog-content h3 { color: var(--dark-text); font-size: 1.5rem; margin-top: 30px;
+            margin-bottom: 12px; font-weight: 600; }
+        .blog-content p { color: var(--medium-text); font-size: 1.125rem; margin-bottom: 20px; line-height: 1.8; }
+        .blog-content ul { margin-bottom: 20px; padding-left: 30px; color: var(--medium-text); font-size: 1.125rem; }
+        .blog-content li { margin-bottom: 10px; line-height: 1.8; }
+        @media (max-width: 768px) {
+            .blog-title { font-size: 2rem; }
+            .blog-content { padding: 30px 20px; }
+            .blog-header { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="/#blog" class="back-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Blog
+    </a>
+    <div class="container">
+        <header class="blog-header">
+            <span class="blog-category">Web Development</span>
+            <h1 class="blog-title">Creating Mobile-Responsive Layouts</h1>
+            <div class="blog-meta">
+                <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    October 28, 2025
+                </span>
+                <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    6 min read
+                </span>
+            </div>
+        </header>
+        <article class="blog-content">
+            <p>More than 60% of web traffic comes from mobile devices. If your website doesn't work well on phones and tablets, you're losing visitors. Let's explore how to create layouts that adapt beautifully to any screen size.</p>
+            <h2>The Mobile-First Approach</h2>
+            <p>Start designing for mobile, then scale up for larger screens. This approach ensures your content works on the smallest devices first, then progressively enhances the experience for tablets and desktops.</p>
+            <h2>CSS Flexbox: One-Dimensional Layouts</h2>
+            <p>Flexbox is perfect for laying out items in a single row or column. It excels at:</p>
+            <ul>
+                <li>Navigation bars that collapse on mobile</li>
+                <li>Card layouts that stack vertically on small screens</li>
+                <li>Centering content both vertically and horizontally</li>
+                <li>Distributing space between elements</li>
+            </ul>
+            <h2>CSS Grid: Two-Dimensional Layouts</h2>
+            <p>Grid gives you complete control over rows and columns simultaneously. Use it for complex layouts like photo galleries, dashboard interfaces, and full page structures.</p>
+            <h3>Common Grid Patterns</h3>
+            <ul>
+                <li>Auto-fit columns that adjust based on available space</li>
+                <li>Named grid areas for semantic layouts</li>
+                <li>Responsive grids without media queries using minmax()</li>
+            </ul>
+            <h2>Media Queries: Breakpoints</h2>
+            <p>Media queries allow you to apply different styles based on screen size. Common breakpoints:</p>
+            <ul>
+                <li><strong>Mobile:</strong> Up to 480px</li>
+                <li><strong>Tablet:</strong> 481px to 768px</li>
+                <li><strong>Desktop:</strong> 769px and above</li>
+                <li><strong>Large screens:</strong> 1200px and above</li>
+            </ul>
+            <h2>Viewport Units and Relative Sizing</h2>
+            <p>Use relative units like percentages, em, rem, and viewport units (vw, vh) instead of fixed pixels. This ensures your layout scales smoothly across different screen sizes.</p>
+            <h2>Testing Across Devices</h2>
+            <p>Always test on real devices when possible. Browser developer tools are helpful, but nothing beats testing on actual phones and tablets to catch issues with touch interactions and performance.</p>
+            <p>Responsive design isn't a feature - it's a fundamental requirement for modern web development. Master these techniques and your websites will look great everywhere.</p>
+        </article>
+    </div>
+</body>
+</html>

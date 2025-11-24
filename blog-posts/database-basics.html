@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Basics Every Developer Should Know - Prapan Biswas</title>
+    <meta name="description" content="Understanding relational databases, SQL queries, and data structure">
+    <meta name="author" content="Prapan Biswas">
+    <link rel="icon" type="image/png" href="/attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-text: #1a202c; --medium-text: #4a5568; --light-text: #718096;
+            --white: #ffffff; --body-bg: #0a0118; --container-bg: rgba(255, 255, 255, 0.95);
+        }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--body-bg);
+            min-height: 100vh; padding: 20px; line-height: 1.7; color: var(--dark-text); }
+        .back-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 12px; color: white;
+            text-decoration: none; margin-bottom: 30px; transition: all 0.3s ease; font-weight: 500; }
+        .back-button:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
+        .container { max-width: 900px; margin: 0 auto; background: var(--container-bg);
+            backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+        .blog-header { background: var(--primary-gradient); color: white; padding: 60px 40px; text-align: center; }
+        .blog-category { display: inline-block; padding: 6px 16px; background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px; font-size: 0.875rem; margin-bottom: 16px; font-weight: 500; }
+        .blog-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+        .blog-meta { display: flex; align-items: center; justify-content: center; gap: 20px;
+            font-size: 0.95rem; opacity: 0.9; }
+        .blog-meta span { display: flex; align-items: center; gap: 6px; }
+        .blog-content { padding: 50px 40px; }
+        .blog-content h2 { color: var(--dark-text); font-size: 1.875rem; margin-top: 40px;
+            margin-bottom: 16px; font-weight: 600; }
+        .blog-content p { color: var(--medium-text); font-size: 1.125rem; margin-bottom: 20px; line-height: 1.8; }
+        .blog-content ul { margin-bottom: 20px; padding-left: 30px; color: var(--medium-text); font-size: 1.125rem; }
+        .blog-content li { margin-bottom: 10px; line-height: 1.8; }
+        @media (max-width: 768px) {
+            .blog-title { font-size: 2rem; }
+            .blog-content { padding: 30px 20px; }
+            .blog-header { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="/#blog" class="back-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Blog
+    </a>
+    <div class="container">
+        <header class="blog-header">
+            <span class="blog-category">Development</span>
+            <h1 class="blog-title">Database Basics Every Developer Should Know</h1>
+            <div class="blog-meta">
+                <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    November 5, 2025
+                </span>
+                <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    7 min read
+                </span>
+            </div>
+        </header>
+        <article class="blog-content">
+            <p>Databases are the backbone of almost every modern application. Understanding how to store, retrieve, and manage data efficiently is crucial for any developer.</p>
+            <h2>What is a Database?</h2>
+            <p>A database is an organized collection of data that can be easily accessed, managed, and updated. Think of it as a digital filing cabinet where information is stored in a structured way.</p>
+            <h2>Relational vs. Non-Relational</h2>
+            <p>There are two main types of databases:</p>
+            <ul>
+                <li><strong>Relational (SQL):</strong> Data is organized in tables with rows and columns. Examples: PostgreSQL, MySQL, SQLite</li>
+                <li><strong>Non-Relational (NoSQL):</strong> Data can be stored in various formats like documents, key-value pairs, or graphs. Examples: MongoDB, Redis</li>
+            </ul>
+            <h2>Core SQL Operations (CRUD)</h2>
+            <p>Most database interactions involve four basic operations:</p>
+            <ul>
+                <li><strong>Create:</strong> Adding new data (INSERT)</li>
+                <li><strong>Read:</strong> Retrieving data (SELECT)</li>
+                <li><strong>Update:</strong> Modifying existing data (UPDATE)</li>
+                <li><strong>Delete:</strong> Removing data (DELETE)</li>
+            </ul>
+            <h2>Database Design Principles</h2>
+            <p>Good database design is essential for performance and maintainability. Key principles include normalization to reduce redundancy, establishing proper relationships between tables, and creating appropriate indexes for faster queries.</p>
+            <h2>Why Databases Matter</h2>
+            <p>Whether you're building a blog, e-commerce site, or social network, databases enable you to persist data, handle concurrent users, maintain data integrity, and scale your application as it grows.</p>
+            <p>Start simple with a basic database and gradually explore more advanced concepts as your projects become more complex.</p>
+        </article>
+    </div>
+</body>
+</html>

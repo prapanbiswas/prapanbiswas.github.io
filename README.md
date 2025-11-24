@@ -8,6 +8,24 @@ Static HTML/CSS/JavaScript website with no build process or frameworks.
 
 ## Recent Changes
 
+### November 24, 2025 - Dynamic Blog Section
+- Added a complete dynamic blog system using JSON as a database
+- Created `blog-data.json` with 6 sample blog posts covering engineering, web development, and personal topics
+- Implemented vanilla JavaScript blog post fetcher that reads from JSON and dynamically generates blog cards
+- Created `blog-posts/` folder structure with:
+  - `blog-template.html` - Template file for creating new blog posts with consistent styling
+  - `getting-started-civil-engineering.html` - Sample blog post about civil engineering journey
+- Added responsive blog card grid layout with:
+  - Thumbnail images
+  - Category badges
+  - Publication dates
+  - Post summaries
+  - "Read More" links
+- Blog cards feature smooth animations, hover effects, and click-through to individual posts
+- Fully responsive design that works on all screen sizes
+- No frameworks or build tools required - pure HTML/CSS/JavaScript
+- Blog posts maintain the same design language as the main portfolio
+
 ### November 19, 2025 - Dark Mode Improvements & Project Cleanup
 - Fixed loading screen to respect dark mode preference (prevents bright light flash on dark mode)
 - Added dark gradient background for loader in dark mode

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Your First Website from Scratch - Prapan Biswas</title>
+    <meta name="description" content="A step-by-step guide to creating a responsive website using HTML, CSS, and JavaScript">
+    <meta name="author" content="Prapan Biswas">
+    <link rel="icon" type="image/png" href="/attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-text: #1a202c; --medium-text: #4a5568; --light-text: #718096;
+            --white: #ffffff; --body-bg: #0a0118; --container-bg: rgba(255, 255, 255, 0.95);
+        }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--body-bg);
+            min-height: 100vh; padding: 20px; line-height: 1.7; color: var(--dark-text); }
+        .back-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 12px; color: white;
+            text-decoration: none; margin-bottom: 30px; transition: all 0.3s ease; font-weight: 500; }
+        .back-button:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
+        .container { max-width: 900px; margin: 0 auto; background: var(--container-bg);
+            backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+        .blog-header { background: var(--primary-gradient); color: white; padding: 60px 40px; text-align: center; }
+        .blog-category { display: inline-block; padding: 6px 16px; background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px; font-size: 0.875rem; margin-bottom: 16px; font-weight: 500; }
+        .blog-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+        .blog-meta { display: flex; align-items: center; justify-content: center; gap: 20px;
+            font-size: 0.95rem; opacity: 0.9; }
+        .blog-meta span { display: flex; align-items: center; gap: 6px; }
+        .blog-content { padding: 50px 40px; }
+        .blog-content h2 { color: var(--dark-text); font-size: 1.875rem; margin-top: 40px;
+            margin-bottom: 16px; font-weight: 600; }
+        .blog-content h3 { color: var(--dark-text); font-size: 1.5rem; margin-top: 30px;
+            margin-bottom: 12px; font-weight: 600; }
+        .blog-content p { color: var(--medium-text); font-size: 1.125rem; margin-bottom: 20px; line-height: 1.8; }
+        .blog-content ul { margin-bottom: 20px; padding-left: 30px; color: var(--medium-text); font-size: 1.125rem; }
+        .blog-content li { margin-bottom: 10px; line-height: 1.8; }
+        .blog-content blockquote { border-left: 4px solid #667eea; padding-left: 20px; margin: 30px 0;
+            font-style: italic; color: var(--light-text); background: rgba(102, 126, 234, 0.05);
+            padding: 20px; border-radius: 8px; }
+        @media (max-width: 768px) {
+            .blog-title { font-size: 2rem; }
+            .blog-content { padding: 30px 20px; }
+            .blog-header { padding: 40px 20px; }
+            .blog-content h2 { font-size: 1.5rem; }
+            .blog-content h3 { font-size: 1.25rem; }
+            .blog-content p, .blog-content ul { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <a href="/#blog" class="back-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Blog
+    </a>
+    <div class="container">
+        <header class="blog-header">
+            <span class="blog-category">Web Development</span>
+            <h1 class="blog-title">Building Your First Website from Scratch</h1>
+            <div class="blog-meta">
+                <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    November 15, 2025
+                </span>
+                <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    6 min read
+                </span>
+            </div>
+        </header>
+        <article class="blog-content">
+            <p>Creating your first website can seem daunting, but with the right approach and understanding of the basics, anyone can build a beautiful, functional website. This guide will walk you through the essential steps.</p>
+            <h2>The Foundation: HTML</h2>
+            <p>HTML (HyperText Markup Language) is the skeleton of every website. It provides the structure and content. Think of it as the blueprint of a building - it defines where everything goes.</p>
+            <h3>Key HTML Elements</h3>
+            <ul>
+                <li><strong>Headers:</strong> Use h1-h6 tags to create headings of different sizes</li>
+                <li><strong>Paragraphs:</strong> The p tag wraps your text content</li>
+                <li><strong>Links:</strong> The a tag creates clickable links</li>
+                <li><strong>Images:</strong> The img tag displays images on your page</li>
+                <li><strong>Divs:</strong> Container elements that group content together</li>
+            </ul>
+            <h2>Adding Style with CSS</h2>
+            <p>CSS (Cascading Style Sheets) is what makes your website look good. It controls colors, fonts, layouts, spacing, and animations. If HTML is the blueprint, CSS is the interior design.</p>
+            <h3>CSS Fundamentals</h3>
+            <ul>
+                <li>Selectors target specific HTML elements</li>
+                <li>Properties define what you want to change (color, size, etc.)</li>
+                <li>Values specify how you want to change it</li>
+                <li>The box model controls spacing (margin, padding, border)</li>
+            </ul>
+            <h2>Making It Interactive with JavaScript</h2>
+            <p>JavaScript brings your website to life with interactivity. It can respond to user actions, update content dynamically, and create engaging experiences.</p>
+            <blockquote>
+                "The beautiful thing about learning is that nobody can take it away from you." - Start with small projects and gradually build your skills.
+            </blockquote>
+            <h2>Responsive Design</h2>
+            <p>Your website should look great on all devices - desktops, tablets, and phones. Use CSS media queries to adjust your layout based on screen size.</p>
+            <h2>Best Practices</h2>
+            <ul>
+                <li>Keep your code clean and organized</li>
+                <li>Use semantic HTML tags for better accessibility</li>
+                <li>Optimize images for faster loading</li>
+                <li>Test on multiple browsers and devices</li>
+                <li>Write descriptive comments in your code</li>
+            </ul>
+            <h2>Next Steps</h2>
+            <p>Once you've mastered the basics, explore frameworks like Bootstrap or libraries like React to build more complex applications. Remember, every expert was once a beginner. Keep practicing, building projects, and learning from others!</p>
+        </article>
+    </div>
+</body>
+</html>
