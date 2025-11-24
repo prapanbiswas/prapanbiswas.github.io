@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "Getting Started with Civil Engineering",
+    "date": "2025-11-20",
+    "summary": "An introduction to my journey in civil engineering and what inspired me to pursue this field. Learn about structural design fundamentals and urban planning.",
+    "filename": "getting-started-civil-engineering.html",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "category": "Engineering"
+  },
+  {
+    "id": 2,
+    "title": "Building Your First Website from Scratch",
+    "date": "2025-11-15",
+    "summary": "A step-by-step guide to creating a responsive website using HTML, CSS, and JavaScript. Perfect for beginners looking to get started with web development.",
+    "filename": "building-first-website.html",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "category": "Web Development"
+  },
+  {
+    "id": 3,
+    "title": "Modern Design Principles for Web Apps",
+    "date": "2025-11-10",
+    "summary": "Explore contemporary design patterns, color theory, and user interface best practices that make websites stand out in 2025.",
+    "filename": "modern-design-principles.html",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "category": "Design"
+  },
+  {
+    "id": 4,
+    "title": "Database Basics Every Developer Should Know",
+    "date": "2025-11-05",
+    "summary": "Understanding relational databases, SQL queries, and how to structure your data efficiently for scalable applications.",
+    "filename": "database-basics.html",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "category": "Development"
+  },
+  {
+    "id": 5,
+    "title": "My Journey as a Multi-Skill Learner",
+    "date": "2025-11-01",
+    "summary": "How I balance studying civil engineering with learning web development, app development, and graphic design. Tips for continuous learning.",
+    "filename": "multi-skill-learner-journey.html",
+    "thumbnail_url": "attached_assets/profile_1763407607038.jpg",
+    "category": "Personal"
+  },
+  {
+    "id": 6,
+    "title": "Creating Mobile-Responsive Layouts",
+    "date": "2025-10-28",
+    "summary": "Master the art of responsive web design with CSS Grid, Flexbox, and media queries. Make your websites look great on any device.",
+    "filename": "mobile-responsive-layouts.html",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "category": "Web Development"
+  }
+]
