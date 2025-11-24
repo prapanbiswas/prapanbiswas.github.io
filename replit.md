@@ -8,6 +8,32 @@ Static HTML/CSS/JavaScript website with no build process or frameworks.
 
 ## Recent Changes
 
+### November 24, 2025 - Dynamic Blog Section Implementation
+- Added complete blog system using vanilla JavaScript and JSON data
+- Created blog-data.json with 6 blog post entries (metadata: title, date, summary, filename, thumbnail, category)
+- Built responsive blog section on main page with:
+  - Dynamic fetch logic to load blog data from JSON file
+  - Responsive grid layout (3 columns desktop, 2 tablet, 1 mobile)
+  - Blog cards with hover effects, category badges, and read time
+  - Loading states and error handling
+  - Click-to-navigate functionality to individual blog posts
+- Created 6 individual blog post HTML files:
+  - Getting Started with Civil Engineering
+  - Building Your First Website from Scratch
+  - Modern Design Principles for Web Apps
+  - Database Basics Every Developer Should Know
+  - My Journey as a Multi-Skill Learner
+  - Creating Mobile-Responsive Layouts
+- All blog posts feature:
+  - Consistent styling matching main site design
+  - Purple gradient headers with category badges
+  - Semantic HTML with proper heading hierarchy
+  - Responsive design for all screen sizes
+  - Back to Blog button with absolute path navigation
+  - Absolute asset paths for favicon and images
+- Added blog-template.html for creating future blog posts
+- Blog system is fully static - no backend required
+
 ### November 24, 2025 - Replit Environment Setup (GitHub Import)
 - Successfully imported from GitHub to Replit
 - Installed Python 3.11 for serving static files
@@ -115,9 +141,11 @@ Preferred communication style: Simple, everyday language.
 - Files are served directly to the browser
 
 **Component Structure**
-- `index.html`: Main structure with semantic HTML sections
+- `index.html`: Main structure with semantic HTML sections (includes blog section)
 - `style.css`: Styling with CSS custom properties for theming
-- `script.js`: Client-side interactivity (dynamic age calculation, dark mode, animations)
+- `script.js`: Client-side interactivity (dynamic age calculation, dark mode, animations, blog fetching)
+- `blog-data.json`: JSON database for blog post metadata
+- `blog-posts/`: Directory containing individual blog post HTML files and template
 - `attached_assets/`: Profile images and media
 - `robots.txt`: Search engine crawler instructions
 - `sitemap.xml`: Site structure for search engines
@@ -136,6 +164,8 @@ Preferred communication style: Simple, everyday language.
 - Smooth scroll animations and 3D card tilt effects
 - Loading screen with animated hourglass SVG
 - Intersection Observer for scroll-based animations
+- Blog system with dynamic fetch from JSON data
+- Loading states and error handling for blog posts
 - Uses vanilla JavaScript - no frameworks or libraries
 
 ### SEO Features
