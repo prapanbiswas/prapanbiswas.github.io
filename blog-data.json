@@ -1,5 +1,14 @@
 [
   {
+    "id": 0,
+    "title": "How to Use This Blog Demo",
+    "date": "2025-12-04",
+    "summary": "A guide on how to use the new demo blog file and manage images for your blog posts.",
+    "filename": "demo-blog.html",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "category": "Demo"
+  },
+  {
     "id": 1,
     "title": "Getting Started with Civil Engineering",
     "date": "2025-11-20",

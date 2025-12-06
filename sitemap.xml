@@ -4,4 +4,8 @@
     <loc>https://prapanbiswas.github.io/</loc>
     <priority>1.00</priority>
   </url>
+  <url>
+    <loc>https://prapanbiswas.github.io/blog.html</loc>
+    <priority>0.80</priority>
+  </url>
 </urlset>

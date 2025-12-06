@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Prapan Biswas (Arko) | Mangrove Student</title>
+    <meta name="description"
+        content="Read thoughts, tutorials, and updates from Prapan Biswas (Arko), a best student at Mangrove Institute. covering technology, civil engineering, and design.">
+    <meta name="keywords"
+        content="Prapan Blog, Tech Blog, Prapan Biswas, Arko, Mangrove student, mangrove best student, Engineering Articles, Web Design Tutorials">
+    <meta name="author" content="Prapan Biswas">
+    <link rel="canonical" href="https://prapanbiswas.github.io/blog.html">
+
+    <!-- Open Graph / Social Media Tags -->
+    <meta property="og:title" content="Blog - Prapan Biswas (Arko) | Mangrove Student">
+    <meta property="og:description"
+        content="Read thoughts, tutorials, and updates from Prapan Biswas (Arko), Mangrove Institute student.">
+    <meta property="og:url" content="https://prapanbiswas.github.io/blog.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://prapanbiswas.github.io/attached_assets/prapan-biswas-profile.jpg">
+
+    <!-- Three.js & GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#a855f7',
+                        glass: 'rgba(255, 255, 255, 0.1)',
+                        'glass-dark': 'rgba(15, 23, 42, 0.6)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite linear',
+                        'float': 'float 8s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-black text-slate-100 min-h-screen selection:bg-fuchsia-500/30 overflow-x-hidden">
+
+    <div id="orb-canvas-container" class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <canvas id="orb-canvas" class="block w-full h-full"></canvas>
+    </div>
+
+    <nav
+        class="fixed top-0 left-0 w-full z-50 transition-all duration-300 px-6 py-4 glass-card rounded-b-2xl mx-auto max-w-7xl inset-x-0 mt-4">
+        <div class="flex justify-between items-center">
+            <a href="index.html"
+                class="flex items-center gap-2 font-heading font-bold text-2xl text-slate-900 dark:text-white hover:scale-105 transition-transform">
+                <img src="attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png" alt="Prapan Logo"
+                    class="w-10 h-10 rounded-full object-cover border-2 border-white/50">
+                <span>Prapan</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div
+                class="hidden md:flex items-center gap-8 bg-black/20 px-6 py-2 rounded-full backdrop-blur-md border border-white/10">
+                <a href="index.html#about"
+                    class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors">About</a>
+                <a href="index.html#skills"
+                    class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors">Skills</a>
+                <a href="index.html#interests"
+                    class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors">Interests</a>
+                <a href="blog.html" class="nav-link text-sm font-medium text-white font-bold transition-colors">Blog</a>
+                <a href="index.html#contact"
+                    class="nav-link text-sm font-medium text-slate-300 hover:text-white transition-colors">Contact</a>
+            </div>
+
+            <!-- Mobile Magnetic Menu Trigger -->
+            <div class="md:hidden relative z-[100]">
+                <button id="nav-trigger"
+                    class="relative w-12 h-12 flex items-center justify-center group cursor-pointer border border-white/20 rounded-full bg-white/5 backdrop-blur-md">
+                    <div id="magnetic-area"
+                        class="absolute inset-0 rounded-full transition-all duration-300 group-hover:bg-white/10"></div>
+
+                    <!-- 3-Line Hamburger -->
+                    <div class="relative w-5 h-4 overflow-hidden pointer-events-none flex flex-col justify-between">
+                        <span
+                            class="w-full h-[2px] bg-white transition-all duration-300 burger-line-1 origin-left"></span>
+                        <span
+                            class="w-full h-[2px] bg-white transition-all duration-300 burger-line-2 origin-left"></span>
+                        <span
+                            class="w-full h-[2px] bg-white transition-all duration-300 burger-line-3 origin-left"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Fullscreen Menu Overlay -->
+    <div id="fullscreen-menu"
+        class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-2xl clip-path-circle-0 flex items-center justify-center invisible md:hidden">
+        <nav class="flex flex-col items-center gap-8">
+            <a href="index.html#home"
+                class="menu-link text-3xl font-heading font-bold text-white hover:text-primary transition-all duration-300 translate-y-10 opacity-0">Home</a>
+            <a href="index.html#about"
+                class="menu-link text-3xl font-heading font-bold text-white hover:text-primary transition-all duration-300 translate-y-10 opacity-0">About</a>
+            <a href="index.html#skills"
+                class="menu-link text-3xl font-heading font-bold text-white hover:text-primary transition-all duration-300 translate-y-10 opacity-0">Skills</a>
+            <a href="blog.html"
+                class="menu-link text-3xl font-heading font-bold text-white hover:text-primary transition-all duration-300 translate-y-10 opacity-0">Blog</a>
+            <a href="index.html#contact"
+                class="menu-link text-3xl font-heading font-bold text-white hover:text-primary transition-all duration-300 translate-y-10 opacity-0">Contact</a>
+        </nav>
+
+        <!-- Background Decoration -->
+        <div class="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-900/10 to-purple-900/10 pointer-events-none">
+        </div>
+    </div>
+
+    <main class="pt-32 pb-20 px-4 max-w-6xl mx-auto">
+        <section class="text-center mb-16">
+            <h1
+                class="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-200 drop-shadow-lg">
+                My Blog</h1>
+            <p class="text-xl opacity-80 max-w-2xl mx-auto">Thoughts, stories, and ideas about engineering, technology,
+                and design.</p>
+        </section>
+
+        <div id="blog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Blog cards will be dynamically inserted here by script.js -->
+            <div class="col-span-full text-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                <p class="opacity-60">Loading posts...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-sm opacity-60">
+        <p>&copy; 2025 Prapan Biswas. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
