@@ -38,3 +38,4 @@ Thumbs.db
 .breakpoints
 .upm/
 replit.nix
+.env
