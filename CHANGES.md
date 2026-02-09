@@ -33,6 +33,17 @@ Successfully migrated from blog-based content to external projects showcase whil
 #### sitemap.xml
 - Updated URL: `blog.html` → `projects.html`
 
+#### README.md
+- Updated "User Manual" section with project management instructions
+- Replaced blog post creation guide with project addition guide
+- Updated AI Maintenance Guide references
+
+#### replit.md
+- Updated overview to reference "external project links" instead of "blog posts"
+- Updated project structure diagram
+- Updated key features list
+- Added recent changes entry for migration
+
 ## Features
 
 ### Featured Projects Section (Homepage)

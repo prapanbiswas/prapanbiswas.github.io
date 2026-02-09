@@ -20,22 +20,24 @@ No build process required. This site uses Vanilla JS and CSS variables.
 
 ## 📖 User Manual
 
-### How to Add a New Blog Post
-1.  **Create File**: Go to `blog-posts/` and duplicate an existing HTML file. Rename it (e.g., `my-story.html`).
-2.  **Edit Content**: Update the title, date, and body text in the HTML file.
-3.  **Register Post**: Open `blog-data.json` and add an entry:
+### How to Add a New Project
+1.  **Open Data File**: Open `projects-data.json` in a text editor.
+2.  **Add Project Entry**: Add a new object to the array:
     ```json
     {
-        "id": 8,
-        "title": "My New Story",
-        "date": "2025-12-07",
-        "summary": "Short description for the card...",
-        "filename": "my-story.html",
-        "thumbnail_url": "attached_assets/image.jpg",
-        "category": "Design"
+        "id": 7,
+        "title": "My New Project",
+        "description": "Brief description of your project and its key features.",
+        "category": "Web Application",
+        "url": "https://yourproject.com",
+        "thumbnail_url": "attached_assets/project-image.jpg",
+        "tech_stack": ["React", "Node.js", "MongoDB"],
+        "featured": false
     }
     ```
-4.  **Done**: The blog page will automatically load the new post.
+3.  **Add Project Image**: Place your project thumbnail in the `attached_assets/` folder.
+4.  **Featured Projects**: Set `"featured": true` to display the project on the homepage (limit to 3).
+5.  **Done**: The projects page will automatically load and display the new project.
 
 ---
 
@@ -51,8 +53,10 @@ No build process required. This site uses Vanilla JS and CSS variables.
 > 5. **No Light Mode**: The site is permanently dark. Do not re-introduce theme toggles.
 > **Code Structure**:
 > - `style.css`: Contains all visual styles and variables.
-> - `script.js`: Contains the `Orb` class, animation loop, and blog fetching logic.
-> - `index.html`: Main SPA structure.
+> - `script.js`: Contains the `Orb` class, animation loop, and projects fetching logic.
+> - `index.html`: Main homepage with featured projects section.
+> - `projects.html`: Full projects showcase page.
+> - `projects-data.json`: Project metadata with external URLs.
 >
 > **Task**: [INSERT YOUR REQUEST HERE]
 
