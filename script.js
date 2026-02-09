@@ -273,65 +273,89 @@ function initActiveLinkHighlight() {
     sections.forEach(section => observer.observe(section));
 }
 
-async function fetchBlogPosts() {
-    const blogContainer = document.getElementById('blog-container');
-    if (!blogContainer) return;
+async function fetchProjects() {
+    const projectsContainer = document.getElementById('projects-container');
+    if (!projectsContainer) return;
 
     try {
-        const response = await fetch('blog-data.json');
-        if (!response.ok) throw new Error('Failed to fetch blog posts');
+        const response = await fetch('projects-data.json');
+        if (!response.ok) throw new Error('Failed to fetch projects');
 
-        const posts = await response.json();
-        blogContainer.innerHTML = '';
+        const projects = await response.json();
+        projectsContainer.innerHTML = '';
 
-        posts.forEach((post, index) => {
-            const blogCard = createBlogCard(post, index);
-            blogContainer.appendChild(blogCard);
+        projects.forEach((project, index) => {
+            const projectCard = createProjectCard(project, index);
+            projectsContainer.appendChild(projectCard);
         });
     } catch (error) {
-        console.error('Error fetching blog posts:', error);
-        blogContainer.innerHTML = `
-            <div class="text-center p-8 text-red-500">
-                <p>Unable to load blog posts. Please try again later.</p>
+        console.error('Error fetching projects:', error);
+        projectsContainer.innerHTML = `
+            <div class="col-span-full text-center p-8 text-red-500">
+                <p>Unable to load projects. Please try again later.</p>
             </div>
         `;
     }
 }
 
-function createBlogCard(post, index) {
+async function fetchFeaturedProjects() {
+    const featuredContainer = document.getElementById('featured-projects-container');
+    if (!featuredContainer) return;
+
+    try {
+        const response = await fetch('projects-data.json');
+        if (!response.ok) throw new Error('Failed to fetch featured projects');
+
+        const projects = await response.json();
+        const featuredProjects = projects.filter(p => p.featured);
+        
+        featuredContainer.innerHTML = '';
+
+        featuredProjects.forEach((project, index) => {
+            const projectCard = createProjectCard(project, index);
+            featuredContainer.appendChild(projectCard);
+        });
+    } catch (error) {
+        console.error('Error fetching featured projects:', error);
+        featuredContainer.innerHTML = `
+            <div class="col-span-full text-center p-8 text-red-500">
+                <p>Unable to load featured projects.</p>
+            </div>
+        `;
+    }
+}
+
+function createProjectCard(project, index) {
     const card = document.createElement('a');
-    card.href = `blog-posts/${post.filename}`;
+    card.href = project.url;
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
     card.className = 'glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 block group';
 
-    // Using new glass styles
     card.innerHTML = `
         <div class="relative h-48 overflow-hidden">
-            <img src="${post.thumbnail_url}" alt="${post.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            <img src="${project.thumbnail_url}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
             <span class="absolute bottom-4 left-4 bg-primary-glow/90 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm bg-indigo-600">
-                ${post.category}
+                ${project.category}
             </span>
         </div>
         <div class="p-6">
-            <h4 class="text-xl font-bold mb-2 text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-2">${post.title}</h4>
-            <div class="flex items-center gap-2 text-sm text-slate-400 mb-4">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                ${formatDate(post.date)}
+            <h4 class="text-xl font-bold mb-2 text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-2">${project.title}</h4>
+            <p class="text-sm text-slate-300 line-clamp-3 mb-4">${project.description}</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+                ${project.tech_stack.slice(0, 3).map(tech => `
+                    <span class="text-xs px-2 py-1 bg-white/5 rounded-full text-slate-400 border border-white/10">${tech}</span>
+                `).join('')}
             </div>
-            <p class="text-sm text-slate-300 line-clamp-3 mb-4">${post.summary}</p>
             <span class="text-indigo-400 font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                Read More
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                View Project
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
             </span>
         </div>
     `;
 
     return card;
-}
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 function initScrollAnimations() {
@@ -351,7 +375,8 @@ function initScrollAnimations() {
 function initializeWebsite() {
     updateAge();
     initActiveLinkHighlight();
-    fetchBlogPosts();
+    fetchProjects();
+    fetchFeaturedProjects();
     initScrollAnimations();
 
     // Initialize Systems

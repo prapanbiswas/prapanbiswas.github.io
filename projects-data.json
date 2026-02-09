@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "Cloud Infrastructure Platform",
+    "description": "A modern cloud-native infrastructure management platform with real-time monitoring, auto-scaling capabilities, and integrated DevOps tools.",
+    "category": "Web Application",
+    "url": "https://example.com/project1",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "tech_stack": ["React", "Node.js", "Docker", "Kubernetes"],
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "Smart City Dashboard",
+    "description": "Comprehensive urban analytics dashboard for monitoring traffic, air quality, and public services in real-time using IoT sensors.",
+    "category": "Civil Engineering",
+    "url": "https://example.com/project2",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "tech_stack": ["Vue.js", "Python", "PostgreSQL", "IoT"],
+    "featured": true
+  },
+  {
+    "id": 3,
+    "title": "Design System Library",
+    "description": "A complete design system with reusable components, design tokens, and comprehensive documentation for building consistent UIs.",
+    "category": "UI/UX Design",
+    "url": "https://example.com/project3",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "tech_stack": ["Figma", "React", "Storybook", "CSS"],
+    "featured": true
+  },
+  {
+    "id": 4,
+    "title": "E-Commerce Mobile App",
+    "description": "Feature-rich mobile shopping application with AR product preview, secure payment integration, and personalized recommendations.",
+    "category": "Mobile Development",
+    "url": "https://example.com/project4",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "tech_stack": ["React Native", "Firebase", "Stripe", "AR Kit"],
+    "featured": false
+  },
+  {
+    "id": 5,
+    "title": "Structural Analysis Software",
+    "description": "Advanced engineering software for structural analysis, load calculations, and 3D visualization of building designs.",
+    "category": "Engineering",
+    "url": "https://example.com/project5",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "tech_stack": ["C++", "OpenGL", "Python", "Qt"],
+    "featured": false
+  },
+  {
+    "id": 6,
+    "title": "AI Content Generator",
+    "description": "Machine learning powered content generation tool for creating blog posts, social media content, and marketing copy.",
+    "category": "AI/ML",
+    "url": "https://example.com/project6",
+    "thumbnail_url": "attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png",
+    "tech_stack": ["Python", "TensorFlow", "FastAPI", "Next.js"],
+    "featured": false
+  }
+]

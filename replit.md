@@ -1,7 +1,7 @@
 # Prapan Biswas Portfolio Website
 
 ## Overview
-A personal portfolio website for Prapan Biswas (Arko), a civil engineering student and web developer from Khulna, Bangladesh. The site showcases skills, interests, and blog posts.
+A personal portfolio website for Prapan Biswas (Arko), a civil engineering student and web developer from Khulna, Bangladesh. The site showcases skills, interests, and external project links.
 
 ## Project Architecture
 - **Type**: Static HTML/CSS/JS website
@@ -12,12 +12,11 @@ A personal portfolio website for Prapan Biswas (Arko), a civil engineering stude
 
 ## Project Structure
 ```
-├── index.html          # Main homepage
-├── blog.html           # Blog listing page
+├── index.html          # Main homepage with featured projects
+├── projects.html       # Projects showcase page
 ├── style.css           # Custom styles
 ├── script.js           # Interactive functionality
-├── blog-data.json      # Blog posts metadata
-├── blog-posts/         # Individual blog post HTML files
+├── projects-data.json  # Project metadata with external URLs
 ├── attached_assets/    # Images and assets
 ├── sitemap.xml         # SEO sitemap
 └── robots.txt          # Search engine directives
@@ -32,9 +31,11 @@ python -m http.server 5000 --bind 0.0.0.0
 ## Key Features
 - Responsive design with mobile navigation
 - Interactive animated background orbs
-- Blog system with JSON-based post management
+- Projects showcase with external links
+- Featured projects section on homepage
 - Social media links and contact section
 - SEO optimized with structured data
 
 ## Recent Changes
+- February 2026: Migrated from blog system to external projects showcase
 - December 2025: Initial import to Replit environment
