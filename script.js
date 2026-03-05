@@ -4,7 +4,6 @@ function calculateAge() {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
         age--;
     }
@@ -13,161 +12,396 @@ function calculateAge() {
 
 function updateAge() {
     const ageElement = document.getElementById('age');
-    if (ageElement) {
-        ageElement.textContent = calculateAge();
-    }
+    if (ageElement) ageElement.textContent = calculateAge();
 }
 
 /* =========================================
-   Orb Animation System (Infinite Motion)
+   Device Detection
    ========================================= */
-class Orb {
-    constructor(canvas, colors) {
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    || window.innerWidth < 768;
+
+/* =========================================
+   3D Depth Orb System — Immersive World
+   ========================================= */
+class Orb3D {
+    constructor(canvas, layer) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
-        this.colors = colors;
+        this.layer = layer; // 0 = far back, 1 = mid, 2 = close
         this.reset();
     }
 
     reset() {
-        this.radius = Math.random() * 300 + 200; // Much larger, spreading orbs
+        // Depth-based sizing — far orbs are bigger & dimmer, close orbs are smaller & brighter
+        const depthScale = [1.8, 1.2, 0.6][this.layer];
+        const baseRadius = isMobile ? 120 : 250;
+        this.radius = (Math.random() * baseRadius + baseRadius * 0.5) * depthScale;
+
         this.x = Math.random() * this.canvas.width;
         this.y = Math.random() * this.canvas.height;
-        // Randomize initial direction completely (360 degrees)
+
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 0.3 + 0.1;
+        const baseSpeed = [0.08, 0.15, 0.25][this.layer]; // Far = slow, close = fast
+        const speed = Math.random() * baseSpeed + baseSpeed * 0.5;
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
 
-        // Initial Color (HSLA for easier manipulation)
-        this.hue = Math.random() * 360;
-        this.shimmerSpeed = Math.random() * 0.2 + 0.1;
+        // Unique hue per orb, constrained to a beautiful palette
+        const hueRanges = [
+            [220, 280],  // Layer 0: Deep blues & purples
+            [260, 340],  // Layer 1: Purples & pinks
+            [180, 260],  // Layer 2: Cyans & blues
+        ];
+        const [minH, maxH] = hueRanges[this.layer];
+        this.hue = Math.random() * (maxH - minH) + minH;
+        this.hueSpeed = (Math.random() - 0.5) * 0.3;
+
+        // Opacity based on depth
+        this.maxOpacity = [0.15, 0.22, 0.35][this.layer];
+
+        // Parallax multiplier
+        this.parallaxFactor = [0.3, 0.6, 1.0][this.layer];
+
+        // Pulse
+        this.pulsePhase = Math.random() * Math.PI * 2;
+        this.pulseSpeed = Math.random() * 0.005 + 0.003;
     }
 
-    update(mouseX, mouseY, tiltX, tiltY) {
-        // 1. Organic Wandering (Change direction slowly)
-        // Add a small random vector to velocity each frame
-        const wanderStrength = 0.02;
+    update(mouseX, mouseY, tiltX, tiltY, time) {
+        // Organic wandering
+        const wanderStrength = 0.008;
         this.vx += (Math.random() - 0.5) * wanderStrength;
         this.vy += (Math.random() - 0.5) * wanderStrength;
 
-        // Cap max speed to prevent them from zooming off
-        const maxSpeed = 0.8;
+        // Speed cap
+        const maxSpeed = [0.3, 0.5, 0.8][this.layer];
         const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
         if (speed > maxSpeed) {
             this.vx = (this.vx / speed) * maxSpeed;
             this.vy = (this.vy / speed) * maxSpeed;
         }
 
-        // Apply Velocity
         this.x += this.vx;
         this.y += this.vy;
 
-        // 2. Continuous Color Motion (Global Shift)
-        this.hue += this.shimmerSpeed;
-        if (this.hue > 360) this.hue = 0;
+        // Color drift
+        this.hue += this.hueSpeed;
+        if (this.hue > 360) this.hue -= 360;
+        if (this.hue < 0) this.hue += 360;
 
-        // Interaction Forces (Mouse Magnetism) - subtle pull
-        if (mouseX && mouseY) {
-            const dx = mouseX - this.canvas.width / 2;
-            const dy = mouseY - this.canvas.height / 2;
-            // Distort position slightly towards mouse but keep organic flow
-            this.x += dx * 0.005;
-            this.y += dy * 0.005;
+        // Pulsing radius
+        this.pulsePhase += this.pulseSpeed;
+        const pulse = 1 + Math.sin(this.pulsePhase) * 0.08;
+
+        // Mouse parallax (depth-aware)
+        if (mouseX && mouseY && !isMobile) {
+            const dx = (mouseX - this.canvas.width / 2) * this.parallaxFactor * 0.008;
+            const dy = (mouseY - this.canvas.height / 2) * this.parallaxFactor * 0.008;
+            this.x += dx;
+            this.y += dy;
         }
 
-        // Gyroscope
+        // Gyroscope parallax (mobile)
         if (tiltX && tiltY) {
-            this.x += tiltX * 0.1;
-            this.y += tiltY * 0.1;
+            this.x += tiltX * this.parallaxFactor * 0.15;
+            this.y += tiltY * this.parallaxFactor * 0.15;
         }
 
-        // Wall Collision (Wrap)
-        // Add extra buffer so they don't 'pop' in
-        const buffer = this.radius;
+        // Wrap around edges
+        const buffer = this.radius * 1.5;
         if (this.x < -buffer) this.x = this.canvas.width + buffer;
         if (this.x > this.canvas.width + buffer) this.x = -buffer;
         if (this.y < -buffer) this.y = this.canvas.height + buffer;
         if (this.y > this.canvas.height + buffer) this.y = -buffer;
+
+        this._pulse = pulse;
     }
 
     draw() {
-        this.ctx.beginPath();
-        // Dynamic Color from Hue
-        const color = `hsla(${this.hue}, 80%, 60%`;
+        const r = this.radius * this._pulse;
+        const color = `hsla(${this.hue}, 75%, 55%`;
 
-        // "Round line not visible... faded or blurred out"
-        // Use a gradient that fades to 0 opacity well before the edge radius
-        const gradient = this.ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-        gradient.addColorStop(0, color + ', 0.3)'); // Soft center
-        gradient.addColorStop(0.4, color + ', 0.1)'); // Fade out begins
-        gradient.addColorStop(0.8, color + ', 0)'); // Fully transparent BEFORE edge
-        gradient.addColorStop(1, color + ', 0)'); // Safety clear
+        this.ctx.beginPath();
+        const gradient = this.ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r);
+        gradient.addColorStop(0, color + `, ${this.maxOpacity})`);
+        gradient.addColorStop(0.3, color + `, ${this.maxOpacity * 0.6})`);
+        gradient.addColorStop(0.7, color + `, ${this.maxOpacity * 0.15})`);
+        gradient.addColorStop(1, color + ', 0)');
 
         this.ctx.fillStyle = gradient;
-        // 'screen' mode helps them blend beautifully like light
         this.ctx.globalCompositeOperation = 'screen';
-        this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        this.ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
         this.ctx.fill();
         this.ctx.globalCompositeOperation = 'source-over';
     }
 }
 
+/* =========================================
+   Floating Particles (Stars / Dust)
+   ========================================= */
+class Particle {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.reset();
+    }
+
+    reset() {
+        this.x = Math.random() * this.canvas.width;
+        this.y = Math.random() * this.canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedY = -(Math.random() * 0.3 + 0.05);
+        this.speedX = (Math.random() - 0.5) * 0.2;
+        this.opacity = Math.random() * 0.6 + 0.2;
+        this.flickerPhase = Math.random() * Math.PI * 2;
+        this.flickerSpeed = Math.random() * 0.03 + 0.01;
+    }
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.flickerPhase += this.flickerSpeed;
+
+        if (this.y < -10) {
+            this.y = this.canvas.height + 10;
+            this.x = Math.random() * this.canvas.width;
+        }
+        if (this.x < -10) this.x = this.canvas.width + 10;
+        if (this.x > this.canvas.width + 10) this.x = -10;
+    }
+
+    draw() {
+        const flicker = 0.5 + Math.sin(this.flickerPhase) * 0.5;
+        const alpha = this.opacity * flicker;
+
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        this.ctx.fillStyle = `rgba(200, 210, 255, ${alpha})`;
+        this.ctx.fill();
+    }
+}
+
+/* =========================================
+   Orb System Controller (3D Depth World)
+   ========================================= */
 class OrbSystem {
     constructor() {
         this.canvas = document.getElementById('orb-canvas');
         if (!this.canvas) return;
 
-        // Ensure clean canvas context
         this.ctx = this.canvas.getContext('2d');
         this.orbs = [];
-        this.colors = ['#6366f1', '#a855f7', '#ec4899', '#3b82f6'];
-
+        this.particles = [];
         this.mouseX = 0;
         this.mouseY = 0;
         this.tiltX = 0;
         this.tiltY = 0;
+        this.time = 0;
+        this.frameSkip = isMobile ? 1 : 0; // Skip every other frame on mobile
+        this.frameCount = 0;
 
         this.init();
-        this.animate();
         this.addEventListeners();
+        this.animate();
     }
 
     init() {
         this.resize();
         this.orbs = [];
-        // Create 8 orbs
-        for (let i = 0; i < 8; i++) {
-            this.orbs.push(new Orb(this.canvas, this.colors));
+        this.particles = [];
+
+        // 3 layers of orbs: far, mid, close (fewer on mobile)
+        const orbCounts = isMobile ? [2, 2, 1] : [3, 3, 2];
+        for (let layer = 0; layer < 3; layer++) {
+            for (let i = 0; i < orbCounts[layer]; i++) {
+                this.orbs.push(new Orb3D(this.canvas, layer));
+            }
+        }
+
+        // Floating dust particles
+        const particleCount = isMobile ? 25 : 60;
+        for (let i = 0; i < particleCount; i++) {
+            this.particles.push(new Particle(this.canvas));
         }
     }
 
     resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 2);
+        this.canvas.width = window.innerWidth * dpr;
+        this.canvas.height = window.innerHeight * dpr;
+        this.canvas.style.width = window.innerWidth + 'px';
+        this.canvas.style.height = window.innerHeight + 'px';
+        this.ctx.scale(dpr, dpr);
     }
 
     addEventListeners() {
-        window.addEventListener('resize', () => this.resize());
-        window.addEventListener('mousemove', (e) => {
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => this.resize(), 150);
         });
+
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                this.mouseX = e.clientX;
+                this.mouseY = e.clientY;
+            });
+        }
+
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', (e) => {
-                this.tiltX = e.gamma;
-                this.tiltY = e.beta;
+                this.tiltX = e.gamma || 0;
+                this.tiltY = e.beta || 0;
             });
         }
     }
 
     animate() {
+        this.frameCount++;
+
+        // On mobile, skip every other frame for performance
+        if (isMobile && this.frameCount % 2 !== 0) {
+            requestAnimationFrame(() => this.animate());
+            return;
+        }
+
+        this.time++;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Draw orbs back-to-front (layer 0 first)
+        this.orbs.sort((a, b) => a.layer - b.layer);
         this.orbs.forEach(orb => {
-            orb.update(this.mouseX, this.mouseY, this.tiltX, this.tiltY);
+            orb.update(this.mouseX, this.mouseY, this.tiltX, this.tiltY, this.time);
             orb.draw();
         });
+
+        // Draw particles on top
+        this.particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+
         requestAnimationFrame(() => this.animate());
+    }
+}
+
+/* =========================================
+   3D Tilt Cards — Mouse / Touch Interactive
+   ========================================= */
+class TiltCards {
+    constructor() {
+        this.cards = document.querySelectorAll('.tilt-3d');
+        if (this.cards.length === 0 || isMobile) return; // Skip on mobile for performance
+        this.init();
+    }
+
+    init() {
+        this.cards.forEach(card => {
+            card.style.transformStyle = 'preserve-3d';
+            card.style.transition = 'transform 0.15s ease-out';
+
+            card.addEventListener('mousemove', (e) => this.onMove(e, card));
+            card.addEventListener('mouseleave', () => this.onLeave(card));
+        });
+    }
+
+    onMove(e, card) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -8;
+        const rotateY = ((x - centerX) / centerX) * 8;
+
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+
+        // Shine effect
+        const shine = card.querySelector('.tilt-shine');
+        if (shine) {
+            shine.style.opacity = '1';
+            shine.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+        }
+    }
+
+    onLeave(card) {
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        const shine = card.querySelector('.tilt-shine');
+        if (shine) shine.style.opacity = '0';
+    }
+}
+
+/* =========================================
+   Smooth Scroll-Triggered Animations
+   ========================================= */
+class ScrollReveal {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        // Stagger children animations
+        const staggerContainers = document.querySelectorAll('[data-stagger]');
+        staggerContainers.forEach(container => {
+            const children = container.children;
+            Array.from(children).forEach((child, i) => {
+                child.classList.add('reveal-item');
+                child.style.transitionDelay = `${i * 100}ms`;
+            });
+        });
+
+        // Observe all reveal elements
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger children
+                    entry.target.querySelectorAll('.reveal-item').forEach(child => {
+                        child.classList.add('visible');
+                    });
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal-on-scroll, section').forEach(el => {
+            observer.observe(el);
+        });
+    }
+}
+
+/* =========================================
+   Parallax Scroll Effect for Sections
+   ========================================= */
+class ParallaxScroll {
+    constructor() {
+        if (isMobile) return; // Skip on mobile
+        this.sections = document.querySelectorAll('section');
+        this.init();
+    }
+
+    init() {
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    this.update();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+    }
+
+    update() {
+        const scrollY = window.scrollY;
+        this.sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            const speed = 0.05;
+            const yOffset = rect.top * speed;
+            section.style.transform = `translateY(${yOffset}px)`;
+        });
     }
 }
 
@@ -222,40 +456,35 @@ class MagneticNav {
         const line3 = document.querySelector('.burger-line-3');
 
         if (this.isOpen) {
-            // Animate 3 lines to X
-            // Top and Bottom become X, Middle fades out
-            gsap.to(line1, { rotation: 45, y: 8, duration: 0.3 }); // Move down and rotate
-            gsap.to(line2, { opacity: 0, scale: 0, duration: 0.2 }); // Center disappears
-            gsap.to(line3, { rotation: -45, y: -8, duration: 0.3 }); // Move up and rotate
+            gsap.to(line1, { rotation: 45, y: 8, duration: 0.3 });
+            gsap.to(line2, { opacity: 0, scale: 0, duration: 0.2 });
+            gsap.to(line3, { rotation: -45, y: -8, duration: 0.3 });
 
-            // Reveal Menu
             this.menu.classList.remove('invisible');
             gsap.to(this.menu, { clipPath: 'circle(150% at top right)', duration: 0.6, ease: 'power3.inOut' });
             gsap.to(this.links, { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, delay: 0.2 });
         } else {
-            // Restore Burger
             gsap.to(line1, { rotation: 0, y: 0, duration: 0.3 });
             gsap.to(line2, { opacity: 1, scale: 1, duration: 0.3 });
             gsap.to(line3, { rotation: 0, y: 0, duration: 0.3 });
 
-            // Hide Menu
             gsap.to(this.menu, { clipPath: 'circle(0% at top right)', duration: 0.5, ease: 'power3.inOut', onComplete: () => this.menu.classList.add('invisible') });
             gsap.to(this.links, { y: 10, opacity: 0, duration: 0.3 });
         }
     }
 }
 
+/* =========================================
+   Active Link Highlight
+   ========================================= */
 function initActiveLinkHighlight() {
     const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav-link');
-
     if (sections.length === 0) return;
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const id = entry.target.getAttribute('id');
-                // Highlight Desktop Links
                 const desktopLinks = document.querySelectorAll('nav .hidden a');
                 desktopLinks.forEach(link => {
                     if (link.getAttribute('href') === `#${id}`) {
@@ -273,6 +502,9 @@ function initActiveLinkHighlight() {
     sections.forEach(section => observer.observe(section));
 }
 
+/* =========================================
+   Projects — Fetch & Render
+   ========================================= */
 async function fetchProjects() {
     const projectsContainer = document.getElementById('projects-container');
     if (!projectsContainer) return;
@@ -280,21 +512,14 @@ async function fetchProjects() {
     try {
         const response = await fetch('projects-data.json');
         if (!response.ok) throw new Error('Failed to fetch projects');
-
         const projects = await response.json();
         projectsContainer.innerHTML = '';
-
         projects.forEach((project, index) => {
-            const projectCard = createProjectCard(project, index);
-            projectsContainer.appendChild(projectCard);
+            projectsContainer.appendChild(createProjectCard(project, index));
         });
     } catch (error) {
         console.error('Error fetching projects:', error);
-        projectsContainer.innerHTML = `
-            <div class="col-span-full text-center p-8 text-red-500">
-                <p>Unable to load projects. Please try again later.</p>
-            </div>
-        `;
+        projectsContainer.innerHTML = `<div class="col-span-full text-center p-8 text-red-500"><p>Unable to load projects.</p></div>`;
     }
 }
 
@@ -305,23 +530,15 @@ async function fetchFeaturedProjects() {
     try {
         const response = await fetch('projects-data.json');
         if (!response.ok) throw new Error('Failed to fetch featured projects');
-
         const projects = await response.json();
-        const featuredProjects = projects.filter(p => p.featured);
-        
+        const featured = projects.filter(p => p.featured);
         featuredContainer.innerHTML = '';
-
-        featuredProjects.forEach((project, index) => {
-            const projectCard = createProjectCard(project, index);
-            featuredContainer.appendChild(projectCard);
+        featured.forEach((project, index) => {
+            featuredContainer.appendChild(createProjectCard(project, index));
         });
     } catch (error) {
         console.error('Error fetching featured projects:', error);
-        featuredContainer.innerHTML = `
-            <div class="col-span-full text-center p-8 text-red-500">
-                <p>Unable to load featured projects.</p>
-            </div>
-        `;
+        featuredContainer.innerHTML = `<div class="col-span-full text-center p-8 text-red-500"><p>Unable to load featured projects.</p></div>`;
     }
 }
 
@@ -330,13 +547,15 @@ function createProjectCard(project, index) {
     card.href = project.url;
     card.target = '_blank';
     card.rel = 'noopener noreferrer';
-    card.className = 'glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 block group';
+    card.className = 'tilt-3d glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition-all duration-300 block group reveal-item';
+    card.style.transitionDelay = `${index * 100}ms`;
 
     card.innerHTML = `
+        <div class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300"></div>
         <div class="relative h-48 overflow-hidden">
-            <img src="${project.thumbnail_url}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            <img src="${project.thumbnail_url}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-            <span class="absolute bottom-4 left-4 bg-primary-glow/90 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm bg-indigo-600">
+            <span class="absolute bottom-4 left-4 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm bg-indigo-600/90">
                 ${project.category}
             </span>
         </div>
@@ -358,30 +577,21 @@ function createProjectCard(project, index) {
     return card;
 }
 
-function initScrollAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
-        observer.observe(el);
-    });
-}
-
+/* =========================================
+   Initialize Everything
+   ========================================= */
 function initializeWebsite() {
     updateAge();
     initActiveLinkHighlight();
     fetchProjects();
     fetchFeaturedProjects();
-    initScrollAnimations();
 
-    // Initialize Systems
-    new OrbSystem(); // Classic Infinite Orbs
-    new MagneticNav(); // Mobile-Only Magnetic Menu
+    // Core Systems
+    new OrbSystem();        // 3D Depth Orb World
+    new MagneticNav();      // Mobile Magnetic Menu
+    new ScrollReveal();     // Scroll Animations
+    new TiltCards();        // 3D Tilt on Cards (desktop only)
+    new ParallaxScroll();   // Section Parallax (desktop only)
 }
 
 document.addEventListener('DOMContentLoaded', initializeWebsite);
