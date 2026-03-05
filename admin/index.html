@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Manager — Prapan Biswas</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#a855f7',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background: #0a0a0f;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+        }
+
+        input,
+        textarea,
+        select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .toast {
+            animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-slate-100 min-h-screen font-sans">
+
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+            <div>
+                <a href="../index.html"
+                    class="text-sm text-slate-500 hover:text-white transition-colors mb-2 inline-flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                    Back to Portfolio
+                </a>
+                <h1 class="text-3xl font-heading font-bold">Project Manager</h1>
+                <p class="text-slate-500 text-sm mt-1">Add, edit, and manage your portfolio projects.</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="loadFromURL()"
+                    class="px-4 py-2 text-sm font-medium bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                    </svg>
+                    Load JSON
+                </button>
+                <button onclick="downloadJSON()"
+                    class="px-4 py-2 text-sm font-medium bg-gradient-to-r from-primary to-secondary text-white rounded-xl hover:scale-105 transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download JSON
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Project Form -->
+        <div class="glass rounded-2xl p-6 md:p-8 mb-8" id="form-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-bold" id="form-title">Add New Project</h2>
+                <button onclick="resetForm()" class="text-xs text-slate-500 hover:text-white transition-colors">Clear
+                    Form</button>
+            </div>
+
+            <form id="project-form" onsubmit="handleSubmit(event)">
+                <input type="hidden" id="edit-index" value="-1">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="text-xs uppercase tracking-wider text-slate-500 mb-2 block">Title *</label>
+                        <input type="text" id="project-title" required
+                            class="w-full px-4 py-3 rounded-xl text-white placeholder-slate-600"
+                            placeholder="My Awesome Project">
+                    </div>
+                    <div>
+                        <label class="text-xs uppercase tracking-wider text-slate-500 mb-2 block">Category *</label>
+                        <select id="project-category" required class="w-full px-4 py-3 rounded-xl text-white">
+                            <option value="">Select category</option>
+                            <option value="Web Application">Web Application</option>
+                            <option value="Mobile App">Mobile App</option>
+                            <option value="Design">Design</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-xs uppercase tracking-wider text-slate-500 mb-2 block">Description *</label>
+                        <textarea id="project-description" required rows="3"
+                            class="w-full px-4 py-3 rounded-xl text-white placeholder-slate-600 resize-none"
+                            placeholder="Describe your project..."></textarea>
+                    </div>
+                    <div>
+                        <label class="text-xs uppercase tracking-wider text-slate-500 mb-2 block">Project URL *</label>
+                        <input type="url" id="project-url" required
+                            class="w-full px-4 py-3 rounded-xl text-white placeholder-slate-600"
+                            placeholder="https://example.com">
+                    </div>
+                    <div>
+                        <label class="text-xs uppercase tracking-wider text-slate-500 mb-2 block">Thumbnail URL</label>
+                        <input type="text" id="project-thumbnail"
+                            class="w-full px-4 py-3 rounded-xl text-white placeholder-slate-600"
+                            placeholder="attached_assets/image.png or https://...">
+                    </div>
+                    <div>
+                        <label class="text-xs uppercase tracking-wider text-slate-500 mb-2 block">Tech Stack (comma
+                            separated)</label>
+                        <input type="text" id="project-tech"
+                            class="w-full px-4 py-3 rounded-xl text-white placeholder-slate-600"
+                            placeholder="HTML, CSS, JavaScript, React">
+                    </div>
+                    <div class="flex items-end">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="project-featured" class="w-5 h-5 rounded accent-indigo-500">
+                            <span class="text-sm">Featured project (show on homepage)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-8">
+                    <button type="submit"
+                        class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-xl hover:scale-105 transition-all shadow-lg shadow-indigo-500/20"
+                        id="submit-btn">
+                        Add Project
+                    </button>
+                    <button type="button" onclick="resetForm()" id="cancel-btn"
+                        class="px-6 py-3 bg-white/5 border border-white/10 text-white font-medium rounded-xl hover:bg-white/10 transition-all hidden">
+                        Cancel Edit
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Projects List -->
+        <div class="glass rounded-2xl p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-bold">Projects (<span id="project-count">0</span>)</h2>
+            </div>
+
+            <div id="projects-list" class="space-y-4">
+                <div class="text-center py-12 text-slate-600">
+                    <p>No projects loaded. Click "Load JSON" to import.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3"></div>
+
+    <script>
+        let projects = [];
+
+        // ========== Load from URL ==========
+        async function loadFromURL() {
+            const jsonUrl = prompt('Enter the URL to your projects-data.json:', '../projects-data.json');
+            if (!jsonUrl) return;
+
+            try {
+                const response = await fetch(jsonUrl);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                projects = await response.json();
+                renderProjects();
+                showToast('Loaded ' + projects.length + ' projects', 'success');
+            } catch (error) {
+                showToast('Failed to load: ' + error.message, 'error');
+            }
+        }
+
+        // ========== Render Project List ==========
+        function renderProjects() {
+            const list = document.getElementById('projects-list');
+            document.getElementById('project-count').textContent = projects.length;
+
+            if (projects.length === 0) {
+                list.innerHTML = '<div class="text-center py-12 text-slate-600"><p>No projects. Add one above!</p></div>';
+                return;
+            }
+
+            list.innerHTML = projects.map((p, i) => `
+                <div class="flex flex-col md:flex-row items-start gap-4 p-5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all group">
+                    <div class="w-full md:w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white/5">
+                        ${p.thumbnail_url ? `<img src="${p.thumbnail_url.startsWith('http') ? p.thumbnail_url : '../' + p.thumbnail_url}" alt="" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-slate-600 text-xs">No img</div>'}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <h3 class="font-bold text-white truncate">${p.title}</h3>
+                                <p class="text-sm text-slate-500 line-clamp-2 mt-1">${p.description}</p>
+                            </div>
+                            ${p.featured ? '<span class="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 text-xs rounded-full flex-shrink-0">Featured</span>' : ''}
+                        </div>
+                        <div class="flex flex-wrap gap-1.5 mt-2">
+                            <span class="text-xs px-2 py-0.5 bg-white/5 rounded text-slate-500">${p.category || 'Uncategorized'}</span>
+                            ${(p.tech_stack || []).map(t => `<span class="text-xs px-2 py-0.5 bg-white/5 rounded text-slate-500">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="flex gap-2 flex-shrink-0">
+                        <button onclick="editProject(${i})" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all" title="Edit">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </button>
+                        <button onclick="moveProject(${i}, -1)" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all ${i === 0 ? 'opacity-30 cursor-not-allowed' : ''}" title="Move Up" ${i === 0 ? 'disabled' : ''}>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                        </button>
+                        <button onclick="moveProject(${i}, 1)" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all ${i === projects.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}" title="Move Down" ${i === projects.length - 1 ? 'disabled' : ''}>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <button onclick="deleteProject(${i})" class="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all" title="Delete">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ========== CRUD Actions ==========
+        function handleSubmit(e) {
+            e.preventDefault();
+            const editIndex = parseInt(document.getElementById('edit-index').value);
+            const project = {
+                id: editIndex >= 0 ? projects[editIndex].id : Date.now(),
+                title: document.getElementById('project-title').value.trim(),
+                description: document.getElementById('project-description').value.trim(),
+                category: document.getElementById('project-category').value,
+                url: document.getElementById('project-url').value.trim(),
+                thumbnail_url: document.getElementById('project-thumbnail').value.trim() || '',
+                tech_stack: document.getElementById('project-tech').value.split(',').map(t => t.trim()).filter(Boolean),
+                featured: document.getElementById('project-featured').checked
+            };
+
+            if (editIndex >= 0) {
+                projects[editIndex] = project;
+                showToast('Project updated', 'success');
+            } else {
+                projects.push(project);
+                showToast('Project added', 'success');
+            }
+
+            resetForm();
+            renderProjects();
+        }
+
+        function editProject(index) {
+            const p = projects[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('project-title').value = p.title;
+            document.getElementById('project-description').value = p.description;
+            document.getElementById('project-category').value = p.category || '';
+            document.getElementById('project-url').value = p.url;
+            document.getElementById('project-thumbnail').value = p.thumbnail_url || '';
+            document.getElementById('project-tech').value = (p.tech_stack || []).join(', ');
+            document.getElementById('project-featured').checked = p.featured || false;
+
+            document.getElementById('form-title').textContent = 'Edit Project';
+            document.getElementById('submit-btn').textContent = 'Update Project';
+            document.getElementById('cancel-btn').classList.remove('hidden');
+            document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteProject(index) {
+            if (!confirm(`Delete "${projects[index].title}"?`)) return;
+            projects.splice(index, 1);
+            renderProjects();
+            showToast('Project deleted', 'success');
+        }
+
+        function moveProject(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= projects.length) return;
+            [projects[index], projects[newIndex]] = [projects[newIndex], projects[index]];
+            renderProjects();
+        }
+
+        function resetForm() {
+            document.getElementById('project-form').reset();
+            document.getElementById('edit-index').value = -1;
+            document.getElementById('form-title').textContent = 'Add New Project';
+            document.getElementById('submit-btn').textContent = 'Add Project';
+            document.getElementById('cancel-btn').classList.add('hidden');
+        }
+
+        // ========== Download JSON ==========
+        function downloadJSON() {
+            if (projects.length === 0) {
+                showToast('No projects to download', 'error');
+                return;
+            }
+            const json = JSON.stringify(projects, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'projects-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('JSON downloaded — replace your projects-data.json with this file', 'success');
+        }
+
+        // ========== Toast ==========
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const colors = type === 'success'
+                ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-300'
+                : 'bg-red-500/20 border-red-500/30 text-red-300';
+            toast.className = `toast px-5 py-3 rounded-xl border backdrop-blur-xl text-sm font-medium ${colors}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ========== Auto-load on page open ==========
+        (async function autoLoad() {
+            try {
+                const response = await fetch('../projects-data.json');
+                if (response.ok) {
+                    projects = await response.json();
+                    renderProjects();
+                }
+            } catch (e) {
+                // Silent fail - user can load manually
+            }
+        })();
+    </script>
+</body>
+
+</html>

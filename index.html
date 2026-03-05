@@ -167,6 +167,16 @@
     <!-- Fullscreen Mobile Menu -->
     <div id="fullscreen-menu"
         class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-2xl clip-path-circle-0 flex items-center justify-center invisible md:hidden">
+
+        <!-- Close Button -->
+        <button id="menu-close-btn"
+            class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white hover:bg-white/10 transition-all z-[100] opacity-0 scale-75">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                </path>
+            </svg>
+        </button>
+
         <nav class="flex flex-col items-center gap-8">
             <a href="index.html#home"
                 class="menu-link text-4xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Home</a>
@@ -207,7 +217,7 @@
             </div>
 
             <!-- Name & Title -->
-            <h1
+            <h1 id="typed-title" data-text="Prapan Biswas"
                 class="text-5xl md:text-8xl font-heading font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-purple-200 text-glow leading-tight">
                 Prapan Biswas</h1>
 
