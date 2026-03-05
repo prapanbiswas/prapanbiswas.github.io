@@ -586,12 +586,21 @@ function initializeWebsite() {
     fetchProjects();
     fetchFeaturedProjects();
 
-    // Core Systems
-    new OrbSystem();        // 3D Depth Orb World
-    new MagneticNav();      // Mobile Magnetic Menu
-    new ScrollReveal();     // Scroll Animations
-    new TiltCards();        // 3D Tilt on Cards (desktop only)
-    new ParallaxScroll();   // Section Parallax (desktop only)
+    // Core visual systems (no GSAP dependency)
+    new OrbSystem();
+    new ScrollReveal();
+    new TiltCards();
+    new ParallaxScroll();
+
+    // GSAP-dependent systems — wait for it (deferred script)
+    function initGsapSystems() {
+        if (typeof gsap !== 'undefined') {
+            new MagneticNav();
+        } else {
+            setTimeout(initGsapSystems, 50);
+        }
+    }
+    initGsapSystems();
 }
 
 document.addEventListener('DOMContentLoaded', initializeWebsite);

@@ -4,64 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Prapan Biswas (Arko) | Mangrove Student</title>
+    <title>Projects — Prapan Biswas</title>
     <meta name="description"
-        content="Explore projects by Prapan Biswas (Arko), a best student at Mangrove Institute. Featuring web development, civil engineering, and design work.">
+        content="Explore projects by Prapan Biswas — web development, app development, design, and engineering work.">
     <meta name="keywords"
-        content="Prapan Projects, Portfolio, Prapan Biswas, Arko, Mangrove student, mangrove best student, Engineering Projects, Web Design Work">
+        content="Prapan Projects, Portfolio, Prapan Biswas, Arko, Web Development, Engineering, Design">
     <meta name="author" content="Prapan Biswas">
     <link rel="canonical" href="https://prapanbiswas.github.io/projects.html">
 
-    <!-- Open Graph / Social Media Tags -->
-    <meta property="og:title" content="Projects - Prapan Biswas (Arko) | Mangrove Student">
-    <meta property="og:description" content="Explore projects by Prapan Biswas (Arko), Mangrove Institute student.">
+    <meta property="og:title" content="Projects — Prapan Biswas">
+    <meta property="og:description" content="Explore projects by Prapan Biswas — developer, designer & engineer.">
     <meta property="og:url" content="https://prapanbiswas.github.io/projects.html">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://prapanbiswas.github.io/attached_assets/prapan-biswas-profile.jpg">
 
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- Preload critical fonts -->
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        as="style">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Tailwind CSS CDN -->
+    <!-- GSAP (deferred) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         primary: '#6366f1',
                         secondary: '#a855f7',
-                        glass: 'rgba(255, 255, 255, 0.1)',
-                        'glass-dark': 'rgba(15, 23, 42, 0.6)',
+                        accent: '#ec4899',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         heading: ['Outfit', 'sans-serif'],
-                    },
-                    animation: {
-                        'blob': 'blob 10s infinite linear',
-                        'float': 'float 8s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        }
                     }
                 }
             }
         }
     </script>
 
-    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -71,39 +60,33 @@
         <canvas id="orb-canvas" class="block w-full h-full"></canvas>
     </div>
 
-    <!-- Navigation Bar -->
+    <!-- Navigation -->
     <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 px-4 py-4 mx-auto max-w-7xl inset-x-0 mt-2">
         <div
             class="glass-card rounded-full px-6 py-3 flex justify-between items-center bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg">
-            <!-- Brand -->
             <a href="index.html"
                 class="flex items-center gap-3 font-heading font-bold text-xl text-white hover:scale-105 transition-transform">
                 <img src="attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png" alt="Logo"
-                    class="w-8 h-8 rounded-full border border-white/20">
+                    class="w-8 h-8 rounded-full border border-white/20" loading="eager" width="32" height="32">
                 <span>Prapan</span>
             </a>
 
-            <!-- Desktop Menu (Text Links) -->
             <div class="hidden md:flex items-center gap-8">
                 <a href="index.html#about"
                     class="text-sm font-medium text-slate-300 hover:text-white transition-colors">About</a>
                 <a href="index.html#skills"
                     class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Skills</a>
-                <a href="index.html#interests"
-                    class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Interests</a>
-                <a href="projects.html" class="text-sm font-medium text-white font-bold transition-colors">Projects</a>
+                <a href="projects.html" class="text-sm font-medium text-white transition-colors">Projects</a>
                 <a href="index.html#contact"
-                    class="px-5 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-full transition-all border border-white/10">Contact</a>
+                    class="px-5 py-2 bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium rounded-full hover:scale-105 transition-all shadow-lg shadow-indigo-500/20">Let's
+                    Talk</a>
             </div>
 
-            <!-- Mobile Menu Trigger (Magnetic) -->
             <div class="md:hidden relative z-[100]">
                 <button id="nav-trigger"
                     class="relative w-12 h-12 flex items-center justify-center group cursor-pointer border border-white/20 rounded-full bg-white/5 backdrop-blur-md">
                     <div id="magnetic-area"
                         class="absolute inset-0 rounded-full transition-all duration-300 group-hover:bg-white/10"></div>
-
-                    <!-- 3-Line Hamburger -->
                     <div class="relative w-5 h-4 overflow-hidden pointer-events-none flex flex-col justify-between">
                         <span
                             class="w-full h-[2px] bg-white transition-all duration-300 burger-line-1 origin-left"></span>
@@ -117,51 +100,46 @@
         </div>
     </nav>
 
-    <!-- Fullscreen Menu Overlay -->
+    <!-- Fullscreen Mobile Menu -->
     <div id="fullscreen-menu"
         class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-2xl clip-path-circle-0 flex items-center justify-center invisible md:hidden">
-        <nav class="flex flex-col items-center gap-8 md:gap-12">
+        <nav class="flex flex-col items-center gap-8">
             <a href="index.html#home"
-                class="menu-link text-4xl md:text-6xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Home</a>
+                class="menu-link text-4xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Home</a>
             <a href="index.html#about"
-                class="menu-link text-4xl md:text-6xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">About</a>
-            <a href="index.html#skills"
-                class="menu-link text-4xl md:text-6xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Skills</a>
+                class="menu-link text-4xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">About</a>
             <a href="projects.html"
-                class="menu-link text-4xl md:text-6xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Projects</a>
+                class="menu-link text-4xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Projects</a>
             <a href="index.html#contact"
-                class="menu-link text-4xl md:text-6xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Contact</a>
+                class="menu-link text-4xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 hover:from-white hover:to-white transition-all duration-300 translate-y-10 opacity-0">Contact</a>
         </nav>
-
-        <!-- Background Decoration for Menu -->
         <div class="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-900/10 to-purple-900/10 pointer-events-none">
         </div>
     </div>
 
     <main class="pt-32 pb-20 px-4 max-w-6xl mx-auto">
         <section class="text-center mb-16 reveal-on-scroll">
+            <span class="text-xs uppercase tracking-[4px] text-indigo-400 font-medium mb-4 block">Portfolio</span>
             <h1
-                class="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-200 drop-shadow-lg">
-                My Projects</h1>
-            <p class="text-xl opacity-80 max-w-2xl mx-auto">Explore a collection of projects showcasing my work in web
-                development, engineering, and design.</p>
+                class="text-4xl md:text-6xl font-heading font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+                All Projects</h1>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto">A collection of work spanning web development,
+                engineering, and design.</p>
         </section>
 
-        <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Project cards will be dynamically inserted here by script.js -->
+        <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-stagger>
             <div class="col-span-full text-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-                <p class="opacity-60">Loading projects...</p>
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-400 mx-auto mb-4"></div>
+                <p class="text-slate-500 text-sm">Loading projects...</p>
             </div>
         </div>
     </main>
 
-    <footer class="text-center py-8 text-sm opacity-60">
-        <p>&copy; 2026 Prapan Biswas. All rights reserved.</p>
-        <p class="mt-2">Civil Engineering Student | Multi-Skill Learner | Tech Enthusiast</p>
+    <footer class="text-center py-12 text-sm border-t border-white/5">
+        <p class="text-slate-500">&copy; 2026 Prapan Biswas. Crafted with care.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
