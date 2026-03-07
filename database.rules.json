@@ -1,0 +1,30 @@
+{
+    "rules": {
+        "profile": {
+            ".read": true,
+            ".write": "auth !== null && auth.uid === 'VYr2gUCaAid4ipMMsbGx152ATOU2'"
+        },
+        "socialLinks": {
+            ".read": true,
+            ".write": "auth !== null && auth.uid === 'VYr2gUCaAid4ipMMsbGx152ATOU2'"
+        },
+        "skills": {
+            ".read": true,
+            ".write": "auth !== null && auth.uid === 'VYr2gUCaAid4ipMMsbGx152ATOU2'"
+        },
+        "interests": {
+            ".read": true,
+            ".write": "auth !== null && auth.uid === 'VYr2gUCaAid4ipMMsbGx152ATOU2'"
+        },
+        "projects": {
+            ".read": true,
+            ".write": "auth !== null && auth.uid === 'VYr2gUCaAid4ipMMsbGx152ATOU2'"
+        },
+        "blogs": {
+            ".read": true,
+            ".write": "auth !== null && auth.uid === 'VYr2gUCaAid4ipMMsbGx152ATOU2'"
+        },
+        ".read": false,
+        ".write": false
+    }
+}

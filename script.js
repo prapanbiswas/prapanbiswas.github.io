@@ -567,23 +567,157 @@ function initActiveLinkHighlight() {
 }
 
 /* =========================================
-   Projects — Fetch & Render
+   Firebase REST API Base
+   ========================================= */
+const FIREBASE_DB = 'https://prapan-biswas-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+async function fbGet(path) {
+    const res = await fetch(`${FIREBASE_DB}/${path}.json`);
+    if (!res.ok) throw new Error('Firebase fetch failed');
+    return res.json();
+}
+
+/* =========================================
+   Load Dynamic Content from Firebase
+   ========================================= */
+async function loadDynamicContent() {
+    try {
+        const [profile, socialLinks, skills, interests] = await Promise.all([
+            fbGet('profile').catch(() => null),
+            fbGet('socialLinks').catch(() => null),
+            fbGet('skills').catch(() => null),
+            fbGet('interests').catch(() => null)
+        ]);
+
+        if (profile) renderProfile(profile);
+        if (socialLinks) renderSocialLinks(Array.isArray(socialLinks) ? socialLinks : Object.values(socialLinks));
+        if (skills) renderSkillCards(Array.isArray(skills) ? skills : Object.values(skills));
+        if (interests) renderInterestCards(Array.isArray(interests) ? interests : Object.values(interests));
+    } catch (err) {
+        console.warn('Firebase content load skipped:', err.message);
+    }
+}
+
+function renderProfile(p) {
+    const nameEl = document.getElementById('typed-title');
+    if (nameEl && p.name) nameEl.setAttribute('data-text', p.name);
+
+    const statusEl = document.querySelector('[data-bind="status"]');
+    if (statusEl && p.availableStatus) statusEl.textContent = p.availableStatus;
+
+    const locationEl = document.querySelector('[data-bind="location"]');
+    if (locationEl && p.location) locationEl.textContent = p.location;
+
+    const aboutEl = document.querySelector('[data-bind="about"]');
+    if (aboutEl && p.aboutText) {
+        const paragraphs = p.aboutText.split('\n\n');
+        aboutEl.innerHTML = paragraphs.map(para => {
+            const boldName = para.replace(/(Prapan Biswas)/g, '<strong class="text-white">$1</strong>');
+            return `<p class="mb-4">${boldName}</p>`;
+        }).join('');
+    }
+
+    const taglineEl = document.querySelector('[data-bind="tagline"]');
+    if (taglineEl && p.tagline) {
+        taglineEl.innerHTML = p.tagline.replace(/code/gi, '<strong>code</strong>')
+            .replace(/design/gi, '<strong>design</strong>')
+            .replace(/engineering/gi, '<strong>engineering</strong>');
+    }
+
+    if (p.birthday) {
+        const bd = new Date(p.birthday);
+        const today = new Date();
+        let age = today.getFullYear() - bd.getFullYear();
+        const m = today.getMonth() - bd.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < bd.getDate())) age--;
+        const ageEl = document.getElementById('age');
+        if (ageEl) ageEl.textContent = age;
+    }
+
+    if (p.profileImageUrl) {
+        const img = document.querySelector('[data-bind="profile-img"]');
+        if (img) img.src = p.profileImageUrl;
+    }
+}
+
+function renderSocialLinks(links) {
+    const container = document.querySelector('[data-bind="social-links"]');
+    if (!container || !links.length) return;
+    container.innerHTML = links.map(link => `
+        <a href="${link.url}" target="_blank" rel="noopener noreferrer"
+            class="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-indigo-500/50 hover:bg-indigo-500/10 transition-all text-xl"
+            title="${link.platform}">
+            ${getIconEmoji(link.icon)}
+        </a>
+    `).join('');
+}
+
+function renderSkillCards(skills) {
+    const container = document.querySelector('[data-bind="skills"]');
+    if (!container || !skills.length) return;
+    container.innerHTML = skills.map(skill => `
+        <div class="tilt-3d glass-card rounded-2xl p-8 group hover:scale-[1.02] transition-all duration-300 reveal-item">
+            <div class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0"></div>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-6"
+                style="background:linear-gradient(135deg, ${skill.color || '#6366f1'}20, ${skill.color || '#6366f1'}40)">
+                ${getIconEmoji(skill.icon)}
+            </div>
+            <h4 class="text-xl font-bold mb-2 text-slate-100">${skill.title}</h4>
+            <p class="text-sm text-slate-400 leading-relaxed">${skill.description || ''}</p>
+        </div>
+    `).join('');
+}
+
+function renderInterestCards(interests) {
+    const container = document.querySelector('[data-bind="interests"]');
+    if (!container || !interests.length) return;
+    container.innerHTML = interests.map(interest => `
+        <div class="glass-card rounded-2xl p-6 text-center hover:scale-[1.02] transition-all reveal-item">
+            <div class="text-3xl mb-3">${getIconEmoji(interest.icon)}</div>
+            <h4 class="text-lg font-bold text-slate-100 mb-1">${interest.title}</h4>
+            <p class="text-sm text-slate-400">${interest.description || ''}</p>
+        </div>
+    `).join('');
+}
+
+function getIconEmoji(iconId) {
+    const map = {
+        code: '&lt;/&gt;', mobile: '📱', design: '🎨', photo: '📷', server: '🖥️', database: '🗄️',
+        cloud: '☁️', lock: '🔒', gear: '⚙️', globe: '🌐', rocket: '🚀', lightning: '⚡',
+        chart: '📊', paintbrush: '🖌️', palette: '🎭', layers: '📚', pen: '✏️', terminal: '💻',
+        chip: '🔧', atom: '⚛️', brain: '🧠', robot: '🤖', game: '🎮', music: '🎵',
+        video: '🎬', mic: '🎙️', book: '📖', graduation: '🎓', trophy: '🏆', star: '⭐',
+        heart: '❤️', fire: '🔥', sparkle: '✨', target: '🎯', puzzle: '🧩', bulb: '💡',
+        wrench: '🔧', hammer: '🔨', package: '📦', link: '🔗', mail: '📧', chat: '💬',
+        users: '👥', user: '👤', shield: '🛡️', key: '🔑', search: '🔍', map: '🗺️',
+        pin: '📍', clock: '🕐', calendar: '📅', plant: '🌱', tree: '🌳', sun: '☀️',
+        moon: '🌙', building: '🏗️', house: '🏠', camera: '📸', earth: '🌍',
+        crown: '👑', diamond: '💎', coffee: '☕', wave: '👋', bell: '🔔'
+    };
+    return map[iconId] || '❓';
+}
+
+/* =========================================
+   Projects — Fetch from Firebase
    ========================================= */
 async function fetchProjects() {
     const projectsContainer = document.getElementById('projects-container');
     if (!projectsContainer) return;
 
     try {
-        const response = await fetch('projects-data.json');
-        if (!response.ok) throw new Error('Failed to fetch projects');
-        const projects = await response.json();
+        const data = await fbGet('projects');
+        const projects = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
         projectsContainer.innerHTML = '';
+        if (projects.length === 0) {
+            projectsContainer.innerHTML = '<div class="col-span-full text-center p-8 text-slate-500"><p>No projects yet.</p></div>';
+            return;
+        }
         projects.forEach((project, index) => {
             projectsContainer.appendChild(createProjectCard(project, index));
         });
     } catch (error) {
         console.error('Error fetching projects:', error);
-        projectsContainer.innerHTML = `<div class="col-span-full text-center p-8 text-slate-500"><p>Unable to load projects.</p></div>`;
+        projectsContainer.innerHTML = '<div class="col-span-full text-center p-8 text-slate-500"><p>Unable to load projects.</p></div>';
     }
 }
 
@@ -592,17 +726,19 @@ async function fetchFeaturedProjects() {
     if (!featuredContainer) return;
 
     try {
-        const response = await fetch('projects-data.json');
-        if (!response.ok) throw new Error('Failed to fetch featured projects');
-        const projects = await response.json();
+        const data = await fbGet('projects');
+        const projects = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
         const featured = projects.filter(p => p.featured);
         featuredContainer.innerHTML = '';
+        if (featured.length === 0) {
+            featuredContainer.innerHTML = '<div class="col-span-full text-center p-8 text-slate-500"><p>No featured projects yet.</p></div>';
+            return;
+        }
         featured.forEach((project, index) => {
             featuredContainer.appendChild(createProjectCard(project, index));
         });
     } catch (error) {
         console.error('Error fetching featured projects:', error);
-        featuredContainer.innerHTML = `<div class="col-span-full text-center p-8 text-slate-500"><p>Unable to load featured projects.</p></div>`;
     }
 }
 
@@ -617,7 +753,6 @@ function createProjectCard(project, index) {
     card.style.transition = 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)';
     card.style.transitionDelay = `${index * 120}ms`;
 
-    // Animate in after a tick
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             card.style.opacity = '1';
@@ -625,22 +760,19 @@ function createProjectCard(project, index) {
         });
     });
 
+    const techStack = project.tech_stack || [];
     card.innerHTML = `
         <div class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300"></div>
         <div class="relative h-48 overflow-hidden">
-            <img src="${project.thumbnail_url}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+            ${project.thumbnail_url ? `<img src="${project.thumbnail_url}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">` : '<div class="w-full h-full bg-gradient-to-br from-indigo-900/40 to-purple-900/40 flex items-center justify-center text-4xl">📦</div>'}
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-            <span class="absolute bottom-4 left-4 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm bg-indigo-600/90">
-                ${project.category}
-            </span>
+            <span class="absolute bottom-4 left-4 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm bg-indigo-600/90">${project.category || 'Project'}</span>
         </div>
         <div class="p-6">
             <h4 class="text-xl font-bold mb-2 text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-2">${project.title}</h4>
             <p class="text-sm text-slate-400 line-clamp-3 mb-4">${project.description}</p>
             <div class="flex flex-wrap gap-2 mb-4">
-                ${project.tech_stack.slice(0, 3).map(tech => `
-                    <span class="text-xs px-2 py-1 bg-white/5 rounded-full text-slate-400 border border-white/10">${tech}</span>
-                `).join('')}
+                ${techStack.slice(0, 3).map(tech => `<span class="text-xs px-2 py-1 bg-white/5 rounded-full text-slate-400 border border-white/10">${tech}</span>`).join('')}
             </div>
             <span class="text-indigo-400 font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
                 View Project
@@ -658,6 +790,7 @@ function createProjectCard(project, index) {
 function initializeWebsite() {
     updateAge();
     initActiveLinkHighlight();
+    loadDynamicContent();
     fetchProjects();
     fetchFeaturedProjects();
 
