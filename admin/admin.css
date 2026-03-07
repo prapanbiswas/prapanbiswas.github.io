@@ -14,10 +14,11 @@ body {
 }
 
 .glass {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px);
     border-radius: 1rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .glass-hover:hover {
@@ -82,12 +83,12 @@ body {
 
 .sidebar a:hover,
 .sidebar a.active {
-    background: rgba(99, 102, 241, 0.12);
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), transparent);
     color: #fff;
 }
 
 .sidebar a.active {
-    box-shadow: inset 3px 0 0 #6366f1;
+    box-shadow: inset 3px 0 0 #a855f7;
 }
 
 .main-content {
@@ -218,17 +219,20 @@ label {
 .item-card {
     padding: 1rem 1.25rem;
     border-radius: 0.75rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .item-card:hover {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
 .item-card .item-info {
@@ -316,8 +320,9 @@ label {
 
 .icon-option:hover {
     border-color: #6366f1;
-    background: rgba(99, 102, 241, 0.1);
-    transform: scale(1.1);
+    background: rgba(99, 102, 241, 0.15);
+    transform: scale(1.15) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
 .icon-option.selected {

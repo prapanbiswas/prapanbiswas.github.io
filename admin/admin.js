@@ -271,6 +271,7 @@ function renderSocialLinks(data) {
             </div>
         </div>
     `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function showSocialForm(index = -1) {
@@ -278,9 +279,10 @@ function showSocialForm(index = -1) {
     document.getElementById('social-edit-idx').value = index;
     document.getElementById('social-platform').value = s.platform;
     document.getElementById('social-url').value = s.url;
-    document.getElementById('social-icon-preview').textContent = getIconSvg(s.icon);
+    document.getElementById('social-icon-preview').innerHTML = getIconSvg(s.icon);
     document.getElementById('social-icon-val').value = s.icon || 'globe';
     document.getElementById('social-form-panel').style.display = 'block';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 function editSocial(i) { showSocialForm(i); }
 function hideSocialForm() { document.getElementById('social-form-panel').style.display = 'none'; }
@@ -336,6 +338,7 @@ function renderSkills(data) {
             </div>
         </div>
     `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function showSkillForm(index = -1) {
@@ -344,9 +347,10 @@ function showSkillForm(index = -1) {
     document.getElementById('skill-title').value = s.title;
     document.getElementById('skill-desc').value = s.description || '';
     document.getElementById('skill-color').value = s.color || '#6366f1';
-    document.getElementById('skill-icon-preview').textContent = getIconSvg(s.icon);
+    document.getElementById('skill-icon-preview').innerHTML = getIconSvg(s.icon);
     document.getElementById('skill-icon-val').value = s.icon || 'code';
     document.getElementById('skill-form-panel').style.display = 'block';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 function editSkill(i) { showSkillForm(i); }
 function hideSkillForm() { document.getElementById('skill-form-panel').style.display = 'none'; }
@@ -403,6 +407,7 @@ function renderInterests(data) {
             </div>
         </div>
     `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function showInterestForm(index = -1) {
@@ -410,9 +415,10 @@ function showInterestForm(index = -1) {
     document.getElementById('interest-edit-idx').value = index;
     document.getElementById('interest-title').value = s.title;
     document.getElementById('interest-desc').value = s.description || '';
-    document.getElementById('interest-icon-preview').textContent = getIconSvg(s.icon);
+    document.getElementById('interest-icon-preview').innerHTML = getIconSvg(s.icon);
     document.getElementById('interest-icon-val').value = s.icon || 'bulb';
     document.getElementById('interest-form-panel').style.display = 'block';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 function editInterest(i) { showInterestForm(i); }
 function hideInterestForm() { document.getElementById('interest-form-panel').style.display = 'none'; }
@@ -591,8 +597,18 @@ async function deleteBlog(i) {
    Icon Picker
    ========================================= */
 function getIconSvg(iconId) {
-    const icon = ICON_LIBRARY.find(i => i.id === iconId);
-    return icon ? icon.svg : '❓';
+    if (!iconId) return '';
+    const map = {
+        mobile: 'smartphone', design: 'palette', photo: 'camera', gear: 'settings',
+        lightning: 'zap', chart: 'bar-chart', paintbrush: 'brush', chip: 'cpu',
+        robot: 'bot', game: 'gamepad-2', graduation: 'graduation-cap', fire: 'flame',
+        sparkle: 'sparkles', bulb: 'lightbulb', chat: 'message-square', pin: 'map-pin',
+        plant: 'leaf', tree: 'tree-deciduous', math: 'calculator', diamond: 'gem',
+        money: 'coins', gym: 'dumbbell', run: 'activity', thumbsup: 'thumbs-up',
+        confetti: 'party-popper', speech: 'mic', earth: 'globe'
+    };
+    const validId = map[iconId] || iconId;
+    return `<i data-lucide="${validId}"></i>`;
 }
 
 function openIconPicker(previewId, valueId) {
@@ -606,9 +622,10 @@ function openIconPicker(previewId, valueId) {
         const filtered = filter ? ICON_LIBRARY.filter(i => i.label.toLowerCase().includes(filter.toLowerCase()) || i.id.includes(filter.toLowerCase())) : ICON_LIBRARY;
         grid.innerHTML = filtered.map(icon => `
             <div class="icon-option ${icon.id === currentVal ? 'selected' : ''}" onclick="pickIcon('${icon.id}','${previewId}','${valueId}')" title="${icon.label}">
-                ${icon.svg}
+                ${getIconSvg(icon.id)}
             </div>
         `).join('');
+        if (typeof lucide !== 'undefined') lucide.createIcons({ root: grid });
     }
 
     renderIcons();
@@ -617,9 +634,10 @@ function openIconPicker(previewId, valueId) {
 }
 
 function pickIcon(iconId, previewId, valueId) {
-    document.getElementById(previewId).textContent = getIconSvg(iconId);
+    document.getElementById(previewId).innerHTML = getIconSvg(iconId);
     document.getElementById(valueId).value = iconId;
     document.getElementById('icon-picker-modal').classList.remove('open');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function closeIconPicker() {

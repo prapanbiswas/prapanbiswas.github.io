@@ -10,6 +10,10 @@
 </head>
 
 <body>
+    <!-- Background Animation -->
+    <div id="orb-canvas-container" style="position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden">
+        <canvas id="orb-canvas" style="display:block;width:100%;height:100%"></canvas>
+    </div>
 
     <!-- ============ AUTH SCREEN ============ -->
     <div id="auth-screen">
@@ -34,14 +38,27 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo">🎨 CMS</div>
+            <div class="logo" style="display:flex;align-items:center;gap:0.5rem"><i data-lucide="layout-dashboard"></i>
+                CMS</div>
             <nav>
-                <a href="#" data-section="profile">👤 Profile</a>
-                <a href="#" data-section="social">🔗 Social Links</a>
-                <a href="#" data-section="skills">⚡ Skills</a>
-                <a href="#" data-section="interests">💡 Interests</a>
-                <a href="#" data-section="projects">📦 Projects</a>
-                <a href="#" data-section="blogs">📝 Blog Posts</a>
+                <a href="#" data-section="profile"><i data-lucide="user"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Profile</a>
+                <a href="#" data-section="social"><i data-lucide="link"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Social Links</a>
+                <a href="#" data-section="skills"><i data-lucide="zap"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Skills</a>
+                <a href="#" data-section="interests"><i data-lucide="lightbulb"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Interests</a>
+                <a href="#" data-section="projects"><i data-lucide="package"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Projects</a>
+                <a href="#" data-section="blogs"><i data-lucide="file-text"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Blog Posts</a>
             </nav>
             <div style="margin-top:auto;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.06)">
                 <p style="font-size:0.7rem;color:#475569;margin-bottom:0.5rem" id="user-email"></p>
@@ -272,7 +289,16 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../background.js" defer></script>
     <script src="admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -26,8 +26,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-[#030014] text-white font-body antialiased overflow-x-hidden">
-    <canvas id="orb-canvas" class="fixed inset-0 z-0 pointer-events-none"></canvas>
+<body class="bg-black text-slate-100 min-h-screen selection:bg-fuchsia-500/30 overflow-x-hidden">
+
+    <div id="orb-canvas-container" class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <canvas id="orb-canvas" class="block w-full h-full"></canvas>
+    </div>
+
     <div class="noise-overlay"></div>
     <div class="relative z-10">
 
@@ -160,6 +164,8 @@
         document.addEventListener('DOMContentLoaded', loadBlogs);
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="libs/lucide.min.js"></script>
+    <script src="background.js" defer></script>
     <script src="script.js" defer></script>
 </body>
 

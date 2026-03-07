@@ -16,5 +16,10 @@ node_modules/
 npm-debug.log*
 
 # Build artifacts
-dist/
 build/
+
+# Firebase configuration & Old Data
+.firebaserc
+firebase.json
+database.rules.json
+projects-data.json
