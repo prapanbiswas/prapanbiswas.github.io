@@ -15,6 +15,11 @@ let app, auth, db;
 
 function initFirebase() {
     app = firebase.initializeApp(firebaseConfig);
+    const recaptchaSiteKey = "6Lf2kIMsAAAAAPt7x-3J9t8ICtLGoOxsrQEwU3X9";
+    firebase.appCheck().activate(
+        new firebase.appCheck.ReCaptchaV3Provider(recaptchaSiteKey),
+        true
+    );
     auth = firebase.auth();
     db = firebase.database();
 }
