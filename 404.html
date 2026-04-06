@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <meta name="description" content="The page you're looking for couldn't be found.">
+    <meta name="robots" content="noindex, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png">
+
+    <!-- Preload & Preconnect for speed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .animated-404 {
+            font-size: 8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #4facfe);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .bounce {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center">
+            <!-- Animated 404 -->
+            <div class="animated-404 mb-4 bounce">404</div>
+
+            <!-- Glass Card Container -->
+            <div class="glass-effect rounded-3xl p-8 md:p-12 max-w-2xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 font-['Outfit']">
+                    Oops! Page Not Found
+                </h1>
+
+                <p class="text-lg text-white/80 mb-8">
+                    The page you're looking for doesn't exist or has been moved. Let me help you get back on track.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/"
+                        class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]">
+                        ← Back to Home
+                    </a>
+                    <a href="/#contact"
+                        class="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-8 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-white/20">
+                        Contact Me
+                    </a>
+                </div>
+
+                <!-- Quick Links -->
+                <hr class="border-white/10 my-8">
+                <p class="text-white/60 text-sm mb-4">Quick Navigation:</p>
+                <nav class="flex flex-wrap gap-4 justify-center">
+                    <a href="/" class="text-indigo-300 hover:text-indigo-200 transition">Home</a>
+                    <a href="/blog.html" class="text-indigo-300 hover:text-indigo-200 transition">Blog</a>
+                    <a href="/projects.html" class="text-indigo-300 hover:text-indigo-200 transition">Projects</a>
+                    <a href="/#contact" class="text-indigo-300 hover:text-indigo-200 transition">Contact</a>
+                </nav>
+            </div>
+
+            <!-- Footer -->
+            <p class="text-white/40 text-sm mt-8">
+                © 2024 Prapan Biswas. If this is an error, please report it.
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
