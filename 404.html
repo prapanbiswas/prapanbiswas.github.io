@@ -30,11 +30,6 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .animated-404 {
@@ -45,7 +40,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientShift 3s ease infinite;
+            animation: gradientShift 3s ease infinite, float 6s ease-in-out infinite;
         }
 
         @keyframes gradientShift {
@@ -54,31 +49,56 @@
             100% { background-position: 0% 50%; }
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
         .glass-effect {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .bounce {
-            animation: bounce 1s infinite;
+        .fade-in {
+            animation: fadeIn 1.5s ease-out;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
         }
     </style>
 </head>
 
-<body>
-    <div class="container mx-auto px-4 py-8">
-        <div class="text-center">
+<body class="bg-black text-slate-100 min-h-screen selection:bg-fuchsia-500/30 overflow-x-hidden">
+
+    <!-- 3D Orb Canvas -->
+    <div id="orb-canvas-container" class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <canvas id="orb-canvas" class="block w-full h-full"></canvas>
+    </div>
+
+    <!-- Noise Texture Overlay -->
+    <div class="fixed inset-0 z-[1] pointer-events-none opacity-[0.03] mix-blend-overlay"
+        style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px;">
+    </div>
+
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <div class="text-center fade-in">
             <!-- Animated 404 -->
-            <div class="animated-404 mb-4 bounce">404</div>
+            <div class="animated-404 mb-4">404</div>
 
             <!-- Glass Card Container -->
-            <div class="glass-effect rounded-3xl p-8 md:p-12 max-w-2xl mx-auto">
+            <div class="glass-effect rounded-3xl p-8 md:p-12 max-w-2xl mx-auto pulse-glow">
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 font-['Outfit']">
                     Oops! Page Not Found
                 </h1>
@@ -116,6 +136,9 @@
             </p>
         </div>
     </div>
+
+    <!-- Background Script -->
+    <script src="background.js"></script>
 </body>
 
 </html>
