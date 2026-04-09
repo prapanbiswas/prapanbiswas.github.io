@@ -17,7 +17,7 @@ const FIREBASE_CONFIG = {
     appId: "1:453264451702:web:fda490119ff32667701757"
 };
 
-const RECAPTCHA_SITE_KEY = "6Lf2kIMsAAAAAPt7x-3J9t8ICtLGoOxsrQEwU3X9";
+const RECAPTCHA_SITE_KEY = "YOUR_NEW_SITE_KEY_ENDING_IN_6qT";
 const FIREBASE_DB = FIREBASE_CONFIG.databaseURL;
 
 let _appCheckInstance = null;
@@ -42,12 +42,13 @@ function initPublicFirebase() {
             app = firebase.initializeApp(FIREBASE_CONFIG);
         }
 
+        // Initialize App Check with standard reCAPTCHA v3 (NOT Enterprise)
         _appCheckInstance = firebase.appCheck();
         _appCheckInstance.activate(
-            new firebase.appCheck.ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY),
+            new firebase.appCheck.ReCaptchaV3Provider(RECAPTCHA_SITE_KEY),
             /* isTokenAutoRefreshEnabled */ true
         );
-        console.log('[AppCheck] Initialized with reCAPTCHA Enterprise');
+        console.log('[AppCheck] Initialized with reCAPTCHA v3');
     } catch (err) {
         console.warn('[AppCheck] Init failed:', err.message);
     }

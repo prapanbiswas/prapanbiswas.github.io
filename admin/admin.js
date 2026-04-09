@@ -13,21 +13,21 @@ const firebaseConfig = {
 
 let app, auth, db;
 
-const RECAPTCHA_SITE_KEY = "6Lf2kIMsAAAAAPt7x-3J9t8ICtLGoOxsrQEwU3X9";
+const RECAPTCHA_SITE_KEY = "YOUR_NEW_SITE_KEY_ENDING_IN_6qT";
 
 function initFirebase() {
     app = firebase.initializeApp(firebaseConfig);
 
-    // Initialize App Check with reCAPTCHA Enterprise
+    // Initialize App Check with standard reCAPTCHA v3 BEFORE database
     const appCheck = firebase.appCheck();
     appCheck.activate(
-        new firebase.appCheck.ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY),
+        new firebase.appCheck.ReCaptchaV3Provider(RECAPTCHA_SITE_KEY),
         /* isTokenAutoRefreshEnabled */ true
     );
 
     auth = firebase.auth();
     db = firebase.database();
-    console.log('[Admin] Firebase + App Check initialized');
+    console.log('[Admin] Firebase + App Check (v3) initialized');
 }
 
 /* =========================================
