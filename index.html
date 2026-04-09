@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.recaptcha.net https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google.com https://*.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://www.recaptcha.net https://firebase.googleapis.com https://fcm.googleapis.com; frame-src https://www.google.com https://www.recaptcha.net; worker-src 'self';">
     <title>Prapan Biswas — Developer, Designer & Engineer</title>
     <meta name="description"
         content="Portfolio of Prapan Biswas (Arko) — a multi-disciplinary developer, designer & civil engineering student building digital experiences from Bangladesh.">
@@ -43,7 +44,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
     <!-- GSAP (deferred — not render-blocking) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" crossorigin="anonymous"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -633,6 +634,12 @@
     </footer>
 
     <script src="libs/lucide.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+    <script src="firebase-appcheck.js"></script>
+    <script src="push-notifications.js" defer></script>
     <script src="background.js" defer></script>
     <script src="script.js" defer></script>
 </body>

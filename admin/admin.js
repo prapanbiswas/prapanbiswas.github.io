@@ -13,10 +13,23 @@ const firebaseConfig = {
 
 let app, auth, db;
 
+const RECAPTCHA_SITE_KEY = "6Lfoq64sAAAAAGgMOjvbyyNkZ5Jd5eYbc4enw6qT";
+
 function initFirebase() {
     app = firebase.initializeApp(firebaseConfig);
-    const recaptchaSiteKey = "6Lf2kIMsAAAAAPt7x-3J9t8ICtLGoOxsrQEwU3X9";
-    firebase.appCheck().activate(recaptchaSiteKey, true);
+
+    // Initialize App Check with standard reCAPTCHA v3 BEFORE database
+    try {
+        const appCheck = firebase.appCheck();
+        appCheck.activate(
+            new firebase.appCheck.ReCaptchaV3Provider(RECAPTCHA_SITE_KEY),
+            true
+        );
+        console.log('[Admin] App Check (reCAPTCHA v3) initialized');
+    } catch (err) {
+        console.warn('[Admin] App Check init failed:', err.message);
+    }
+
     auth = firebase.auth();
     db = firebase.database();
 }
@@ -132,8 +145,36 @@ const ICON_LIBRARY = [
 /* =========================================
    State
    ========================================= */
-let currentSection = 'profile';
-let iconPickerCallback = null;
+let currentSection = 'dashboard';
+
+/* =========================================
+   Security: Sanitization
+   ========================================= */
+function escapeHTML(str) {
+    if (typeof str !== 'string') return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function sanitizeURL(url) {
+    if (typeof url !== 'string') return '#';
+    const trimmed = url.trim();
+    if (/^\s*(javascript|data|vbscript)\s*:/i.test(trimmed)) return '#';
+    if (/^(https?:|mailto:|tel:|\/|#|\.\.)/i.test(trimmed) || !trimmed.includes(':')) {
+        return encodeURI(decodeURI(trimmed));
+    }
+    return '#';
+}
+
+/* =========================================
+   Lucide Helper — refresh icons after DOM
+   ========================================= */
+function refreshIcons(root) {
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons(root ? { root } : undefined);
+    }
+}
 
 /* =========================================
    Auth
@@ -142,20 +183,22 @@ function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
-    document.getElementById('login-btn').disabled = true;
-    document.getElementById('login-btn').textContent = 'Signing in...';
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
 
     auth.signInWithEmailAndPassword(email, password)
         .then(() => {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
+            refreshIcons();
             loadAllData();
             toast('Signed in successfully', 'success');
         })
         .catch(err => {
             toast(err.message, 'error');
-            document.getElementById('login-btn').disabled = false;
-            document.getElementById('login-btn').textContent = 'Sign In';
+            btn.disabled = false;
+            btn.textContent = 'Sign In';
         });
 }
 
@@ -173,12 +216,15 @@ function navigateTo(section) {
     currentSection = section;
     document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.sidebar a[data-section]').forEach(a => a.classList.remove('active'));
+
     const panel = document.getElementById('section-' + section);
     const link = document.querySelector(`.sidebar a[data-section="${section}"]`);
     if (panel) panel.classList.add('active');
     if (link) link.classList.add('active');
-    // Close mobile sidebar
+
+    // Close mobile sidebar & overlay
     document.querySelector('.sidebar')?.classList.remove('open');
+    document.getElementById('mobile-overlay')?.classList.remove('open');
 }
 
 /* =========================================
@@ -193,26 +239,55 @@ function dbGet(path) {
 }
 
 /* =========================================
+   Loading Skeletons
+   ========================================= */
+function showListLoading(containerId, count = 3) {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    c.innerHTML = Array.from({ length: count }, () =>
+        '<div class="skeleton" style="margin-bottom:0.5rem;min-height:60px"></div>'
+    ).join('');
+}
+
+/* =========================================
+   Dashboard Stats
+   ========================================= */
+function updateDashboard() {
+    const el = (id) => document.getElementById(id);
+    el('dash-social').textContent = socialLinks.length;
+    el('dash-skills').textContent = skills.length;
+    el('dash-projects').textContent = projects.length;
+    el('dash-blogs').textContent = blogs.length;
+}
+
+/* =========================================
    Load All Data
    ========================================= */
 async function loadAllData() {
+    // Show loading skeletons
+    ['social-list', 'skills-list', 'interests-list', 'projects-list', 'blogs-list', 'subscribers-list'].forEach(id => showListLoading(id, 2));
+
     try {
-        const [profile, socialLinks, skills, interests, projects, blogs] = await Promise.all([
+        const [profile, sl, sk, int, proj, bl, tokens] = await Promise.all([
             dbGet('profile'),
             dbGet('socialLinks'),
             dbGet('skills'),
             dbGet('interests'),
             dbGet('projects'),
-            dbGet('blogs')
+            dbGet('blogs'),
+            dbGet('fcm_tokens')
         ]);
         renderProfile(profile || {});
-        renderSocialLinks(socialLinks || []);
-        renderSkills(skills || []);
-        renderInterests(interests || []);
-        renderProjects(projects || []);
-        renderBlogs(blogs || []);
+        renderSocialLinks(sl || []);
+        renderSkills(sk || []);
+        renderInterests(int || []);
+        renderProjects(proj || []);
+        renderBlogs(bl || []);
+        renderSubscribers(tokens || {});
+        updateDashboard();
     } catch (err) {
         toast('Failed to load data: ' + err.message, 'error');
+        console.error('[Admin] Load error:', err);
     }
 }
 
@@ -257,15 +332,15 @@ function renderSocialLinks(data) {
     const list = document.getElementById('social-list');
     document.getElementById('social-count').textContent = socialLinks.length;
     if (socialLinks.length === 0) {
-        list.innerHTML = '<p style="color:#475569;text-align:center;padding:2rem">No social links. Add one!</p>';
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">🔗</div><h3>No social links</h3><p>Add your first social profile</p></div>';
         return;
     }
     list.innerHTML = socialLinks.map((s, i) => `
-        <div class="item-card">
-            <div style="font-size:1.5rem">${getIconSvg(s.icon)}</div>
+        <div class="item-card" style="animation-delay:${i * 50}ms">
+            <div class="item-icon">${getIconSvg(s.icon)}</div>
             <div class="item-info">
-                <div class="item-title">${s.platform}</div>
-                <div class="item-desc">${s.url}</div>
+                <div class="item-title">${escapeHTML(s.platform)}</div>
+                <div class="item-desc">${escapeHTML(s.url)}</div>
             </div>
             <div class="item-actions">
                 <button class="btn btn-ghost btn-sm" onclick="editSocial(${i})">Edit</button>
@@ -273,7 +348,7 @@ function renderSocialLinks(data) {
             </div>
         </div>
     `).join('');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    refreshIcons(list);
 }
 
 function showSocialForm(index = -1) {
@@ -284,7 +359,7 @@ function showSocialForm(index = -1) {
     document.getElementById('social-icon-preview').innerHTML = getIconSvg(s.icon);
     document.getElementById('social-icon-val').value = s.icon || 'globe';
     document.getElementById('social-form-panel').style.display = 'block';
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    refreshIcons(document.getElementById('social-form-panel'));
 }
 function editSocial(i) { showSocialForm(i); }
 function hideSocialForm() { document.getElementById('social-form-panel').style.display = 'none'; }
@@ -302,6 +377,7 @@ async function saveSocial() {
         await dbSet('socialLinks', socialLinks);
         renderSocialLinks(socialLinks);
         hideSocialForm();
+        updateDashboard();
         toast('Social link saved', 'success');
     } catch (err) { toast(err.message, 'error'); }
 }
@@ -311,6 +387,7 @@ async function deleteSocial(i) {
     socialLinks.splice(i, 1);
     await dbSet('socialLinks', socialLinks);
     renderSocialLinks(socialLinks);
+    updateDashboard();
     toast('Deleted', 'success');
 }
 
@@ -324,15 +401,15 @@ function renderSkills(data) {
     const list = document.getElementById('skills-list');
     document.getElementById('skills-count').textContent = skills.length;
     if (skills.length === 0) {
-        list.innerHTML = '<p style="color:#475569;text-align:center;padding:2rem">No skills. Add one!</p>';
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚡</div><h3>No skills</h3><p>Add your first expertise</p></div>';
         return;
     }
     list.innerHTML = skills.map((s, i) => `
-        <div class="item-card">
-            <div style="font-size:1.5rem">${getIconSvg(s.icon)}</div>
+        <div class="item-card" style="animation-delay:${i * 50}ms">
+            <div class="item-icon" style="border-color:${s.color || '#6366f1'}30;background:${s.color || '#6366f1'}15">${getIconSvg(s.icon)}</div>
             <div class="item-info">
-                <div class="item-title">${s.title}</div>
-                <div class="item-desc">${s.description || ''}</div>
+                <div class="item-title">${escapeHTML(s.title)}</div>
+                <div class="item-desc">${escapeHTML(s.description || '')}</div>
             </div>
             <div class="item-actions">
                 <button class="btn btn-ghost btn-sm" onclick="editSkill(${i})">Edit</button>
@@ -340,7 +417,7 @@ function renderSkills(data) {
             </div>
         </div>
     `).join('');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    refreshIcons(list);
 }
 
 function showSkillForm(index = -1) {
@@ -352,7 +429,7 @@ function showSkillForm(index = -1) {
     document.getElementById('skill-icon-preview').innerHTML = getIconSvg(s.icon);
     document.getElementById('skill-icon-val').value = s.icon || 'code';
     document.getElementById('skill-form-panel').style.display = 'block';
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    refreshIcons(document.getElementById('skill-form-panel'));
 }
 function editSkill(i) { showSkillForm(i); }
 function hideSkillForm() { document.getElementById('skill-form-panel').style.display = 'none'; }
@@ -371,6 +448,7 @@ async function saveSkill() {
         await dbSet('skills', skills);
         renderSkills(skills);
         hideSkillForm();
+        updateDashboard();
         toast('Skill saved', 'success');
     } catch (err) { toast(err.message, 'error'); }
 }
@@ -380,6 +458,7 @@ async function deleteSkill(i) {
     skills.splice(i, 1);
     await dbSet('skills', skills);
     renderSkills(skills);
+    updateDashboard();
     toast('Deleted', 'success');
 }
 
@@ -393,15 +472,15 @@ function renderInterests(data) {
     const list = document.getElementById('interests-list');
     document.getElementById('interests-count').textContent = interests.length;
     if (interests.length === 0) {
-        list.innerHTML = '<p style="color:#475569;text-align:center;padding:2rem">No interests. Add one!</p>';
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">💡</div><h3>No interests</h3><p>Add what drives you</p></div>';
         return;
     }
     list.innerHTML = interests.map((s, i) => `
-        <div class="item-card">
-            <div style="font-size:1.5rem">${getIconSvg(s.icon)}</div>
+        <div class="item-card" style="animation-delay:${i * 50}ms">
+            <div class="item-icon">${getIconSvg(s.icon)}</div>
             <div class="item-info">
-                <div class="item-title">${s.title}</div>
-                <div class="item-desc">${s.description || ''}</div>
+                <div class="item-title">${escapeHTML(s.title)}</div>
+                <div class="item-desc">${escapeHTML(s.description || '')}</div>
             </div>
             <div class="item-actions">
                 <button class="btn btn-ghost btn-sm" onclick="editInterest(${i})">Edit</button>
@@ -409,7 +488,7 @@ function renderInterests(data) {
             </div>
         </div>
     `).join('');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    refreshIcons(list);
 }
 
 function showInterestForm(index = -1) {
@@ -420,7 +499,7 @@ function showInterestForm(index = -1) {
     document.getElementById('interest-icon-preview').innerHTML = getIconSvg(s.icon);
     document.getElementById('interest-icon-val').value = s.icon || 'bulb';
     document.getElementById('interest-form-panel').style.display = 'block';
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    refreshIcons(document.getElementById('interest-form-panel'));
 }
 function editInterest(i) { showInterestForm(i); }
 function hideInterestForm() { document.getElementById('interest-form-panel').style.display = 'none'; }
@@ -438,6 +517,7 @@ async function saveInterest() {
         await dbSet('interests', interests);
         renderInterests(interests);
         hideInterestForm();
+        updateDashboard();
         toast('Interest saved', 'success');
     } catch (err) { toast(err.message, 'error'); }
 }
@@ -447,6 +527,7 @@ async function deleteInterest(i) {
     interests.splice(i, 1);
     await dbSet('interests', interests);
     renderInterests(interests);
+    updateDashboard();
     toast('Deleted', 'success');
 }
 
@@ -460,17 +541,17 @@ function renderProjects(data) {
     const list = document.getElementById('projects-list');
     document.getElementById('projects-count').textContent = projects.length;
     if (projects.length === 0) {
-        list.innerHTML = '<p style="color:#475569;text-align:center;padding:2rem">No projects. Add one!</p>';
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><h3>No projects</h3><p>Add your first portfolio project</p></div>';
         return;
     }
     list.innerHTML = projects.map((p, i) => `
-        <div class="item-card">
-            <div style="width:48px;height:48px;border-radius:0.5rem;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.05)">
-                ${p.thumbnail_url ? `<img src="${p.thumbnail_url}" style="width:100%;height:100%;object-fit:cover">` : ''}
+        <div class="item-card" style="animation-delay:${i * 50}ms">
+            <div style="width:48px;height:48px;border-radius:0.6rem;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.04)">
+                ${p.thumbnail_url ? `<img src="${sanitizeURL(p.thumbnail_url)}" style="width:100%;height:100%;object-fit:cover" alt="">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.2rem">📦</div>'}
             </div>
             <div class="item-info">
-                <div class="item-title">${p.title} ${p.featured ? '<span class="tag" style="margin-left:0.5rem">Featured</span>' : ''}</div>
-                <div class="item-desc">${p.category || ''} · ${(p.tech_stack || []).join(', ')}</div>
+                <div class="item-title">${escapeHTML(p.title)} ${p.featured ? '<span class="tag" style="margin-left:0.5rem">Featured</span>' : ''}</div>
+                <div class="item-desc">${escapeHTML(p.category || '')} · ${(p.tech_stack || []).map(t => escapeHTML(t)).join(', ')}</div>
             </div>
             <div class="item-actions">
                 <button class="btn btn-ghost btn-sm" onclick="editProject(${i})">Edit</button>
@@ -513,6 +594,7 @@ async function saveProject() {
         await dbSet('projects', projects);
         renderProjects(projects);
         hideProjectForm();
+        updateDashboard();
         toast('Project saved', 'success');
     } catch (err) { toast(err.message, 'error'); }
 }
@@ -522,6 +604,7 @@ async function deleteProject(i) {
     projects.splice(i, 1);
     await dbSet('projects', projects);
     renderProjects(projects);
+    updateDashboard();
     toast('Deleted', 'success');
 }
 
@@ -535,14 +618,15 @@ function renderBlogs(data) {
     const list = document.getElementById('blogs-list');
     document.getElementById('blogs-count').textContent = blogs.length;
     if (blogs.length === 0) {
-        list.innerHTML = '<p style="color:#475569;text-align:center;padding:2rem">No blog posts. Write one!</p>';
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><h3>No blog posts</h3><p>Write your first article</p></div>';
         return;
     }
     list.innerHTML = blogs.map((b, i) => `
-        <div class="item-card">
+        <div class="item-card" style="animation-delay:${i * 50}ms">
+            <div class="item-icon">📝</div>
             <div class="item-info">
-                <div class="item-title">${b.title}</div>
-                <div class="item-desc">${b.date || ''} · ${(b.tags || []).join(', ')}</div>
+                <div class="item-title">${escapeHTML(b.title)}</div>
+                <div class="item-desc">${escapeHTML(b.date || '')} · ${(b.tags || []).map(t => escapeHTML(t)).join(', ')}</div>
             </div>
             <div class="item-actions">
                 <button class="btn btn-ghost btn-sm" onclick="editBlog(${i})">Edit</button>
@@ -583,6 +667,7 @@ async function saveBlog() {
         await dbSet('blogs', blogs);
         renderBlogs(blogs);
         hideBlogForm();
+        updateDashboard();
         toast('Blog post saved', 'success');
     } catch (err) { toast(err.message, 'error'); }
 }
@@ -592,7 +677,63 @@ async function deleteBlog(i) {
     blogs.splice(i, 1);
     await dbSet('blogs', blogs);
     renderBlogs(blogs);
+    updateDashboard();
     toast('Deleted', 'success');
+}
+
+/* =========================================
+   SUBSCRIBERS (FCM Tokens)
+   ========================================= */
+let subscribers = {};
+
+function renderSubscribers(data) {
+    subscribers = data || {};
+    const entries = Object.entries(subscribers);
+    const list = document.getElementById('subscribers-list');
+    const countEl = document.getElementById('subscribers-count');
+    if (countEl) countEl.textContent = entries.length;
+
+    if (entries.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">🔔</div><h3>No subscribers yet</h3><p>Once visitors allow notifications, they\'ll appear here</p></div>';
+        return;
+    }
+
+    list.innerHTML = entries.map(([key, sub], i) => {
+        const ua = sub.userAgent || '';
+        let browser = 'Unknown';
+        if (ua.includes('Chrome')) browser = 'Chrome';
+        else if (ua.includes('Firefox')) browser = 'Firefox';
+        else if (ua.includes('Safari')) browser = 'Safari';
+        else if (ua.includes('Edge')) browser = 'Edge';
+
+        const platform = sub.platform || 'Unknown';
+        const date = sub.createdAt ? new Date(sub.createdAt).toLocaleDateString() : 'Unknown';
+        const tokenShort = sub.token ? sub.token.substring(0, 24) + '...' : 'N/A';
+
+        return `
+            <div class="item-card" style="animation-delay:${i * 50}ms">
+                <div class="item-icon">🔔</div>
+                <div class="item-info">
+                    <div class="item-title">${escapeHTML(browser)} on ${escapeHTML(platform)}</div>
+                    <div class="item-desc">Subscribed: ${escapeHTML(date)} · Token: ${escapeHTML(tokenShort)}</div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn btn-danger btn-sm" onclick="deleteSubscriber('${escapeHTML(key)}')">✕</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+async function deleteSubscriber(key) {
+    if (!confirm('Remove this subscriber?')) return;
+    try {
+        await db.ref('fcm_tokens/' + key).remove();
+        delete subscribers[key];
+        renderSubscribers(subscribers);
+        updateDashboard();
+        toast('Subscriber removed', 'success');
+    } catch (err) { toast(err.message, 'error'); }
 }
 
 /* =========================================
@@ -627,7 +768,7 @@ function openIconPicker(previewId, valueId) {
                 ${getIconSvg(icon.id)}
             </div>
         `).join('');
-        if (typeof lucide !== 'undefined') lucide.createIcons({ root: grid });
+        refreshIcons(grid);
     }
 
     renderIcons();
@@ -639,7 +780,7 @@ function pickIcon(iconId, previewId, valueId) {
     document.getElementById(previewId).innerHTML = getIconSvg(iconId);
     document.getElementById(valueId).value = iconId;
     document.getElementById('icon-picker-modal').classList.remove('open');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    refreshIcons();
 }
 
 function closeIconPicker() {
@@ -700,7 +841,12 @@ function toast(msg, type = 'success') {
     t.className = `toast toast-${type}`;
     t.textContent = msg;
     c.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
+    setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateX(20px)';
+        t.style.transition = 'all 0.3s ease';
+        setTimeout(() => t.remove(), 300);
+    }, 3000);
 }
 
 /* =========================================
@@ -709,17 +855,21 @@ function toast(msg, type = 'success') {
 document.addEventListener('DOMContentLoaded', () => {
     initFirebase();
 
+    // Render Lucide icons in sidebar
+    refreshIcons();
+
     // Auth listener
     auth.onAuthStateChanged(user => {
         if (user) {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
             document.getElementById('user-email').textContent = user.email;
+            refreshIcons();
             loadAllData();
         }
     });
 
-    // Sidebar nav
+    // Sidebar nav — event delegation
     document.querySelectorAll('.sidebar a[data-section]').forEach(a => {
         a.addEventListener('click', (e) => {
             e.preventDefault();
@@ -728,9 +878,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Mobile toggle
-    document.getElementById('mobile-toggle')?.addEventListener('click', () => {
-        document.querySelector('.sidebar').classList.toggle('open');
-    });
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.toggle('open');
+            mobileOverlay?.classList.toggle('open');
+        });
+    }
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.remove('open');
+            mobileOverlay.classList.remove('open');
+        });
+    }
 
-    navigateTo('profile');
+    // Navigate to dashboard by default
+    navigateTo('dashboard');
 });
