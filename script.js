@@ -1,3 +1,32 @@
+/* =========================================
+   Security: HTML Sanitization Utilities
+   ========================================= */
+function escapeHTML(str) {
+    if (typeof str !== 'string') return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function sanitizeURL(url) {
+    if (typeof url !== 'string') return '#';
+    const trimmed = url.trim();
+    // Block javascript:, data:, vbscript: protocols
+    if (/^\s*(javascript|data|vbscript)\s*:/i.test(trimmed)) return '#';
+    // Allow http, https, mailto, tel, and relative URLs
+    if (/^(https?:|mailto:|tel:|\/|#|\.\.)/i.test(trimmed) || !trimmed.includes(':')) {
+        return encodeURI(decodeURI(trimmed));
+    }
+    return '#';
+}
+
+function sanitizeColor(color) {
+    if (typeof color !== 'string') return '#6366f1';
+    // Only allow valid hex colors
+    if (/^#[0-9a-fA-F]{3,8}$/.test(color.trim())) return color.trim();
+    return '#6366f1';
+}
+
 const birthDate = new Date('2006-02-15T00:00:00');
 
 function calculateAge() {
@@ -313,15 +342,9 @@ function initActiveLinkHighlight() {
 }
 
 /* =========================================
-   Firebase REST API Base
+   Firebase REST API — provided by firebase-appcheck.js
+   fbGet(path) and FIREBASE_DB are defined there.
    ========================================= */
-const FIREBASE_DB = 'https://prapan-biswas-default-rtdb.asia-southeast1.firebasedatabase.app';
-
-async function fbGet(path) {
-    const res = await fetch(`${FIREBASE_DB}/${path}.json`);
-    if (!res.ok) throw new Error('Firebase fetch failed');
-    return res.json();
-}
 
 /* =========================================
    Load Dynamic Content from Firebase
@@ -350,7 +373,7 @@ async function loadDynamicContent() {
 
 function renderProfile(p) {
     const nameEl = document.getElementById('typed-title');
-    if (nameEl && p.name) nameEl.setAttribute('data-text', p.name);
+    if (nameEl && p.name) nameEl.setAttribute('data-text', escapeHTML(p.name));
 
     const statusEl = document.querySelector('[data-bind="status"]');
     if (statusEl && p.availableStatus) statusEl.textContent = p.availableStatus;
@@ -362,14 +385,16 @@ function renderProfile(p) {
     if (aboutEl && p.aboutText) {
         const paragraphs = p.aboutText.split('\n\n');
         aboutEl.innerHTML = paragraphs.map(para => {
-            const boldName = para.replace(/(Prapan Biswas)/g, '<strong class="text-white">$1</strong>');
+            const escaped = escapeHTML(para);
+            const boldName = escaped.replace(/(Prapan Biswas)/g, '<strong class="text-white">$1</strong>');
             return `<p class="mb-4">${boldName}</p>`;
         }).join('');
     }
 
     const taglineEl = document.querySelector('[data-bind="tagline"]');
     if (taglineEl && p.tagline) {
-        taglineEl.innerHTML = p.tagline.replace(/code/gi, '<strong>code</strong>')
+        const escaped = escapeHTML(p.tagline);
+        taglineEl.innerHTML = escaped.replace(/code/gi, '<strong>code</strong>')
             .replace(/design/gi, '<strong>design</strong>')
             .replace(/engineering/gi, '<strong>engineering</strong>');
     }
@@ -386,7 +411,7 @@ function renderProfile(p) {
 
     if (p.profileImageUrl) {
         const img = document.querySelector('[data-bind="profile-img"]');
-        if (img) img.src = p.profileImageUrl;
+        if (img) img.src = sanitizeURL(p.profileImageUrl);
     }
 }
 
@@ -394,9 +419,9 @@ function renderSocialLinks(links) {
     const container = document.querySelector('[data-bind="social-links"]');
     if (!container || !links.length) return;
     container.innerHTML = links.map(link => `
-        <a href="${link.url}" target="_blank" rel="noopener noreferrer"
+        <a href="${sanitizeURL(link.url)}" target="_blank" rel="noopener noreferrer"
             class="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-indigo-500/50 hover:bg-indigo-500/10 transition-all text-xl"
-            title="${link.platform}">
+            title="${escapeHTML(link.platform)}">
             ${getLucideIcon(link.icon)}
         </a>
     `).join('');
@@ -405,17 +430,20 @@ function renderSocialLinks(links) {
 function renderSkillCards(skills) {
     const container = document.querySelector('[data-bind="skills"]');
     if (!container || !skills.length) return;
-    container.innerHTML = skills.map(skill => `
+    container.innerHTML = skills.map(skill => {
+        const safeColor = sanitizeColor(skill.color);
+        return `
         <div class="tilt-3d glass-card rounded-2xl p-8 group hover:scale-[1.02] transition-all duration-300 reveal-item">
             <div class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0"></div>
             <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-6"
-                style="background:linear-gradient(135deg, ${skill.color || '#6366f1'}20, ${skill.color || '#6366f1'}40)">
+                style="background:linear-gradient(135deg, ${safeColor}20, ${safeColor}40)">
                 ${getLucideIcon(skill.icon)}
             </div>
-            <h4 class="text-xl font-bold mb-2 text-slate-100">${skill.title}</h4>
-            <p class="text-sm text-slate-400 leading-relaxed">${skill.description || ''}</p>
+            <h4 class="text-xl font-bold mb-2 text-slate-100">${escapeHTML(skill.title)}</h4>
+            <p class="text-sm text-slate-400 leading-relaxed">${escapeHTML(skill.description || '')}</p>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function renderInterestCards(interests) {
@@ -424,8 +452,8 @@ function renderInterestCards(interests) {
     container.innerHTML = interests.map(interest => `
         <div class="glass-card rounded-2xl p-6 text-center hover:scale-[1.02] transition-all reveal-item">
             <div class="text-3xl mb-3">${getLucideIcon(interest.icon)}</div>
-            <h4 class="text-lg font-bold text-slate-100 mb-1">${interest.title}</h4>
-            <p class="text-sm text-slate-400">${interest.description || ''}</p>
+            <h4 class="text-lg font-bold text-slate-100 mb-1">${escapeHTML(interest.title)}</h4>
+            <p class="text-sm text-slate-400">${escapeHTML(interest.description || '')}</p>
         </div>
     `).join('');
 }
@@ -492,7 +520,7 @@ async function fetchFeaturedProjects() {
 
 function createProjectCard(project, index) {
     const card = document.createElement('a');
-    card.href = project.url;
+    card.href = sanitizeURL(project.url);
     card.target = '_blank';
     card.rel = 'noopener noreferrer';
     card.className = 'tilt-3d glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition-all duration-300 block group';
@@ -509,18 +537,22 @@ function createProjectCard(project, index) {
     });
 
     const techStack = project.tech_stack || [];
+    const safeTitle = escapeHTML(project.title);
+    const safeDesc = escapeHTML(project.description);
+    const safeCategory = escapeHTML(project.category || 'Project');
+    const safeThumbnail = project.thumbnail_url ? sanitizeURL(project.thumbnail_url) : '';
     card.innerHTML = `
         <div class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300"></div>
         <div class="relative h-48 overflow-hidden">
-            ${project.thumbnail_url ? `<img src="${project.thumbnail_url}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">` : '<div class="w-full h-full bg-gradient-to-br from-indigo-900/40 to-purple-900/40 flex items-center justify-center text-4xl">📦</div>'}
+            ${safeThumbnail ? `<img src="${safeThumbnail}" alt="${safeTitle}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">` : '<div class="w-full h-full bg-gradient-to-br from-indigo-900/40 to-purple-900/40 flex items-center justify-center text-4xl">📦</div>'}
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-            <span class="absolute bottom-4 left-4 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm bg-indigo-600/90">${project.category || 'Project'}</span>
+            <span class="absolute bottom-4 left-4 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm bg-indigo-600/90">${safeCategory}</span>
         </div>
         <div class="p-6">
-            <h4 class="text-xl font-bold mb-2 text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-2">${project.title}</h4>
-            <p class="text-sm text-slate-400 line-clamp-3 mb-4">${project.description}</p>
+            <h4 class="text-xl font-bold mb-2 text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-2">${safeTitle}</h4>
+            <p class="text-sm text-slate-400 line-clamp-3 mb-4">${safeDesc}</p>
             <div class="flex flex-wrap gap-2 mb-4">
-                ${techStack.slice(0, 3).map(tech => `<span class="text-xs px-2 py-1 bg-white/5 rounded-full text-slate-400 border border-white/10">${tech}</span>`).join('')}
+                ${techStack.slice(0, 3).map(tech => `<span class="text-xs px-2 py-1 bg-white/5 rounded-full text-slate-400 border border-white/10">${escapeHTML(tech)}</span>`).join('')}
             </div>
             <span class="text-indigo-400 font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
                 View Project
@@ -536,6 +568,11 @@ function createProjectCard(project, index) {
    Initialize
    ========================================= */
 function initializeWebsite() {
+    // Initialize Firebase App Check before any data fetching
+    if (typeof initPublicFirebase === 'function') {
+        initPublicFirebase();
+    }
+
     updateAge();
     initActiveLinkHighlight();
     loadDynamicContent();
