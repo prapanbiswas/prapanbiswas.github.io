@@ -265,16 +265,17 @@ function updateDashboard() {
    ========================================= */
 async function loadAllData() {
     // Show loading skeletons
-    ['social-list', 'skills-list', 'interests-list', 'projects-list', 'blogs-list'].forEach(id => showListLoading(id, 2));
+    ['social-list', 'skills-list', 'interests-list', 'projects-list', 'blogs-list', 'subscribers-list'].forEach(id => showListLoading(id, 2));
 
     try {
-        const [profile, sl, sk, int, proj, bl] = await Promise.all([
+        const [profile, sl, sk, int, proj, bl, tokens] = await Promise.all([
             dbGet('profile'),
             dbGet('socialLinks'),
             dbGet('skills'),
             dbGet('interests'),
             dbGet('projects'),
-            dbGet('blogs')
+            dbGet('blogs'),
+            dbGet('fcm_tokens')
         ]);
         renderProfile(profile || {});
         renderSocialLinks(sl || []);
@@ -282,6 +283,7 @@ async function loadAllData() {
         renderInterests(int || []);
         renderProjects(proj || []);
         renderBlogs(bl || []);
+        renderSubscribers(tokens || {});
         updateDashboard();
     } catch (err) {
         toast('Failed to load data: ' + err.message, 'error');
@@ -677,6 +679,61 @@ async function deleteBlog(i) {
     renderBlogs(blogs);
     updateDashboard();
     toast('Deleted', 'success');
+}
+
+/* =========================================
+   SUBSCRIBERS (FCM Tokens)
+   ========================================= */
+let subscribers = {};
+
+function renderSubscribers(data) {
+    subscribers = data || {};
+    const entries = Object.entries(subscribers);
+    const list = document.getElementById('subscribers-list');
+    const countEl = document.getElementById('subscribers-count');
+    if (countEl) countEl.textContent = entries.length;
+
+    if (entries.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">🔔</div><h3>No subscribers yet</h3><p>Once visitors allow notifications, they\'ll appear here</p></div>';
+        return;
+    }
+
+    list.innerHTML = entries.map(([key, sub], i) => {
+        const ua = sub.userAgent || '';
+        let browser = 'Unknown';
+        if (ua.includes('Chrome')) browser = 'Chrome';
+        else if (ua.includes('Firefox')) browser = 'Firefox';
+        else if (ua.includes('Safari')) browser = 'Safari';
+        else if (ua.includes('Edge')) browser = 'Edge';
+
+        const platform = sub.platform || 'Unknown';
+        const date = sub.createdAt ? new Date(sub.createdAt).toLocaleDateString() : 'Unknown';
+        const tokenShort = sub.token ? sub.token.substring(0, 24) + '...' : 'N/A';
+
+        return `
+            <div class="item-card" style="animation-delay:${i * 50}ms">
+                <div class="item-icon">🔔</div>
+                <div class="item-info">
+                    <div class="item-title">${escapeHTML(browser)} on ${escapeHTML(platform)}</div>
+                    <div class="item-desc">Subscribed: ${escapeHTML(date)} · Token: ${escapeHTML(tokenShort)}</div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn btn-danger btn-sm" onclick="deleteSubscriber('${escapeHTML(key)}')">✕</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+async function deleteSubscriber(key) {
+    if (!confirm('Remove this subscriber?')) return;
+    try {
+        await db.ref('fcm_tokens/' + key).remove();
+        delete subscribers[key];
+        renderSubscribers(subscribers);
+        updateDashboard();
+        toast('Subscriber removed', 'success');
+    } catch (err) { toast(err.message, 'error'); }
 }
 
 /* =========================================

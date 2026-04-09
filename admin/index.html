@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://apis.google.com https://www.recaptcha.net https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google.com https://*.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://www.recaptcha.net https://firebase.googleapis.com; frame-src https://www.google.com https://www.recaptcha.net https://prapan-biswas.firebaseapp.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://apis.google.com https://www.recaptcha.net https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google.com https://*.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://www.recaptcha.net https://firebase.googleapis.com https://fcm.googleapis.com; frame-src https://www.google.com https://www.recaptcha.net https://prapan-biswas.firebaseapp.com;">
     <title>CMS — Prapan Biswas</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="admin.css">
@@ -56,6 +56,8 @@
                         style="width:1.15rem;height:1.15rem"></i>Projects</a>
                 <a href="#" data-section="blogs"><i data-lucide="file-text"
                         style="width:1.15rem;height:1.15rem"></i>Blog Posts</a>
+                <a href="#" data-section="subscribers"><i data-lucide="bell"
+                        style="width:1.15rem;height:1.15rem"></i>Subscribers</a>
             </nav>
             <div class="sidebar-footer">
                 <p id="user-email"></p>
@@ -302,6 +304,24 @@
                     </div>
                 </div>
                 <div id="blogs-list"></div>
+            </div>
+
+            <!-- SUBSCRIBERS -->
+            <div id="section-subscribers" class="section-panel">
+                <div class="section-header">
+                    <h2>Push Subscribers (<span id="subscribers-count">0</span>)</h2>
+                    <p>People subscribed to your push notifications</p>
+                </div>
+                <div class="glass" style="padding:1.5rem;margin-bottom:1rem">
+                    <h3 style="font-family:Outfit;font-weight:600;font-size:1rem;margin-bottom:0.75rem">📢 How to Send Notifications</h3>
+                    <p style="color:var(--text-dim);font-size:0.85rem;line-height:1.6;margin-bottom:1rem">
+                        Go to <strong>Firebase Console → Cloud Messaging → Send your first message</strong>. 
+                        You can compose notifications with title, body, and image. Select your web app as the target.
+                    </p>
+                    <a href="https://console.firebase.google.com/project/prapan-biswas/messaging" target="_blank" 
+                       class="btn btn-primary" style="text-decoration:none">Open Firebase Console →</a>
+                </div>
+                <div id="subscribers-list"></div>
             </div>
 
         </div>
