@@ -12,7 +12,7 @@
     // ── Config ──────────────────────────────────
     // Replace with your VAPID key from Firebase Console:
     // Project Settings → Cloud Messaging → Web Push certificates → Generate key pair
-    const VAPID_KEY = 'YOUR_VAPID_KEY_HERE';
+    const VAPID_KEY = 'BBW-YbsQSzRZyXoKXCvmHx8SNV31U1U8Y599cNA-Twd_6domo4-BqnZQfUKJaCfQNkH1csjIEJJSJF8C7S555IY';
 
     const DB_URL = 'https://prapan-biswas-default-rtdb.asia-southeast1.firebasedatabase.app';
     const STORAGE_KEY_GRANTED = 'pb_push_granted';
