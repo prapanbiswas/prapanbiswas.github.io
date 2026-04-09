@@ -13,7 +13,7 @@ const firebaseConfig = {
 
 let app, auth, db;
 
-const RECAPTCHA_SITE_KEY = "YOUR_NEW_SITE_KEY_ENDING_IN_6qT";
+const RECAPTCHA_SITE_KEY = "6Lfoq64sAAAAAGgMOjvbyyNkZ5Jd5eYbc4enw6qT";
 
 function initFirebase() {
     app = firebase.initializeApp(firebaseConfig);

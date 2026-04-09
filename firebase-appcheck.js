@@ -17,7 +17,7 @@ const FIREBASE_CONFIG = {
     appId: "1:453264451702:web:fda490119ff32667701757"
 };
 
-const RECAPTCHA_SITE_KEY = "YOUR_NEW_SITE_KEY_ENDING_IN_6qT";
+const RECAPTCHA_SITE_KEY = "6Lfoq64sAAAAAGgMOjvbyyNkZ5Jd5eYbc4enw6qT";
 const FIREBASE_DB = FIREBASE_CONFIG.databaseURL;
 
 let _appCheckInstance = null;
