@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://apis.google.com https://www.google.com https://www.recaptcha.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://prapan-biswas-default-rtdb.asia-southeast1.firebasedatabase.app https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebase.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.recaptcha.net; frame-src https://www.google.com https://www.recaptcha.net https://prapan-biswas.firebaseapp.com;">
+    <title>CMS — Prapan Biswas</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+    <!-- Background Animation -->
+    <div id="orb-canvas-container" style="position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden">
+        <canvas id="orb-canvas" style="display:block;width:100%;height:100%"></canvas>
+    </div>
+
+    <!-- ============ AUTH SCREEN ============ -->
+    <div id="auth-screen">
+        <div class="auth-card glass">
+            <h1 style="font-family:Outfit;font-size:1.5rem;font-weight:700;margin-bottom:0.25rem">🔐 Admin Login</h1>
+            <p style="color:#64748b;font-size:0.85rem;margin-bottom:1.5rem">Sign in to manage your portfolio</p>
+            <form onsubmit="handleLogin(event)">
+                <div style="margin-bottom:1rem"><label>Email</label><input type="email" id="login-email" required
+                        placeholder="your@email.com"></div>
+                <div style="margin-bottom:1.5rem"><label>Password</label><input type="password" id="login-password"
+                        required placeholder="••••••••"></div>
+                <button type="submit" id="login-btn" class="btn btn-primary"
+                    style="width:100%;justify-content:center">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============ APP SCREEN ============ -->
+    <div id="app-screen">
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" id="mobile-toggle">☰</button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo" style="display:flex;align-items:center;gap:0.5rem"><i data-lucide="layout-dashboard"></i>
+                CMS</div>
+            <nav>
+                <a href="#" data-section="profile"><i data-lucide="user"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Profile</a>
+                <a href="#" data-section="social"><i data-lucide="link"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Social Links</a>
+                <a href="#" data-section="skills"><i data-lucide="zap"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Skills</a>
+                <a href="#" data-section="interests"><i data-lucide="lightbulb"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Interests</a>
+                <a href="#" data-section="projects"><i data-lucide="package"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Projects</a>
+                <a href="#" data-section="blogs"><i data-lucide="file-text"
+                        style="width:1.2rem;height:1.2rem;margin-right:0.5rem;display:inline-block;vertical-align:-3px"></i>
+                    Blog Posts</a>
+            </nav>
+            <div style="margin-top:auto;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.06)">
+                <p style="font-size:0.7rem;color:#475569;margin-bottom:0.5rem" id="user-email"></p>
+                <button class="btn btn-ghost btn-sm" style="width:100%" onclick="seedInitialData()">🌱 Seed
+                    Data</button>
+                <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:0.4rem" onclick="handleLogout()">🚪
+                    Logout</button>
+                <a href="../index.html" class="btn btn-ghost btn-sm"
+                    style="width:100%;margin-top:0.4rem;text-decoration:none;justify-content:center">← Back to Site</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- PROFILE -->
+            <div id="section-profile" class="section-panel active">
+                <div class="section-header">
+                    <h2>Profile</h2>
+                    <p>Your personal info displayed on the website</p>
+                </div>
+                <div class="glass" style="padding:1.5rem">
+                    <div class="form-grid">
+                        <div><label>Name</label><input id="pf-name" placeholder="Prapan Biswas"></div>
+                        <div><label>Birthday</label><input id="pf-birthday" type="date"></div>
+                        <div class="full"><label>Tagline</label><input id="pf-tagline"
+                                placeholder="I craft digital experiences..."></div>
+                        <div><label>Location</label><input id="pf-location" placeholder="Khulna, Bangladesh"></div>
+                        <div><label>Education</label><input id="pf-education" placeholder="Civil Engineering Student">
+                        </div>
+                        <div><label>Status Badge</label><input id="pf-status" placeholder="Available for projects">
+                        </div>
+                        <div><label>Profile Image URL</label><input id="pf-image"
+                                placeholder="https://... or attached_assets/..."></div>
+                        <div class="full"><label>About Text</label><textarea id="pf-about" rows="6"
+                                placeholder="Tell the world about yourself..."></textarea></div>
+                    </div>
+                    <div style="margin-top:1.25rem"><button class="btn btn-primary" onclick="saveProfile()">💾 Save
+                            Profile</button></div>
+                </div>
+            </div>
+
+            <!-- SOCIAL LINKS -->
+            <div id="section-social" class="section-panel">
+                <div class="section-header" style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h2>Social Links (<span id="social-count">0</span>)</h2>
+                        <p>Your social media profiles</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showSocialForm()">+ Add Link</button>
+                </div>
+                <div id="social-form-panel" class="glass" style="padding:1.25rem;margin-bottom:1rem;display:none">
+                    <input type="hidden" id="social-edit-idx" value="-1">
+                    <div class="form-grid">
+                        <div><label>Platform</label><input id="social-platform" placeholder="GitHub, Twitter, etc.">
+                        </div>
+                        <div><label>URL</label><input id="social-url" placeholder="https://..."></div>
+                        <div>
+                            <label>Icon</label>
+                            <div style="display:flex;gap:0.5rem;align-items:center">
+                                <span id="social-icon-preview" style="font-size:1.5rem">🌐</span>
+                                <input type="hidden" id="social-icon-val" value="globe">
+                                <button class="btn btn-ghost btn-sm"
+                                    onclick="openIconPicker('social-icon-preview','social-icon-val')">Choose
+                                    Icon</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:1rem;display:flex;gap:0.5rem">
+                        <button class="btn btn-primary" onclick="saveSocial()">Save</button>
+                        <button class="btn btn-ghost" onclick="hideSocialForm()">Cancel</button>
+                    </div>
+                </div>
+                <div id="social-list"></div>
+            </div>
+
+            <!-- SKILLS -->
+            <div id="section-skills" class="section-panel">
+                <div class="section-header" style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h2>Skills (<span id="skills-count">0</span>)</h2>
+                        <p>Your expertise areas shown on the site</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showSkillForm()">+ Add Skill</button>
+                </div>
+                <div id="skill-form-panel" class="glass" style="padding:1.25rem;margin-bottom:1rem;display:none">
+                    <input type="hidden" id="skill-edit-idx" value="-1">
+                    <div class="form-grid">
+                        <div><label>Title</label><input id="skill-title" placeholder="Web Development"></div>
+                        <div>
+                            <label>Icon</label>
+                            <div style="display:flex;gap:0.5rem;align-items:center">
+                                <span id="skill-icon-preview" style="font-size:1.5rem">💻</span>
+                                <input type="hidden" id="skill-icon-val" value="code">
+                                <button class="btn btn-ghost btn-sm"
+                                    onclick="openIconPicker('skill-icon-preview','skill-icon-val')">Choose Icon</button>
+                            </div>
+                        </div>
+                        <div class="full"><label>Description</label><textarea id="skill-desc" rows="2"
+                                placeholder="What you do..."></textarea></div>
+                        <div><label>Accent Color</label><input id="skill-color" type="color" value="#6366f1"
+                                style="height:42px;padding:4px"></div>
+                    </div>
+                    <div style="margin-top:1rem;display:flex;gap:0.5rem">
+                        <button class="btn btn-primary" onclick="saveSkill()">Save</button>
+                        <button class="btn btn-ghost" onclick="hideSkillForm()">Cancel</button>
+                    </div>
+                </div>
+                <div id="skills-list"></div>
+            </div>
+
+            <!-- INTERESTS -->
+            <div id="section-interests" class="section-panel">
+                <div class="section-header" style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h2>Interests (<span id="interests-count">0</span>)</h2>
+                        <p>What drives you</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showInterestForm()">+ Add Interest</button>
+                </div>
+                <div id="interest-form-panel" class="glass" style="padding:1.25rem;margin-bottom:1rem;display:none">
+                    <input type="hidden" id="interest-edit-idx" value="-1">
+                    <div class="form-grid">
+                        <div><label>Title</label><input id="interest-title" placeholder="Continuous Learning"></div>
+                        <div>
+                            <label>Icon</label>
+                            <div style="display:flex;gap:0.5rem;align-items:center">
+                                <span id="interest-icon-preview" style="font-size:1.5rem">💡</span>
+                                <input type="hidden" id="interest-icon-val" value="bulb">
+                                <button class="btn btn-ghost btn-sm"
+                                    onclick="openIconPicker('interest-icon-preview','interest-icon-val')">Choose
+                                    Icon</button>
+                            </div>
+                        </div>
+                        <div class="full"><label>Description</label><textarea id="interest-desc" rows="2"
+                                placeholder="What drives you..."></textarea></div>
+                    </div>
+                    <div style="margin-top:1rem;display:flex;gap:0.5rem">
+                        <button class="btn btn-primary" onclick="saveInterest()">Save</button>
+                        <button class="btn btn-ghost" onclick="hideInterestForm()">Cancel</button>
+                    </div>
+                </div>
+                <div id="interests-list"></div>
+            </div>
+
+            <!-- PROJECTS -->
+            <div id="section-projects" class="section-panel">
+                <div class="section-header" style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h2>Projects (<span id="projects-count">0</span>)</h2>
+                        <p>Your portfolio work</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showProjectForm()">+ Add Project</button>
+                </div>
+                <div id="project-form-panel" class="glass" style="padding:1.25rem;margin-bottom:1rem;display:none">
+                    <input type="hidden" id="proj-edit-idx" value="-1">
+                    <div class="form-grid">
+                        <div><label>Title</label><input id="proj-title" placeholder="My Project"></div>
+                        <div><label>Category</label><input id="proj-category" placeholder="Web Application"></div>
+                        <div class="full"><label>Description</label><textarea id="proj-desc" rows="3"
+                                placeholder="Describe your project..."></textarea></div>
+                        <div><label>Project URL</label><input id="proj-url" placeholder="https://..."></div>
+                        <div><label>Thumbnail URL</label><input id="proj-thumb" placeholder="https://... image link">
+                        </div>
+                        <div><label>Tech Stack (comma separated)</label><input id="proj-tech"
+                                placeholder="React, Node.js, Firebase"></div>
+                        <div><label class="checkbox-label"><input type="checkbox" id="proj-featured"> Featured project
+                                (show on homepage)</label></div>
+                    </div>
+                    <div style="margin-top:1rem;display:flex;gap:0.5rem">
+                        <button class="btn btn-primary" onclick="saveProject()">Save</button>
+                        <button class="btn btn-ghost" onclick="hideProjectForm()">Cancel</button>
+                    </div>
+                </div>
+                <div id="projects-list"></div>
+            </div>
+
+            <!-- BLOGS -->
+            <div id="section-blogs" class="section-panel">
+                <div class="section-header" style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h2>Blog Posts (<span id="blogs-count">0</span>)</h2>
+                        <p>Write and manage blog posts</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showBlogForm()">+ New Post</button>
+                </div>
+                <div id="blog-form-panel" class="glass" style="padding:1.25rem;margin-bottom:1rem;display:none">
+                    <input type="hidden" id="blog-edit-idx" value="-1">
+                    <div class="form-grid">
+                        <div><label>Title</label><input id="blog-title" placeholder="My Blog Post"></div>
+                        <div><label>Date</label><input id="blog-date" type="date"></div>
+                        <div class="full"><label>Excerpt (short summary)</label><textarea id="blog-excerpt" rows="2"
+                                placeholder="A brief summary..."></textarea></div>
+                        <div class="full"><label>Content (full post)</label><textarea id="blog-content" rows="8"
+                                placeholder="Write your post content here..."></textarea></div>
+                        <div><label>Thumbnail URL</label><input id="blog-thumb" placeholder="https://... image link">
+                        </div>
+                        <div><label>Tags (comma separated)</label><input id="blog-tags" placeholder="tech, web, design">
+                        </div>
+                    </div>
+                    <div style="margin-top:1rem;display:flex;gap:0.5rem">
+                        <button class="btn btn-primary" onclick="saveBlog()">Save</button>
+                        <button class="btn btn-ghost" onclick="hideBlogForm()">Cancel</button>
+                    </div>
+                </div>
+                <div id="blogs-list"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============ ICON PICKER MODAL ============ -->
+    <div id="icon-picker-modal" class="icon-picker-modal" onclick="if(event.target===this)closeIconPicker()">
+        <div class="icon-picker-body glass">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h3 style="font-family:Outfit;font-weight:700">Choose an Icon</h3>
+                <button class="btn btn-ghost btn-sm" onclick="closeIconPicker()">✕ Close</button>
+            </div>
+            <input type="text" id="icon-search" placeholder="Search icons..." style="margin-bottom:0.75rem">
+            <div id="icon-picker-grid" class="icon-grid"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../background.js" defer></script>
+    <script src="admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+
+</html>
