@@ -242,23 +242,10 @@
                 platform: navigator.platform || 'unknown'
             };
 
-            // Use App Check token if available
-            const headers = { 'Content-Type': 'application/json' };
-            if (typeof getAppCheckToken === 'function') {
-                try {
-                    const acToken = await getAppCheckToken();
-                    if (acToken) headers['X-Firebase-AppCheck'] = acToken;
-                } catch (e) { /* proceed without */ }
-            }
-
-            const resp = await fetch(
-                `${DB_URL}/fcm_tokens/${tokenKey}.json`,
-                { method: 'PUT', headers, body: JSON.stringify(payload) }
-            );
-
-            if (resp.ok) {
-                console.log('[Push] Token saved to database');
-            }
+            // Use Firebase SDK — App Check token is attached automatically
+            const db = firebase.database();
+            await db.ref('fcm_tokens/' + tokenKey).set(payload);
+            console.log('[Push] Token saved to database');
         } catch (err) {
             console.warn('[Push] Failed to save token:', err);
         }
@@ -352,6 +339,11 @@
 
     // ── Init ────────────────────────────────────
     function init() {
+        // Ensure Firebase + App Check are initialized
+        if (typeof initPublicFirebase === 'function') {
+            initPublicFirebase();
+        }
+
         // Setup foreground handler
         setupForegroundHandler();
 
