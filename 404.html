@@ -11,9 +11,15 @@
         href="attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
 
         body {
             background: #06060b;
@@ -21,57 +27,142 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: #fff;
+            cursor: default;
         }
 
-        /* Ambient glow */
-        .glow {
-            position: fixed;
-            width: 500px; height: 500px;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-            pointer-events: none;
-            animation: drift 12s ease-in-out infinite alternate;
+        /* ===== Orb canvas (matches main site) ===== */
+        #orb-canvas-container {
+            position: fixed; inset: 0; z-index: 0;
+            pointer-events: none; overflow: hidden;
         }
-        .glow-1 { background: #6366f1; top: -20%; left: -10%; }
-        .glow-2 { background: #a855f7; bottom: -20%; right: -10%; animation-delay: -6s; }
+        #orb-canvas { display: block; width: 100%; height: 100%; }
 
-        @keyframes drift {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(60px, 40px) scale(1.15); }
+        /* ===== Noise overlay (matches main site) ===== */
+        .noise-overlay {
+            position: fixed; inset: 0; z-index: 1;
+            pointer-events: none; opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
         }
 
+        /* ===== Main container ===== */
         .container {
             text-align: center;
             position: relative;
-            z-index: 1;
-            animation: fadeUp 0.8s ease both;
+            z-index: 10;
+            padding: 2rem;
         }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ===== Astronaut / Character ===== */
+        .astronaut {
+            position: relative;
+            width: 120px; height: 120px;
+            margin: 0 auto 2rem;
+            animation: float-astronaut 4s ease-in-out infinite;
+        }
+        .astronaut-body {
+            width: 80px; height: 90px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 40px 40px 30px 30px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .astronaut-visor {
+            width: 50px; height: 38px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            border-radius: 25px 25px 20px 20px;
+            margin: 15px auto 0;
+            position: relative;
+            box-shadow: 0 0 20px rgba(99,102,241,0.3), inset 0 -4px 8px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .astronaut-visor::after {
+            content: '';
+            position: absolute;
+            top: 6px; left: 8px;
+            width: 12px; height: 8px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            transform: rotate(-20deg);
+        }
+        .astronaut-arm-l, .astronaut-arm-r {
+            position: absolute;
+            width: 16px; height: 35px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            top: 25px;
+        }
+        .astronaut-arm-l {
+            left: -4px;
+            transform: rotate(20deg);
+            animation: wave-arm 3s ease-in-out infinite;
+            transform-origin: top center;
+        }
+        .astronaut-arm-r {
+            right: -4px;
+            transform: rotate(-15deg);
+            animation: wave-arm 3s ease-in-out infinite 1.5s;
+            transform-origin: top center;
+        }
+        .astronaut-antenna {
+            width: 3px; height: 18px;
+            background: rgba(255,255,255,0.15);
+            margin: 0 auto;
+            position: relative;
+            border-radius: 2px;
+        }
+        .astronaut-antenna::after {
+            content: '';
+            position: absolute;
+            top: -5px; left: 50%;
+            transform: translateX(-50%);
+            width: 8px; height: 8px;
+            background: #6366f1;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #6366f1, 0 0 16px rgba(99,102,241,0.5);
+            animation: blink-light 2s ease-in-out infinite;
         }
 
-        /* Big 404 */
+        @keyframes float-astronaut {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        @keyframes wave-arm {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(35deg); }
+        }
+        @keyframes blink-light {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px #6366f1, 0 0 16px rgba(99,102,241,0.5); }
+            50% { opacity: 0.3; box-shadow: 0 0 4px #6366f1; }
+        }
+
+        /* ===== Big 404 ===== */
         .four-oh-four {
-            font-size: clamp(8rem, 25vw, 14rem);
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(6rem, 20vw, 12rem);
             font-weight: 800;
             line-height: 1;
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 40%, #ec4899 70%, #6366f1 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 30%, #ec4899 60%, #3b82f6 80%, #6366f1 100%);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: shimmer 4s ease infinite;
-            position: relative;
+            animation: shimmer 5s ease infinite;
             user-select: none;
-            cursor: default;
+            position: relative;
+            cursor: pointer;
+            transition: filter 0.3s;
+            text-shadow: none;
         }
         .four-oh-four:hover {
-            animation: shimmer 1s ease infinite, wiggle 0.5s ease;
+            animation: shimmer 1.5s ease infinite, wiggle 0.5s ease;
+            filter: drop-shadow(0 0 30px rgba(99,102,241,0.3));
         }
 
         @keyframes shimmer {
@@ -80,23 +171,46 @@
             100% { background-position: 0% 50%; }
         }
         @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-3deg); }
-            75% { transform: rotate(3deg); }
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            20% { transform: rotate(-4deg) scale(1.02); }
+            40% { transform: rotate(3deg) scale(0.98); }
+            60% { transform: rotate(-2deg) scale(1.01); }
+            80% { transform: rotate(1deg) scale(1); }
         }
 
-        /* Subtitle */
+        /* ===== Subtitle ===== */
         .subtitle {
-            color: rgba(255,255,255,0.35);
-            font-size: clamp(0.85rem, 2vw, 1rem);
-            font-weight: 700;
-            letter-spacing: 0.15em;
+            font-family: 'Outfit', sans-serif;
+            color: rgba(255,255,255,0.3);
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-weight: 600;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            margin-top: 0.5rem;
-            margin-bottom: 3rem;
+            margin-top: 0.75rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.3s forwards;
         }
 
-        /* Home button — icon only */
+
+
+        /* ===== Fun message ===== */
+        .fun-message {
+            color: rgba(255,255,255,0.2);
+            font-size: 0.82rem;
+            margin-top: 1rem;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.5s forwards;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Home button ===== */
         .home-btn {
             display: inline-flex;
             align-items: center;
@@ -106,26 +220,34 @@
             background: linear-gradient(135deg, #6366f1, #a855f7);
             border: none;
             cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
-            box-shadow: 0 4px 24px rgba(99,102,241,0.3);
+            transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: 0 4px 24px rgba(99,102,241,0.3), 0 0 0 0 rgba(99,102,241,0);
             text-decoration: none;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.7s forwards, pulse-ring 3s ease-in-out 2s infinite;
         }
         .home-btn::before {
             content: '';
             position: absolute; inset: 0;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent);
             opacity: 0;
             transition: opacity 0.3s;
         }
         .home-btn:hover {
-            transform: translateY(-4px) scale(1.08);
-            box-shadow: 0 8px 40px rgba(99,102,241,0.5), 0 0 80px rgba(168,85,247,0.2);
+            transform: translateY(-6px) scale(1.12);
+            box-shadow: 0 12px 48px rgba(99,102,241,0.5), 0 0 80px rgba(168,85,247,0.2);
         }
         .home-btn:hover::before { opacity: 1; }
-        .home-btn:active { transform: translateY(-2px) scale(1.02); }
+        .home-btn:active { transform: translateY(-2px) scale(1.04); }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 4px 24px rgba(99,102,241,0.3), 0 0 0 0 rgba(99,102,241,0.3); }
+            70% { box-shadow: 0 4px 24px rgba(99,102,241,0.3), 0 0 0 20px rgba(99,102,241,0); }
+            100% { box-shadow: 0 4px 24px rgba(99,102,241,0.3), 0 0 0 0 rgba(99,102,241,0); }
+        }
 
         .home-btn svg {
             width: 26px; height: 26px;
@@ -134,53 +256,380 @@
             z-index: 1;
             transition: transform 0.3s;
         }
-        .home-btn:hover svg { transform: scale(1.1); }
+        .home-btn:hover svg { transform: scale(1.15) rotate(-5deg); }
 
-        /* Floating particles */
-        .particle {
+        /* ===== Stars (tiny dots) ===== */
+        .star {
             position: fixed;
-            width: 3px; height: 3px;
-            background: rgba(99,102,241,0.4);
+            width: 2px; height: 2px;
+            background: #fff;
             border-radius: 50%;
             pointer-events: none;
-            animation: float-particle linear infinite;
+            z-index: 2;
+            animation: twinkle linear infinite;
         }
-        @keyframes float-particle {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        /* ===== Shooting stars ===== */
+        .shooting-star {
+            position: fixed;
+            width: 80px; height: 1px;
+            background: linear-gradient(90deg, rgba(99,102,241,0.8), transparent);
+            border-radius: 1px;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0;
+            animation: shoot linear infinite;
+        }
+        @keyframes shoot {
+            0% { opacity: 0; transform: translateX(0) translateY(0) rotate(-35deg); }
+            5% { opacity: 1; }
+            15% { opacity: 0; transform: translateX(300px) translateY(200px) rotate(-35deg); }
+            100% { opacity: 0; }
+        }
+
+        /* ===== Floating debris ===== */
+        .debris {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.15;
+            animation: drift-debris linear infinite;
+        }
+        @keyframes drift-debris {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ===== Easter egg click counter ===== */
+        .click-counter {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.1);
+            z-index: 20;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        .click-counter.active { color: rgba(99,102,241,0.4); }
+
+        /* ===== Mouse trail ===== */
+        .trail-dot {
+            position: fixed;
+            width: 6px; height: 6px;
+            background: rgba(99,102,241,0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            transition: transform 0.08s, opacity 0.5s;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 640px) {
+            .astronaut { width: 90px; height: 90px; margin-bottom: 1.5rem; }
+            .astronaut-body { width: 60px; height: 68px; }
+            .astronaut-visor { width: 38px; height: 28px; margin-top: 12px; }
+            .astronaut-arm-l, .astronaut-arm-r { width: 12px; height: 26px; top: 18px; }
+            .astronaut-antenna { height: 14px; }
+            .home-btn { width: 56px; height: 56px; }
+            .home-btn svg { width: 22px; height: 22px; }
+        }
+
+        /* ===== Reduced motion ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
+    <!-- Orb Canvas Background (same as main site) -->
+    <div id="orb-canvas-container">
+        <canvas id="orb-canvas"></canvas>
+    </div>
+
+    <div class="noise-overlay"></div>
 
     <div class="container">
-        <div class="four-oh-four">404</div>
+        <!-- Floating Astronaut -->
+        <div class="astronaut">
+            <div class="astronaut-antenna"></div>
+            <div class="astronaut-body">
+                <div class="astronaut-visor"></div>
+                <div class="astronaut-arm-l"></div>
+                <div class="astronaut-arm-r"></div>
+            </div>
+        </div>
+
+        <!-- 404 Text -->
+        <div class="four-oh-four" id="four-oh-four">404</div>
         <div class="subtitle">Lost in space</div>
-        <a href="/" class="home-btn" title="Go Home" aria-label="Go back to homepage">
+        <div class="fun-message" id="fun-message">
+            Looks like this page drifted into a black hole.<br>
+            Let's get you back to safety.
+        </div>
+
+        <!-- Home button -->
+        <a href="/" class="home-btn" title="Go Home" aria-label="Go back to homepage" id="home-btn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
             </svg>
         </a>
     </div>
 
-    <!-- Floating particles -->
+    <!-- Easter egg counter -->
+    <div class="click-counter" id="click-counter"></div>
+
     <script>
-        for (let i = 0; i < 20; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.animationDuration = (6 + Math.random() * 10) + 's';
-            p.style.animationDelay = Math.random() * 8 + 's';
-            p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
-            p.style.background = Math.random() > 0.5
-                ? 'rgba(99,102,241,0.3)'
-                : 'rgba(168,85,247,0.3)';
-            document.body.appendChild(p);
+        // ===== INLINE ORB BACKGROUND (same as main site) =====
+        const isBgMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+            || window.innerWidth < 768;
+
+        class Orb3D {
+            constructor(canvas, layer) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.layer = layer;
+                this.reset();
+            }
+            reset() {
+                const depthScale = [1.8, 1.2, 0.6][this.layer];
+                const baseRadius = isBgMobile ? 100 : 220;
+                this.radius = (Math.random() * baseRadius + baseRadius * 0.5) * depthScale;
+                this.x = Math.random() * this.canvas.width;
+                this.y = Math.random() * this.canvas.height;
+                const angle = Math.random() * Math.PI * 2;
+                const baseSpeed = [0.06, 0.12, 0.22][this.layer];
+                const speed = Math.random() * baseSpeed + baseSpeed * 0.5;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                const hueRanges = [[210, 290], [250, 350], [170, 260]];
+                const [minH, maxH] = hueRanges[this.layer];
+                this.hue = Math.random() * (maxH - minH) + minH;
+                this.hueSpeed = (Math.random() - 0.5) * 0.4;
+                this.maxOpacity = [0.12, 0.2, 0.3][this.layer];
+                this.parallaxFactor = [0.3, 0.6, 1.0][this.layer];
+                this.pulsePhase = Math.random() * Math.PI * 2;
+                this.pulseSpeed = Math.random() * 0.008 + 0.003;
+                this.breathPhase = Math.random() * Math.PI * 2;
+                this.breathSpeed = Math.random() * 0.002 + 0.001;
+            }
+            update(mouseX, mouseY) {
+                this.vx += (Math.random() - 0.5) * 0.01;
+                this.vy += (Math.random() - 0.5) * 0.01;
+                const maxSpeed = [0.25, 0.4, 0.7][this.layer];
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (speed > maxSpeed) { this.vx = (this.vx / speed) * maxSpeed; this.vy = (this.vy / speed) * maxSpeed; }
+                this.x += this.vx;
+                this.y += this.vy;
+                this.hue += this.hueSpeed;
+                if (this.hue > 360) this.hue -= 360;
+                if (this.hue < 0) this.hue += 360;
+                this.pulsePhase += this.pulseSpeed;
+                this.breathPhase += this.breathSpeed;
+                const pulse = 1 + Math.sin(this.pulsePhase) * 0.06;
+                const breath = 1 + Math.sin(this.breathPhase) * 0.15;
+                if (mouseX && mouseY && !isBgMobile) {
+                    const dx = (mouseX / this.canvas.width - 0.5) * 50 * this.parallaxFactor;
+                    const dy = (mouseY / this.canvas.height - 0.5) * 50 * this.parallaxFactor;
+                    this.drawX = this.x + dx;
+                    this.drawY = this.y + dy;
+                } else {
+                    this.drawX = this.x;
+                    this.drawY = this.y;
+                }
+                this.drawRadius = this.radius * pulse * breath;
+                const w = this.canvas.width, h = this.canvas.height, r = this.drawRadius;
+                if (this.x < -r) this.x = w + r;
+                if (this.x > w + r) this.x = -r;
+                if (this.y < -r) this.y = h + r;
+                if (this.y > h + r) this.y = -r;
+            }
+            draw() {
+                const g = this.ctx.createRadialGradient(this.drawX, this.drawY, 0, this.drawX, this.drawY, this.drawRadius);
+                g.addColorStop(0, `hsla(${this.hue}, 80%, 55%, ${this.maxOpacity})`);
+                g.addColorStop(0.5, `hsla(${this.hue}, 70%, 45%, ${this.maxOpacity * 0.4})`);
+                g.addColorStop(1, `hsla(${this.hue}, 60%, 30%, 0)`);
+                this.ctx.fillStyle = g;
+                this.ctx.beginPath();
+                this.ctx.arc(this.drawX, this.drawY, this.drawRadius, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+        }
+
+        // Init orb background
+        const canvas = document.getElementById('orb-canvas');
+        const ctx = canvas.getContext('2d');
+        let mouseX = 0, mouseY = 0;
+        const orbCount = isBgMobile ? 4 : 8;
+        const orbs = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        for (let i = 0; i < orbCount; i++) {
+            orbs.push(new Orb3D(canvas, i % 3));
+        }
+
+        document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
+        function animateOrbs() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            orbs.forEach(o => { o.update(mouseX, mouseY); o.draw(); });
+            requestAnimationFrame(animateOrbs);
+        }
+        animateOrbs();
+
+        // ===== STARS =====
+        for (let i = 0; i < 40; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.top = Math.random() * 100 + 'vh';
+            s.style.animationDuration = (2 + Math.random() * 4) + 's';
+            s.style.animationDelay = Math.random() * 4 + 's';
+            s.style.width = s.style.height = (1 + Math.random() * 2) + 'px';
+            document.body.appendChild(s);
+        }
+
+        // ===== SHOOTING STARS =====
+        for (let i = 0; i < 3; i++) {
+            const ss = document.createElement('div');
+            ss.className = 'shooting-star';
+            ss.style.top = (Math.random() * 40) + 'vh';
+            ss.style.left = (Math.random() * 60) + 'vw';
+            ss.style.animationDuration = (6 + Math.random() * 8) + 's';
+            ss.style.animationDelay = (Math.random() * 10) + 's';
+            ss.style.width = (60 + Math.random() * 80) + 'px';
+            document.body.appendChild(ss);
+        }
+
+        // ===== FLOATING DEBRIS (tiny shapes) =====
+        const shapes = ['◆', '◇', '○', '△', '▫'];
+        for (let i = 0; i < 8; i++) {
+            const d = document.createElement('div');
+            d.className = 'debris';
+            d.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+            d.style.left = Math.random() * 100 + 'vw';
+            d.style.fontSize = (8 + Math.random() * 10) + 'px';
+            d.style.color = Math.random() > 0.5 ? 'rgba(99,102,241,0.4)' : 'rgba(168,85,247,0.4)';
+            d.style.animationDuration = (10 + Math.random() * 15) + 's';
+            d.style.animationDelay = Math.random() * 10 + 's';
+            document.body.appendChild(d);
+        }
+
+        // ===== MOUSE TRAIL =====
+        const trailDots = [];
+        const TRAIL_LENGTH = 8;
+        for (let i = 0; i < TRAIL_LENGTH; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'trail-dot';
+            dot.style.width = dot.style.height = (6 - i * 0.5) + 'px';
+            dot.style.opacity = (1 - i / TRAIL_LENGTH) * 0.4;
+            document.body.appendChild(dot);
+            trailDots.push({ el: dot, x: 0, y: 0 });
+        }
+        let trailMouseX = 0, trailMouseY = 0;
+        document.addEventListener('mousemove', e => {
+            trailMouseX = e.clientX;
+            trailMouseY = e.clientY;
+        });
+        function animateTrail() {
+            trailDots.forEach((dot, i) => {
+                const target = i === 0 ? { x: trailMouseX, y: trailMouseY } : trailDots[i - 1];
+                dot.x += (target.x - dot.x) * 0.3;
+                dot.y += (target.y - dot.y) * 0.3;
+                dot.el.style.left = dot.x + 'px';
+                dot.el.style.top = dot.y + 'px';
+            });
+            requestAnimationFrame(animateTrail);
+        }
+        if (!isBgMobile) animateTrail();
+
+        // ===== EASTER EGG: Click 404 for fun messages =====
+        const funMessages = [
+            "Looks like this page drifted into a black hole.<br>Let's get you back to safety.",
+            "Houston, we have a problem... this page is missing! 🚀",
+            "This isn't the page you're looking for. *waves hand* 🖐️",
+            "Error 404: Page got abducted by aliens. 👽",
+            "The page you want is in another castle. 🏰",
+            "This page went to buy milk and never came back. 🥛",
+            "Plot twist: the page was inside you all along. 💫",
+            "Page not found. Have you tried turning the internet off and on? 🔌",
+            "Congratulations! You found the void. 🕳️",
+            "This page is on vacation. Try again Monday. 🏖️",
+        ];
+        let clickCount = 0;
+        const fourEl = document.getElementById('four-oh-four');
+        const msgEl = document.getElementById('fun-message');
+        const counterEl = document.getElementById('click-counter');
+
+        fourEl.addEventListener('click', () => {
+            clickCount++;
+            const idx = clickCount % funMessages.length;
+            msgEl.style.opacity = '0';
+            msgEl.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                msgEl.innerHTML = funMessages[idx];
+                msgEl.style.opacity = '1';
+                msgEl.style.transform = 'translateY(0)';
+            }, 200);
+
+            // Show click counter after 3 clicks
+            if (clickCount >= 3) {
+                counterEl.textContent = `🔮 ${clickCount} clicks into the void`;
+                counterEl.classList.add('active');
+            }
+
+            // Spawn burst particles on click
+            for (let i = 0; i < 8; i++) {
+                const p = document.createElement('div');
+                p.style.cssText = `
+                    position:fixed; width:4px; height:4px; border-radius:50%;
+                    background:${['#6366f1','#a855f7','#ec4899','#3b82f6'][Math.floor(Math.random()*4)]};
+                    left:50%; top:50%; z-index:20; pointer-events:none;
+                    transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+                `;
+                document.body.appendChild(p);
+                requestAnimationFrame(() => {
+                    const angle = (Math.PI * 2 / 8) * i;
+                    const dist = 60 + Math.random() * 80;
+                    p.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px) scale(0)`;
+                    p.style.opacity = '0';
+                });
+                setTimeout(() => p.remove(), 900);
+            }
+        });
+
+        // ===== 404 text interaction: tilt on mouse =====
+        if (!isBgMobile) {
+            fourEl.addEventListener('mousemove', e => {
+                const rect = fourEl.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                fourEl.style.transform = `perspective(600px) rotateY(${x * 15}deg) rotateX(${-y * 10}deg)`;
+            });
+            fourEl.addEventListener('mouseleave', () => {
+                fourEl.style.transform = 'perspective(600px) rotateY(0deg) rotateX(0deg)';
+                fourEl.style.transition = 'transform 0.5s ease';
+                setTimeout(() => fourEl.style.transition = '', 500);
+            });
         }
     </script>
 </body>
