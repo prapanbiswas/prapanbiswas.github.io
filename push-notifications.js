@@ -242,10 +242,36 @@
                 platform: navigator.platform || 'unknown'
             };
 
-            // Use Firebase SDK — App Check token is attached automatically
-            const db = firebase.database();
-            await db.ref('fcm_tokens/' + tokenKey).set(payload);
-            console.log('[Push] Token saved to database');
+            // Try Firebase SDK first (includes App Check automatically)
+            let saved = false;
+            try {
+                if (typeof firebase !== 'undefined' && firebase.database) {
+                    const db = firebase.database();
+                    await db.ref('fcm_tokens/' + tokenKey).set(payload);
+                    saved = true;
+                    console.log('[Push] Token saved via SDK');
+                }
+            } catch (sdkErr) {
+                console.warn('[Push] SDK save failed, trying REST fallback:', sdkErr.message);
+            }
+
+            // Fallback: direct REST (needed when App Check is throttled)
+            if (!saved) {
+                const resp = await fetch(
+                    `${DB_URL}/fcm_tokens/${tokenKey}.json`,
+                    {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    }
+                );
+                if (resp.ok) {
+                    console.log('[Push] Token saved via REST fallback');
+                } else {
+                    const errText = await resp.text();
+                    console.warn('[Push] REST save failed:', resp.status, errText);
+                }
+            }
         } catch (err) {
             console.warn('[Push] Failed to save token:', err);
         }
