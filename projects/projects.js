@@ -1,38 +1,34 @@
 /* =========================================
    Projects Page — Page-Specific JavaScript
    =========================================
-   Fetches all projects from Firebase and renders
-   them into the projects-container grid.
+   Persistent real-time listener for all projects.
+   Uses onValue() — no polling, instant updates.
    ========================================= */
 
-async function fetchProjects() {
-    const projectsContainer = document.getElementById('projects-container');
-    if (!projectsContainer) return;
+function initializeProjectsPage() {
+    const container = document.getElementById('projects-container');
+    if (!container) return;
 
-    try {
-        const data = await fbGet('projects');
+    // Show skeleton cards on initial load
+    generateSkeletonCards(6, container);
+
+    // Attach persistent listener
+    fbListen('projects', (data) => {
         const projects = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
-        projectsContainer.innerHTML = '';
+        container.innerHTML = '';
+
         if (projects.length === 0) {
-            projectsContainer.innerHTML = '<div class="col-span-full text-center p-8 text-slate-500"><p>No projects yet.</p></div>';
+            container.innerHTML = '<div class="col-span-full text-center p-8 text-slate-500"><p>No projects yet.</p></div>';
             return;
         }
+
         projects.forEach((project, index) => {
-            projectsContainer.appendChild(createProjectCard(project, index));
+            container.appendChild(createProjectCard(project, index));
         });
-    } catch (error) {
-        console.error('Error fetching projects:', error);
-        projectsContainer.innerHTML = '<div class="col-span-full text-center p-8 text-slate-500"><p>Unable to load projects.</p></div>';
-    }
-}
 
-function initializeProjectsPage() {
-    // Initialize Firebase App Check before data fetching
-    if (typeof initPublicFirebase === 'function') {
-        initPublicFirebase();
-    }
-
-    fetchProjects();
+        // Re-init tilt on dynamically injected cards
+        new TiltCards();
+    }, container);
 }
 
 document.addEventListener('DOMContentLoaded', initializeProjectsPage);

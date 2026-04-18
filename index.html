@@ -214,36 +214,30 @@
                         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
                 </span>
-                <span class="text-slate-300" data-bind="status">Available for projects</span>
+                <span class="skel skel-text w-32" data-bind="status">&nbsp;</span>
             </div>
 
             <!-- Profile -->
             <div class="relative w-40 h-40 md:w-52 md:h-52 mb-10 animate-float profile-ring">
-                <img src="attached_assets/prapan-biswas-profile.jpg" alt="Prapan Biswas" data-bind="profile-img"
-                    class="relative w-full h-full object-cover rounded-full border-4 border-white/10 shadow-2xl z-10">
+                <div class="skel skel-avatar relative w-full h-full rounded-full border-4 border-white/10 shadow-2xl z-10" data-bind="profile-img-skel"></div>
+                <img src="" alt="" data-bind="profile-img"
+                    class="relative w-full h-full object-cover rounded-full border-4 border-white/10 shadow-2xl z-10 hidden">
             </div>
 
             <!-- Name & Title -->
-            <h1 id="typed-title" data-text="Prapan Biswas"
-                class="text-5xl md:text-8xl font-heading font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-purple-200 text-glow leading-tight">
-                Prapan Biswas</h1>
+            <h1 id="typed-title" data-text=""
+                class="skel skel-text-xl w-80 mx-auto text-5xl md:text-8xl font-heading font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-purple-200 text-glow leading-tight">
+                &nbsp;</h1>
 
-            <div class="flex flex-wrap justify-center gap-3 mb-6">
-                <span
-                    class="px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium">Developer</span>
-                <span
-                    class="px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-sm font-medium">Designer</span>
-                <span
-                    class="px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-300 text-sm font-medium">Engineer</span>
+            <div class="flex flex-wrap justify-center gap-3 mb-6" data-bind="role-tags">
+                <span class="skel skel-tag"></span>
+                <span class="skel skel-tag"></span>
+                <span class="skel skel-tag"></span>
             </div>
 
-            <p class="text-lg md:text-xl text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed" data-bind="tagline">
-                I craft digital experiences that blend <span class="text-white font-medium">code</span>,
-                <span class="text-white font-medium">design</span> &
-                <span class="text-white font-medium">engineering</span> — turning ideas into reality.
-            </p>
+            <div class="skel skel-text w-96 max-w-full mx-auto mb-10" data-bind="tagline">&nbsp;</div>
 
-            <!-- Hero e-Visiting Card button: change the href below to your own card page URL if needed -->
+            <!-- Hero CTA buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
                 <a href="https://prapan.is-a.dev/developer-card/"
                     class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]">
@@ -265,35 +259,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
-                <span data-bind="location">Khulna, Bangladesh</span>
+                <span class="skel skel-text w-28" data-bind="location">&nbsp;</span>
             </div>
 
-            <!-- Social Links -->
+            <!-- Social Links (skeleton icons) -->
             <div class="flex gap-4" data-bind="social-links">
-                <a href="https://github.com/prapanbiswas" target="_blank"
-                    class="group p-3.5 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-white/5 hover:border-white/15 hover:scale-110 hover:-translate-y-1">
-                    <svg class="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" fill="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                    </svg>
-                </a>
-                <a href="https://www.instagram.com/prapanbiswas" target="_blank"
-                    class="group p-3.5 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-white/5 hover:border-white/15 hover:scale-110 hover:-translate-y-1">
-                    <svg class="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" fill="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                </a>
-                <a href="https://www.facebook.com/prapan.biswas.arko" target="_blank"
-                    class="group p-3.5 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-white/5 hover:border-white/15 hover:scale-110 hover:-translate-y-1">
-                    <svg class="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" fill="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                    </svg>
-                </a>
+                <div class="skel w-12 h-12 rounded-2xl"></div>
+                <div class="skel w-12 h-12 rounded-2xl"></div>
+                <div class="skel w-12 h-12 rounded-2xl"></div>
             </div>
 
             <!-- Scroll Indicator -->
@@ -320,19 +293,16 @@
                     </div>
 
                     <div class="space-y-5 text-slate-300 text-lg leading-relaxed" data-bind="about">
-                        <p>I'm <span class="text-white font-semibold">Prapan Biswas</span> — a
-                            multi-disciplinary creator from Khulna, Bangladesh. I build websites, design interfaces,
-                            develop apps, and study civil engineering — all driven by a deep curiosity to understand how
-                            things work.</p>
-                        <p>My approach combines technical precision with creative thinking. Whether I'm writing code,
-                            designing a user experience, or working on structural plans, I focus on craft, clarity, and
-                            impact.</p>
+                        <div class="skel skel-text w-full"></div>
+                        <div class="skel skel-text w-11/12"></div>
+                        <div class="skel skel-text w-full"></div>
+                        <div class="skel skel-text w-4/5"></div>
                     </div>
 
                     <!-- Stats -->
                     <div class="grid grid-cols-3 gap-4 pt-4" data-stagger>
                         <div class="text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-                            <div class="text-3xl font-heading font-bold text-white mb-1" id="age">20</div>
+                            <div class="skel skel-text-lg w-12 mx-auto" id="age">&nbsp;</div>
                             <div class="text-xs text-slate-500 uppercase tracking-wider">Years Old</div>
                         </div>
                         <div class="text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5">
@@ -354,11 +324,11 @@
                         </div>
                         <div class="flex justify-between items-center border-b border-white/5 pb-4">
                             <span class="text-xs uppercase tracking-wider text-slate-500">Location</span>
-                            <span class="text-sm text-white">Khulna, BD 🇧🇩</span>
+                            <span class="skel skel-text w-24" data-bind="info-location">&nbsp;</span>
                         </div>
                         <div class="flex justify-between items-center border-b border-white/5 pb-4">
                             <span class="text-xs uppercase tracking-wider text-slate-500">Education</span>
-                            <span class="text-sm text-white">Diploma in Civil Eng.</span>
+                            <span class="skel skel-text w-28" data-bind="info-education">&nbsp;</span>
                         </div>
                         <div class="flex justify-between items-center border-b border-white/5 pb-4">
                             <span class="text-xs uppercase tracking-wider text-slate-500">Focus</span>
@@ -366,8 +336,8 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-xs uppercase tracking-wider text-slate-500">Email</span>
-                            <a href="mailto:prapanbiswas@gmail.com"
-                                class="text-sm text-indigo-400 hover:text-indigo-300 transition-colors">prapanbiswas@gmail.com</a>
+                            <a href="#" data-bind="info-email"
+                                class="skel skel-text w-36 text-sm text-indigo-400 hover:text-indigo-300 transition-colors">&nbsp;</a>
                         </div>
                     </div>
                 </div>
@@ -384,111 +354,24 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger data-bind="skills">
-                <!-- Web Development -->
-                <div class="tilt-3d glass-card p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">Web Development</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Clean, responsive websites with modern frameworks,
-                        pixel-perfect design, and smooth interactions.</p>
+                <!-- Skeleton skill cards (replaced by Firebase listener) -->
+                <div class="skel skel-card glass-card p-8 rounded-2xl">
+                    <div class="skel skel-icon mb-6"></div>
+                    <div class="skel skel-text w-3/4 mb-2"></div>
+                    <div class="skel skel-text-sm w-full"></div>
+                    <div class="skel skel-text-sm w-5/6"></div>
                 </div>
-
-                <!-- App Development -->
-                <div class="tilt-3d glass-card p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">App Development</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Functional mobile and web applications built with
-                        Flutter, solving real-world problems elegantly.</p>
+                <div class="skel skel-card glass-card p-8 rounded-2xl">
+                    <div class="skel skel-icon mb-6"></div>
+                    <div class="skel skel-text w-2/3 mb-2"></div>
+                    <div class="skel skel-text-sm w-full"></div>
+                    <div class="skel skel-text-sm w-4/5"></div>
                 </div>
-
-                <!-- UI/UX Design -->
-                <div class="tilt-3d glass-card p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-pink-600/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">UI/UX Design</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">User-centered interfaces with intuitive
-                        navigation, beautiful aesthetics, and accessible experiences.</p>
-                </div>
-
-                <!-- Graphic Design -->
-                <div class="tilt-3d glass-card p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">Graphic Design</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Logos, branding, social media visuals — crafted
-                        with attention to composition and visual hierarchy.</p>
-                </div>
-
-                <!-- Civil Engineering -->
-                <div class="tilt-3d glass-card p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">Civil Engineering</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Structural analysis, construction planning, and
-                        sustainable urban development — where physics meets progress.</p>
-                </div>
-
-                <!-- Backend -->
-                <div class="tilt-3d glass-card p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-600/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">Backend & APIs</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Server-side logic, REST APIs, databases — the
-                        invisible architecture that powers applications.</p>
+                <div class="skel skel-card glass-card p-8 rounded-2xl">
+                    <div class="skel skel-icon mb-6"></div>
+                    <div class="skel skel-text w-1/2 mb-2"></div>
+                    <div class="skel skel-text-sm w-full"></div>
+                    <div class="skel skel-text-sm w-3/4"></div>
                 </div>
             </div>
         </section>
@@ -504,58 +387,24 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-6" data-stagger data-bind="interests">
-                <div
-                    class="tilt-3d glass-card p-8 rounded-2xl text-center group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="inline-flex p-4 rounded-2xl bg-indigo-500/10 text-indigo-400 mb-5 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">Lifelong Learning</h4>
-                    <p class="text-sm text-slate-400">Always exploring new technologies, frameworks, and ideas — one
-                        concept at a time.</p>
+                <!-- Skeleton interest cards (replaced by Firebase listener) -->
+                <div class="skel skel-card glass-card p-8 rounded-2xl text-center">
+                    <div class="skel skel-icon mx-auto mb-5"></div>
+                    <div class="skel skel-text w-2/3 mx-auto mb-2"></div>
+                    <div class="skel skel-text-sm w-full"></div>
+                    <div class="skel skel-text-sm w-4/5 mx-auto"></div>
                 </div>
-
-                <div
-                    class="tilt-3d glass-card p-8 rounded-2xl text-center group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="inline-flex p-4 rounded-2xl bg-pink-500/10 text-pink-400 mb-5 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">Technology</h4>
-                    <p class="text-sm text-slate-400">From IoT to AI, I'm fascinated by how tech shapes our
-                        world and solves complex problems.</p>
+                <div class="skel skel-card glass-card p-8 rounded-2xl text-center">
+                    <div class="skel skel-icon mx-auto mb-5"></div>
+                    <div class="skel skel-text w-1/2 mx-auto mb-2"></div>
+                    <div class="skel skel-text-sm w-full"></div>
+                    <div class="skel skel-text-sm w-3/4 mx-auto"></div>
                 </div>
-
-                <div
-                    class="tilt-3d glass-card p-8 rounded-2xl text-center group hover:-translate-y-2 transition-all duration-300">
-                    <div
-                        class="tilt-shine absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300">
-                    </div>
-                    <div
-                        class="inline-flex p-4 rounded-2xl bg-teal-500/10 text-teal-400 mb-5 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2">Creative Exploration</h4>
-                    <p class="text-sm text-slate-400">Blending engineering precision with artistic vision to create
-                        things that feel both functional and beautiful.</p>
+                <div class="skel skel-card glass-card p-8 rounded-2xl text-center">
+                    <div class="skel skel-icon mx-auto mb-5"></div>
+                    <div class="skel skel-text w-3/5 mx-auto mb-2"></div>
+                    <div class="skel skel-text-sm w-full"></div>
+                    <div class="skel skel-text-sm w-5/6 mx-auto"></div>
                 </div>
             </div>
         </section>
@@ -571,6 +420,7 @@
 
             <div id="featured-projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 data-stagger>
+                <!-- Skeleton project cards injected by JS -->
             </div>
 
             <div class="text-center mt-14">
@@ -606,7 +456,7 @@
                     to say hi? I'd love to hear from you.</p>
 
                 <div class="flex flex-wrap justify-center gap-4">
-                    <a href="mailto:prapanbiswas@gmail.com"
+                    <a href="#" data-bind="email-link"
                         class="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl hover:scale-105 transition-all shadow-lg shadow-indigo-500/20">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -614,14 +464,6 @@
                             </path>
                         </svg>
                         <span class="font-medium">Email Me</span>
-                    </a>
-                    <a href="https://github.com/prapanbiswas" target="_blank"
-                        class="flex items-center gap-3 px-6 py-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all border border-white/10">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                        </svg>
-                        <span class="font-medium">GitHub</span>
                     </a>
                 </div>
             </div>

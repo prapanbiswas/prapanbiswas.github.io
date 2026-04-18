@@ -318,6 +318,105 @@ function initActiveLinkHighlight() {
 }
 
 /* =========================================
+   Firebase Realtime Listener Utilities
+   =========================================
+   Provides persistent onValue() listeners with
+   graceful App Check error handling. Never polls.
+   ========================================= */
+
+/**
+ * Get a reference to the Firebase Realtime Database.
+ * Safely initializes Firebase first if needed.
+ */
+function getFirebaseDB() {
+    if (typeof initPublicFirebase === 'function') {
+        initPublicFirebase();
+    }
+    if (typeof firebase === 'undefined' || !firebase.database) {
+        return null;
+    }
+    return firebase.database();
+}
+
+/**
+ * Attach a persistent onValue() listener to a Firebase RTDB path.
+ * Automatically handles:
+ *   - Permission Denied (App Check) → error fallback UI
+ *   - Skeleton removal + fade-in on success
+ *
+ * @param {string} path        - RTDB path (e.g. 'profile', 'skills')
+ * @param {Function} onData    - Callback with (data) when snapshot arrives
+ * @param {HTMLElement|string} container - Element or selector to clear skeleton from
+ */
+function fbListen(path, onData, container) {
+    const db = getFirebaseDB();
+    const el = typeof container === 'string' ? document.querySelector(container) : container;
+
+    if (!db) {
+        console.warn(`[fbListen] Firebase not available for path: ${path}`);
+        if (el) showErrorFallback(el, 'Firebase unavailable');
+        return;
+    }
+
+    const ref = db.ref(path);
+
+    ref.on('value',
+        // Success callback
+        (snapshot) => {
+            const data = snapshot.val();
+            if (el) removeSkeleton(el);
+            onData(data);
+        },
+        // Error callback (Permission Denied, App Check block, etc.)
+        (error) => {
+            console.warn(`[fbListen] Error on "${path}":`, error.message);
+            if (el) {
+                removeSkeleton(el);
+                showErrorFallback(el, error.message);
+            }
+        }
+    );
+}
+
+/**
+ * Remove all skeleton classes from an element and its children.
+ * Applies fade-in animation for smooth data reveal.
+ */
+function removeSkeleton(el) {
+    if (!el) return;
+    // Remove skeleton from the container itself
+    el.classList.remove('skel', 'skel-text', 'skel-text-sm', 'skel-text-lg', 'skel-text-xl',
+        'skel-circle', 'skel-card', 'skel-tag', 'skel-avatar', 'skel-icon');
+    // Remove from all children
+    el.querySelectorAll('.skel, .skel-text, .skel-text-sm, .skel-text-lg, .skel-text-xl, .skel-circle, .skel-card, .skel-tag, .skel-avatar, .skel-icon').forEach(child => {
+        child.classList.remove('skel', 'skel-text', 'skel-text-sm', 'skel-text-lg', 'skel-text-xl',
+            'skel-circle', 'skel-card', 'skel-tag', 'skel-avatar', 'skel-icon');
+    });
+    // Trigger fade-in
+    el.classList.add('data-loaded');
+}
+
+/**
+ * Show a professional error fallback message inside a container.
+ * Replaces any existing content/skeletons.
+ */
+function showErrorFallback(el, errorMsg) {
+    if (!el) return;
+    const isPermDenied = errorMsg && errorMsg.toLowerCase().includes('permission');
+    el.innerHTML = `
+        <div class="fb-error-state">
+            <div class="error-icon">${isPermDenied ? '🔒' : '⚠️'}</div>
+            <div class="error-title">${isPermDenied ? 'Content Restricted' : 'Unable to Load'}</div>
+            <div class="error-desc">${isPermDenied
+                ? 'Content is restricted to the production environment.'
+                : 'Something went wrong loading this content. Please try again later.'
+            }</div>
+        </div>
+    `;
+    el.classList.add('data-loaded');
+}
+
+/* =========================================
    Project Card Builder (shared by home + projects page)
    ========================================= */
 function createProjectCard(project, index) {
@@ -366,6 +465,31 @@ function createProjectCard(project, index) {
     return card;
 }
 
+/**
+ * Generate skeleton placeholder cards for project/blog grids.
+ */
+function generateSkeletonCards(count, container) {
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        const card = document.createElement('div');
+        card.className = 'skel skel-card glass-card rounded-2xl overflow-hidden';
+        card.innerHTML = `
+            <div class="h-48 bg-white/[0.02]"></div>
+            <div class="p-6 space-y-3">
+                <div class="skel skel-text w-3/4"></div>
+                <div class="skel skel-text-sm w-full"></div>
+                <div class="skel skel-text-sm w-5/6"></div>
+                <div class="flex gap-2 mt-3">
+                    <div class="skel skel-tag"></div>
+                    <div class="skel skel-tag w-16"></div>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    }
+}
+
 /* =========================================
    Global Init — runs on every page
    ========================================= */
@@ -387,3 +511,4 @@ function initGlobalSystems() {
 }
 
 document.addEventListener('DOMContentLoaded', initGlobalSystems);
+

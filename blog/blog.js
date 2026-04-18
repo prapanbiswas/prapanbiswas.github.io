@@ -1,28 +1,57 @@
 /* =========================================
    Blog Page — Page-Specific JavaScript
    =========================================
-   Fetches blog posts from Firebase and renders
-   them into the blog-container.
+   Persistent real-time listener for blog posts.
+   Uses onValue() — no polling, instant updates.
    ========================================= */
 
-async function loadBlogs() {
-    // Initialize App Check before fetching
-    if (typeof initPublicFirebase === 'function') {
-        initPublicFirebase();
+/**
+ * Generate skeleton article placeholders for the blog list.
+ */
+function generateBlogSkeletons(count, container) {
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        const article = document.createElement('div');
+        article.className = 'skel glass-card rounded-2xl overflow-hidden';
+        article.innerHTML = `
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-64 h-48 md:h-auto flex-shrink-0 bg-white/[0.02]"></div>
+                <div class="p-6 flex-1 space-y-3">
+                    <div class="flex gap-2">
+                        <div class="skel skel-tag"></div>
+                        <div class="skel skel-tag w-16"></div>
+                    </div>
+                    <div class="skel skel-text w-3/4"></div>
+                    <div class="skel skel-text-sm w-full"></div>
+                    <div class="skel skel-text-sm w-5/6"></div>
+                    <div class="skel skel-text-sm w-20 mt-2"></div>
+                </div>
+            </div>
+        `;
+        container.appendChild(article);
     }
+}
 
+function initializeBlogPage() {
     const container = document.getElementById('blog-container');
-    try {
-        const data = await fbGet('blogs');
+    if (!container) return;
+
+    // Show skeleton articles on initial load
+    generateBlogSkeletons(3, container);
+
+    // Attach persistent listener
+    fbListen('blogs', (data) => {
         const blogs = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
 
         if (blogs.length === 0) {
             container.innerHTML = `
                 <div class="text-center p-16">
-                    <div class="text-5xl mb-4">📝</div>
+                    <div class="text-5xl mb-4"><i data-lucide="file-text" class="w-12 h-12 mx-auto text-slate-600"></i></div>
                     <h3 class="text-xl font-bold text-slate-300 mb-2">No posts yet</h3>
                     <p class="text-slate-500">Check back soon for new content!</p>
                 </div>`;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
             return;
         }
 
@@ -63,9 +92,7 @@ async function loadBlogs() {
                 });
             });
         });
-    } catch (err) {
-        container.innerHTML = '<div class="text-center p-12 text-slate-500"><p>Unable to load posts.</p></div>';
-    }
+    }, container);
 }
 
-document.addEventListener('DOMContentLoaded', loadBlogs);
+document.addEventListener('DOMContentLoaded', initializeBlogPage);
