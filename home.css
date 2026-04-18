@@ -1,0 +1,72 @@
+/* =========================================
+   Home Page — Page-Specific Styles
+   ========================================= */
+
+/* =========================================
+   Profile Image 3D Ring
+   ========================================= */
+
+.profile-ring {
+    position: relative;
+}
+
+.profile-ring::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg,
+            #6366f1,
+            #a855f7,
+            #ec4899,
+            #3b82f6,
+            #6366f1);
+    z-index: -1;
+    animation: ring-spin 6s linear infinite;
+    opacity: 0.7;
+}
+
+.profile-ring::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg,
+            #6366f1,
+            #a855f7,
+            #ec4899,
+            #3b82f6,
+            #6366f1);
+    z-index: -2;
+    filter: blur(20px);
+    animation: ring-spin 6s linear infinite;
+    opacity: 0.4;
+}
+
+@keyframes ring-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================
+   Scroll Indicator
+   ========================================= */
+
+.scroll-indicator {
+    animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+@keyframes scroll-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: translateY(8px);
+        opacity: 1;
+    }
+}
