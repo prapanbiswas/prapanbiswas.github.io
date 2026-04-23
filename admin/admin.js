@@ -303,6 +303,7 @@ function renderProfile(data) {
     document.getElementById('pf-image').value = data.profileImageUrl || '';
     document.getElementById('pf-status').value = data.availableStatus || 'Available for projects';
     document.getElementById('pf-birthday').value = data.birthday || '';
+    document.getElementById('pf-email').value = data.email || '';
 }
 
 async function saveProfile() {
@@ -315,6 +316,7 @@ async function saveProfile() {
         profileImageUrl: document.getElementById('pf-image').value.trim(),
         availableStatus: document.getElementById('pf-status').value.trim(),
         birthday: document.getElementById('pf-birthday').value.trim(),
+        email: document.getElementById('pf-email').value.trim(),
     };
     try {
         await dbSet('profile', data);
@@ -802,7 +804,8 @@ async function seedInitialData() {
                 aboutText: "I'm Prapan Biswas — a multi-disciplinary creator from Khulna, Bangladesh. I build websites, design interfaces, develop apps, and study civil engineering — all driven by a deep curiosity to understand how things work.\n\nMy approach combines technical precision with creative thinking. Whether I'm writing code, designing a user experience, or working on structural plans, I focus on craft, clarity, and impact.",
                 profileImageUrl: 'attached_assets/prapan-biswas-profile.jpg',
                 availableStatus: 'Available for projects',
-                birthday: '2006-02-15'
+                birthday: '2006-02-15',
+                email: 'prapanbiswas@gmail.com'
             }),
             dbSet('socialLinks', [
                 { platform: 'GitHub', url: 'https://github.com/prapanbiswas', icon: 'code' },

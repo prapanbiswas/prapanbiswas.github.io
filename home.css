@@ -70,3 +70,30 @@
         opacity: 1;
     }
 }
+
+/* =========================================
+   Text Wrapping Prevention
+   ========================================= */
+
+/* Hero title — single clean line */
+#typed-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Status badge pill — force single line */
+[data-bind="status"] {
+    white-space: nowrap;
+}
+
+/* E-Visiting Card info fields — single line, right-aligned */
+[data-bind="info-location"],
+[data-bind="info-education"],
+[data-bind="info-tagline"],
+[data-bind="info-email"] {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+}

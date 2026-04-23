@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.recaptcha.net https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google.com https://*.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://www.recaptcha.net https://firebase.googleapis.com https://fcm.googleapis.com; frame-src https://www.google.com https://www.recaptcha.net; worker-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://www.recaptcha.net https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://www.google.com https://*.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://www.recaptcha.net https://firebase.googleapis.com https://fcm.googleapis.com; frame-src https://www.google.com https://www.recaptcha.net; worker-src 'self';">
     <title>Blog — Prapan Biswas</title>
     <meta name="description"
         content="Blog posts by Prapan Biswas on web development, design, engineering, and technology.">
@@ -13,12 +13,10 @@
     <link rel="icon" type="image/png" sizes="32x32"
         href="../attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts (local) -->
+    <link rel="stylesheet" href="../vendor/fonts/fonts.css">
+    <!-- Tailwind CSS (local) -->
+    <script src="../vendor/tailwind.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -133,12 +131,12 @@
     </div>
 
     <!-- JS: Libs → Firebase → Global → Page-specific -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" crossorigin="anonymous"></script>
+    <script src="../vendor/gsap.min.js" defer></script>
     <script src="../libs/lucide.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+    <script src="../vendor/firebase-app-compat.js"></script>
+    <script src="../vendor/firebase-app-check-compat.js"></script>
+    <script src="../vendor/firebase-database-compat.js"></script>
+    <script src="../vendor/firebase-messaging-compat.js"></script>
     <script src="../firebase-appcheck.js"></script>
     <script src="../push-notifications.js" defer></script>
     <script src="../background.js" defer></script>
