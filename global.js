@@ -77,6 +77,31 @@ const CUSTOM_SVGS = {
     stackoverflow: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h14"></path><path d="M18 20V10"></path><path d="M4 20V14"></path><path d="M6 17h10"></path><path d="M6.5 14l10-.5"></path><path d="M7.5 11l9.5-2"></path><path d="M9.5 8.5L18 4"></path></svg>',
 };
 
+/* =========================================
+   Lazy Lucide Icon Loader
+   =========================================
+   Lucide (398 KB) is loaded on-demand only when
+   Firebase data populates cards that need icons.
+   This eliminates it from the initial JS payload.
+   ========================================= */
+let _lucideLoadPromise = null;
+
+function ensureLucide() {
+    if (typeof lucide !== 'undefined') return Promise.resolve();
+    if (_lucideLoadPromise) return _lucideLoadPromise;
+
+    _lucideLoadPromise = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        // Determine correct relative path based on page depth
+        const depth = window.location.pathname.replace(/\/$/,'').split('/').filter(Boolean).length;
+        script.src = (depth > 1 ? '../' : '') + 'libs/lucide.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+    return _lucideLoadPromise;
+}
+
 function getLucideIcon(iconId) {
     if (!iconId) return '';
     // Check custom SVG library first

@@ -185,7 +185,7 @@ function listenSocialLinks() {
                 ${getLucideIcon(link.icon)}
             </a>
         `).join('');
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+        ensureLucide().then(() => lucide.createIcons());
     }, container);
 }
 
@@ -214,7 +214,7 @@ function listenSkills() {
         }).join('');
         // Re-init tilt on new cards
         new TiltCards();
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+        ensureLucide().then(() => lucide.createIcons());
     }, container);
 }
 
@@ -238,7 +238,7 @@ function listenInterests() {
             </div>
         `).join('');
         new TiltCards();
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+        ensureLucide().then(() => lucide.createIcons());
     }, container);
 }
 

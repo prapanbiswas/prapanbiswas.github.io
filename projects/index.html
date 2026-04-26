@@ -49,9 +49,21 @@
     <!-- Fonts (local) -->
     <link rel="stylesheet" href="../vendor/fonts/fonts.css">
 
-    <!-- CSS: Global first, then page-specific -->
+    <!-- Google Fonts (non-blocking preload) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap">
+    </noscript>
+
+    <!-- CSS: Global first, then page-specific (deferred) -->
     <link rel="stylesheet" href="../global.css">
-    <link rel="stylesheet" href="projects.css">
+    <link rel="preload" href="projects.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="projects.css"></noscript>
 </head>
 
 <body class="bg-black text-slate-100 min-h-screen selection:bg-fuchsia-500/30 overflow-x-hidden">
@@ -150,13 +162,13 @@
         <p class="text-slate-500">&copy; 2026 Prapan Biswas. Crafted with care.</p>
     </footer>
 
-    <!-- JS: Libs → Firebase → Global → Page-specific -->
-    <script src="../libs/lucide.min.js"></script>
-    <script src="../vendor/firebase-app-compat.js"></script>
-    <script src="../vendor/firebase-app-check-compat.js"></script>
-    <script src="../vendor/firebase-database-compat.js"></script>
-    <script src="../vendor/firebase-messaging-compat.js"></script>
-    <script src="../firebase-appcheck.js"></script>
+    <!-- JS: Firebase SDK (deferred) → AppCheck → Global → Page-specific -->
+    <!-- Lucide icons lazy-loaded by global.js when needed -->
+    <script src="../vendor/firebase-app-compat.js" defer></script>
+    <script src="../vendor/firebase-app-check-compat.js" defer></script>
+    <script src="../vendor/firebase-database-compat.js" defer></script>
+    <!-- firebase-messaging-compat.js lazy-loaded by push-notifications.js -->
+    <script src="../firebase-appcheck.js" defer></script>
     <script src="../push-notifications.js" defer></script>
     <script src="../background.js" defer></script>
     <script src="../global.js" defer></script>

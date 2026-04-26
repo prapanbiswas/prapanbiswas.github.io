@@ -23,6 +23,23 @@
     // ── Guard ───────────────────────────────────
     if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
 
+    // ── Lazy-load Firebase Messaging SDK (38 KB) ──
+    let _messagingLoadPromise = null;
+    function loadMessagingSDK() {
+        if (typeof firebase !== 'undefined' && firebase.messaging) return Promise.resolve();
+        if (_messagingLoadPromise) return _messagingLoadPromise;
+
+        _messagingLoadPromise = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            const depth = window.location.pathname.replace(/\/$/,'').split('/').filter(Boolean).length;
+            script.src = (depth > 1 ? '../' : '') + 'vendor/firebase-messaging-compat.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+        return _messagingLoadPromise;
+    }
+
     // ── Should we show the popup? ───────────────
     function shouldShowPopup() {
         // Already granted permission & registered
@@ -201,6 +218,9 @@
                 return;
             }
 
+            // Lazy-load Messaging SDK if not yet loaded
+            await loadMessagingSDK();
+
             // Register service worker
             const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
             console.log('[Push] Service Worker registered');
@@ -278,10 +298,14 @@
     }
 
     // ── Handle Foreground Messages ──────────────
-    function setupForegroundHandler() {
-        if (typeof firebase === 'undefined' || !firebase.messaging) return;
+    async function setupForegroundHandler() {
+        if (typeof firebase === 'undefined') return;
 
         try {
+            // Lazy-load Messaging SDK if not yet loaded
+            await loadMessagingSDK();
+            if (!firebase.messaging) return;
+
             const messaging = firebase.messaging();
             messaging.onMessage((payload) => {
                 console.log('[Push] Foreground message:', payload);

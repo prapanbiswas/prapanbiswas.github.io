@@ -51,7 +51,7 @@ function initializeBlogPage() {
                     <h3 class="text-xl font-bold text-slate-300 mb-2">No posts yet</h3>
                     <p class="text-slate-500">Check back soon for new content!</p>
                 </div>`;
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+            ensureLucide().then(() => lucide.createIcons());
             return;
         }
 

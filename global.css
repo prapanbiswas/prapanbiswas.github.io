@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+/* Google Fonts loaded via <link rel="preload"> in HTML — not @import (avoids double render-block) */
 
 /* =========================================
    CSS Reset
@@ -125,9 +125,8 @@ body {
    Section Styling
    ========================================= */
 
-section {
-    will-change: transform;
-}
+/* section will-change removed — was promoting excessive GPU layers.
+   Tilt transforms are applied inline via JS only when needed. */
 
 /* =========================================
    Gradient Text Glow

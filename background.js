@@ -263,6 +263,12 @@ class OrbSystem {
 
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('orb-canvas')) {
-        new OrbSystem();
+        // Defer orb system until browser is idle to reduce main-thread contention
+        const start = () => new OrbSystem();
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(start, { timeout: 2000 });
+        } else {
+            setTimeout(start, 1000);
+        }
     }
 });
