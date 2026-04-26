@@ -304,6 +304,9 @@ function renderProfile(data) {
     document.getElementById('pf-status').value = data.availableStatus || 'Available for projects';
     document.getElementById('pf-birthday').value = data.birthday || '';
     document.getElementById('pf-email').value = data.email || '';
+    // Also populate the dashboard quick-email input
+    const dashEmail = document.getElementById('dash-email');
+    if (dashEmail) dashEmail.value = data.email || '';
 }
 
 async function saveProfile() {
@@ -320,7 +323,26 @@ async function saveProfile() {
     };
     try {
         await dbSet('profile', data);
+        // Sync dashboard email input
+        const dashEmail = document.getElementById('dash-email');
+        if (dashEmail) dashEmail.value = data.email;
         toast('Profile saved', 'success');
+    } catch (err) { toast(err.message, 'error'); }
+}
+
+async function quickSaveEmail() {
+    const emailInput = document.getElementById('dash-email');
+    const email = emailInput ? emailInput.value.trim() : '';
+    if (!email) return toast('Please enter an email address', 'error');
+    // Basic email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return toast('Please enter a valid email', 'error');
+    try {
+        // Use update() to only modify the email field without overwriting other profile data
+        await db.ref('profile').update({ email: email });
+        // Sync the profile section email input too
+        const pfEmail = document.getElementById('pf-email');
+        if (pfEmail) pfEmail.value = email;
+        toast('Email updated successfully', 'success');
     } catch (err) { toast(err.message, 'error'); }
 }
 
