@@ -450,14 +450,24 @@ function fbListen(path, onData, container) {
  */
 function removeSkeleton(el) {
     if (!el) return;
-    // Remove skeleton from the container itself
-    el.classList.remove('skel', 'skel-text', 'skel-text-sm', 'skel-text-lg', 'skel-text-xl',
-        'skel-circle', 'skel-card', 'skel-tag', 'skel-avatar', 'skel-icon');
-    // Remove from all children
-    el.querySelectorAll('.skel, .skel-text, .skel-text-sm, .skel-text-lg, .skel-text-xl, .skel-circle, .skel-card, .skel-tag, .skel-avatar, .skel-icon').forEach(child => {
-        child.classList.remove('skel', 'skel-text', 'skel-text-sm', 'skel-text-lg', 'skel-text-xl',
+
+    // Width classes used as skeleton placeholders — must be removed after data loads
+    // so text can flow naturally (e.g. 'Khulna, Bangladesh 9000' was stuck in w-24 = 96px)
+    const skelWidthPattern = /^w-\d+/;
+
+    function cleanElement(node) {
+        node.classList.remove('skel', 'skel-text', 'skel-text-sm', 'skel-text-lg', 'skel-text-xl',
             'skel-circle', 'skel-card', 'skel-tag', 'skel-avatar', 'skel-icon');
-    });
+        // Strip skeleton placeholder width classes (w-24, w-28, w-32, w-36, w-80, w-96, etc.)
+        [...node.classList].forEach(cls => {
+            if (skelWidthPattern.test(cls)) node.classList.remove(cls);
+        });
+    }
+
+    // Clean the container itself
+    cleanElement(el);
+    // Clean all skeleton children
+    el.querySelectorAll('.skel, .skel-text, .skel-text-sm, .skel-text-lg, .skel-text-xl, .skel-circle, .skel-card, .skel-tag, .skel-avatar, .skel-icon').forEach(cleanElement);
     // Trigger fade-in
     el.classList.add('data-loaded');
 }
