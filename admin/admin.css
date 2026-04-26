@@ -290,6 +290,10 @@ label {
     box-shadow: 0 0 0 2px var(--accent);
 }
 .icon-option svg, .icon-option i { width: 1.2rem; height: 1.2rem; }
+.icon-cat-btn.active {
+    background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.15));
+    border-color: var(--accent); color: #a5b4fc;
+}
 
 /* ===== Toast ===== */
 .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; }

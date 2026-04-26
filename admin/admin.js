@@ -38,6 +38,41 @@ function initFirebase() {
    Icon Library (~100 icons as emoji + text)
    ========================================= */
 const ICON_LIBRARY = [
+    // ── Social Media & Platforms ──
+    { id: 'facebook', label: 'Facebook', svg: '📘', category: 'social' },
+    { id: 'instagram', label: 'Instagram', svg: '📷', category: 'social' },
+    { id: 'github', label: 'GitHub', svg: '🐙', category: 'social' },
+    { id: 'youtube', label: 'YouTube', svg: '▶️', category: 'social' },
+    { id: 'tiktok', label: 'TikTok', svg: '🎵', category: 'social' },
+    { id: 'twitter', label: 'Twitter', svg: '🐦', category: 'social' },
+    { id: 'x', label: 'X (Twitter)', svg: '✖️', category: 'social' },
+    { id: 'linkedin', label: 'LinkedIn', svg: '💼', category: 'social' },
+    { id: 'whatsapp', label: 'WhatsApp', svg: '📞', category: 'social' },
+    { id: 'telegram', label: 'Telegram', svg: '✈️', category: 'social' },
+    { id: 'discord', label: 'Discord', svg: '🎮', category: 'social' },
+    { id: 'reddit', label: 'Reddit', svg: '🤖', category: 'social' },
+    { id: 'snapchat', label: 'Snapchat', svg: '👻', category: 'social' },
+    { id: 'pinterest', label: 'Pinterest', svg: '📌', category: 'social' },
+    { id: 'spotify', label: 'Spotify', svg: '🎧', category: 'social' },
+    { id: 'dribbble', label: 'Dribbble', svg: '🏀', category: 'social' },
+    { id: 'behance', label: 'Behance', svg: '🅱️', category: 'social' },
+    { id: 'medium', label: 'Medium', svg: '📝', category: 'social' },
+    { id: 'threads', label: 'Threads', svg: '🧵', category: 'social' },
+    { id: 'stackoverflow', label: 'Stack Overflow', svg: '📚', category: 'social' },
+    { id: 'twitch', label: 'Twitch', svg: '🎬', category: 'social' },
+    { id: 'email', label: 'Email', svg: '📧', category: 'social' },
+    { id: 'phone', label: 'Phone', svg: '📱', category: 'social' },
+    { id: 'website', label: 'Website', svg: '🌐', category: 'social' },
+    { id: 'figma', label: 'Figma', svg: '🎨', category: 'social' },
+    { id: 'codepen', label: 'CodePen', svg: '🖊️', category: 'social' },
+    { id: 'devto', label: 'Dev.to', svg: '👩‍💻', category: 'social' },
+    { id: 'hashnode', label: 'Hashnode', svg: '#️⃣', category: 'social' },
+    { id: 'patreon', label: 'Patreon', svg: '🎭', category: 'social' },
+    { id: 'buymeacoffee', label: 'Buy Me a Coffee', svg: '☕', category: 'social' },
+    { id: 'mastodon', label: 'Mastodon', svg: '🐘', category: 'social' },
+    { id: 'bluesky', label: 'Bluesky', svg: '🦋', category: 'social' },
+
+    // ── General / Tech ──
     { id: 'code', label: 'Code', svg: '&lt;/&gt;' },
     { id: 'mobile', label: 'Mobile', svg: '📱' },
     { id: 'design', label: 'Design', svg: '🎨' },
@@ -78,7 +113,7 @@ const ICON_LIBRARY = [
     { id: 'hammer', label: 'Build', svg: '🔨' },
     { id: 'package', label: 'Package', svg: '📦' },
     { id: 'link', label: 'Link', svg: '🔗' },
-    { id: 'mail', label: 'Email', svg: '📧' },
+    { id: 'mail', label: 'Mail', svg: '📧' },
     { id: 'chat', label: 'Chat', svg: '💬' },
     { id: 'users', label: 'Team', svg: '👥' },
     { id: 'user', label: 'User', svg: '👤' },
@@ -375,6 +410,41 @@ function renderSocialLinks(data) {
     refreshIcons(list);
 }
 
+const PLATFORM_ICON_MAP = {
+    facebook: 'facebook', fb: 'facebook',
+    instagram: 'instagram', ig: 'instagram', insta: 'instagram',
+    github: 'github', gh: 'github',
+    youtube: 'youtube', yt: 'youtube',
+    tiktok: 'tiktok', 'tik tok': 'tiktok',
+    twitter: 'twitter', tweet: 'twitter',
+    'x': 'x', 'x.com': 'x',
+    linkedin: 'linkedin',
+    whatsapp: 'whatsapp',
+    telegram: 'telegram', tg: 'telegram',
+    discord: 'discord',
+    reddit: 'reddit',
+    snapchat: 'snapchat', snap: 'snapchat',
+    pinterest: 'pinterest',
+    spotify: 'spotify',
+    dribbble: 'dribbble', dribble: 'dribbble',
+    behance: 'behance',
+    medium: 'medium',
+    threads: 'threads',
+    stackoverflow: 'stackoverflow', 'stack overflow': 'stackoverflow',
+    twitch: 'twitch',
+    email: 'email', 'e-mail': 'email', mail: 'email',
+    phone: 'phone', tel: 'phone',
+    website: 'website', web: 'website', site: 'website',
+    figma: 'figma',
+    codepen: 'codepen',
+    'dev.to': 'devto', devto: 'devto',
+    hashnode: 'hashnode',
+    patreon: 'patreon',
+    'buy me a coffee': 'buymeacoffee', buymeacoffee: 'buymeacoffee', kofi: 'buymeacoffee',
+    mastodon: 'mastodon',
+    bluesky: 'bluesky',
+};
+
 function showSocialForm(index = -1) {
     const s = index >= 0 ? socialLinks[index] : { platform: '', url: '', icon: 'globe' };
     document.getElementById('social-edit-idx').value = index;
@@ -384,6 +454,18 @@ function showSocialForm(index = -1) {
     document.getElementById('social-icon-val').value = s.icon || 'globe';
     document.getElementById('social-form-panel').style.display = 'block';
     refreshIcons(document.getElementById('social-form-panel'));
+
+    // Auto-detect icon from platform name
+    const platformInput = document.getElementById('social-platform');
+    platformInput.oninput = () => {
+        const key = platformInput.value.trim().toLowerCase();
+        const match = PLATFORM_ICON_MAP[key];
+        if (match) {
+            document.getElementById('social-icon-val').value = match;
+            document.getElementById('social-icon-preview').innerHTML = getIconSvg(match);
+            refreshIcons(document.getElementById('social-form-panel'));
+        }
+    };
 }
 function editSocial(i) { showSocialForm(i); }
 function hideSocialForm() { document.getElementById('social-form-panel').style.display = 'none'; }
@@ -772,11 +854,16 @@ function getIconSvg(iconId) {
         sparkle: 'sparkles', bulb: 'lightbulb', chat: 'message-square', pin: 'map-pin',
         plant: 'leaf', tree: 'tree-deciduous', math: 'calculator', diamond: 'gem',
         money: 'coins', gym: 'dumbbell', run: 'activity', thumbsup: 'thumbs-up',
-        confetti: 'party-popper', speech: 'mic', earth: 'globe'
+        confetti: 'party-popper', speech: 'mic', earth: 'globe',
+        // Social media → Lucide native icons
+        email: 'mail', phone: 'phone', website: 'globe',
+        buymeacoffee: 'coffee', devto: 'code-2', hashnode: 'hash'
     };
     const validId = map[iconId] || iconId;
     return `<i data-lucide="${validId}"></i>`;
 }
+
+let _iconPickerState = { previewId: '', valueId: '', category: 'all' };
 
 function openIconPicker(previewId, valueId) {
     const modal = document.getElementById('icon-picker-modal');
@@ -784,9 +871,17 @@ function openIconPicker(previewId, valueId) {
     const grid = document.getElementById('icon-picker-grid');
     const search = document.getElementById('icon-search');
     search.value = '';
+    _iconPickerState = { previewId, valueId, category: 'all' };
 
-    function renderIcons(filter = '') {
-        const filtered = filter ? ICON_LIBRARY.filter(i => i.label.toLowerCase().includes(filter.toLowerCase()) || i.id.includes(filter.toLowerCase())) : ICON_LIBRARY;
+    // Reset category tabs
+    document.querySelectorAll('.icon-cat-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.icon-cat-btn[data-cat="all"]')?.classList.add('active');
+
+    function renderIcons(filter = '', category = 'all') {
+        let filtered = ICON_LIBRARY;
+        if (category === 'social') filtered = filtered.filter(i => i.category === 'social');
+        else if (category === 'general') filtered = filtered.filter(i => !i.category || i.category !== 'social');
+        if (filter) filtered = filtered.filter(i => i.label.toLowerCase().includes(filter.toLowerCase()) || i.id.includes(filter.toLowerCase()));
         grid.innerHTML = filtered.map(icon => `
             <div class="icon-option ${icon.id === currentVal ? 'selected' : ''}" onclick="pickIcon('${icon.id}','${previewId}','${valueId}')" title="${icon.label}">
                 ${getIconSvg(icon.id)}
@@ -796,8 +891,28 @@ function openIconPicker(previewId, valueId) {
     }
 
     renderIcons();
-    search.oninput = () => renderIcons(search.value);
+    search.oninput = () => renderIcons(search.value, _iconPickerState.category);
     modal.classList.add('open');
+}
+
+function filterIconCategory(category) {
+    _iconPickerState.category = category;
+    document.querySelectorAll('.icon-cat-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.icon-cat-btn[data-cat="${category}"]`)?.classList.add('active');
+    // Re-render with current search + new category
+    const search = document.getElementById('icon-search').value;
+    const grid = document.getElementById('icon-picker-grid');
+    const currentVal = document.getElementById(_iconPickerState.valueId).value;
+    let filtered = ICON_LIBRARY;
+    if (category === 'social') filtered = filtered.filter(i => i.category === 'social');
+    else if (category === 'general') filtered = filtered.filter(i => !i.category || i.category !== 'social');
+    if (search) filtered = filtered.filter(i => i.label.toLowerCase().includes(search.toLowerCase()) || i.id.includes(search.toLowerCase()));
+    grid.innerHTML = filtered.map(icon => `
+        <div class="icon-option ${icon.id === currentVal ? 'selected' : ''}" onclick="pickIcon('${icon.id}','${_iconPickerState.previewId}','${_iconPickerState.valueId}')" title="${icon.label}">
+            ${getIconSvg(icon.id)}
+        </div>
+    `).join('');
+    refreshIcons(grid);
 }
 
 function pickIcon(iconId, previewId, valueId) {

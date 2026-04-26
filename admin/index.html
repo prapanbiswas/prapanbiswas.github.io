@@ -347,6 +347,11 @@
                 <button class="btn btn-ghost btn-sm" onclick="closeIconPicker()">✕ Close</button>
             </div>
             <input type="text" id="icon-search" placeholder="Search icons..." style="margin-bottom:0.75rem">
+            <div id="icon-category-tabs" style="display:flex;gap:0.35rem;margin-bottom:0.75rem;flex-wrap:wrap">
+                <button class="btn btn-ghost btn-sm icon-cat-btn active" data-cat="all" onclick="filterIconCategory('all')">All</button>
+                <button class="btn btn-ghost btn-sm icon-cat-btn" data-cat="social" onclick="filterIconCategory('social')">🔗 Social</button>
+                <button class="btn btn-ghost btn-sm icon-cat-btn" data-cat="general" onclick="filterIconCategory('general')">⚡ General</button>
+            </div>
             <div id="icon-picker-grid" class="icon-grid"></div>
         </div>
     </div>
