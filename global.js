@@ -94,7 +94,7 @@ function ensureLucide() {
         const script = document.createElement('script');
         // Determine correct relative path based on page depth
         const depth = window.location.pathname.replace(/\/$/,'').split('/').filter(Boolean).length;
-        script.src = (depth > 1 ? '../' : '') + 'libs/lucide.min.js';
+        script.src = (depth > 0 ? '../' : '') + 'libs/lucide.min.js';
         script.onload = resolve;
         script.onerror = reject;
         document.head.appendChild(script);

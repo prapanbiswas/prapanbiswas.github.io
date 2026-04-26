@@ -32,7 +32,7 @@
         _messagingLoadPromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
             const depth = window.location.pathname.replace(/\/$/,'').split('/').filter(Boolean).length;
-            script.src = (depth > 1 ? '../' : '') + 'vendor/firebase-messaging-compat.js';
+            script.src = (depth > 0 ? '../' : '') + 'vendor/firebase-messaging-compat.js';
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);

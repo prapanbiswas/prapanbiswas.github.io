@@ -72,14 +72,13 @@
 }
 
 /* =========================================
-   Text Wrapping Prevention
+   Text Display
    ========================================= */
 
-/* Hero title — responsive sizing */
+/* Hero title — allow full name display, wrap on overflow */
 #typed-title {
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
 }
 
 /* Status badge pill — force single line */
@@ -87,16 +86,16 @@
     white-space: nowrap;
 }
 
-/* ─── Info Card — Desktop: side-by-side, right-aligned text ─── */
+/* ─── Info Card — Desktop: side-by-side, single-line values ─── */
 [data-bind="info-location"],
 [data-bind="info-education"],
 [data-bind="info-tagline"],
 [data-bind="info-email"] {
     text-align: right;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    white-space: nowrap;
+    overflow: visible;
     min-width: 0;
-    flex-shrink: 1;
+    flex-shrink: 0;
 }
 
 /* ─── Info Card — Mobile: stack label on top, value below ─── */
@@ -105,7 +104,6 @@
     #typed-title {
         white-space: normal;
         overflow: visible;
-        text-overflow: unset;
         font-size: clamp(2rem, 10vw, 3.5rem);
         line-height: 1.15;
     }
@@ -117,12 +115,13 @@
         gap: 0.25rem;
     }
 
-    /* Value fields: full width, left-aligned on mobile */
+    /* Value fields: full width, left-aligned, allow wrapping on mobile */
     [data-bind="info-location"],
     [data-bind="info-education"],
     [data-bind="info-tagline"],
     [data-bind="info-email"] {
         text-align: left;
+        white-space: normal;
         width: 100%;
         font-size: 0.9rem;
     }
