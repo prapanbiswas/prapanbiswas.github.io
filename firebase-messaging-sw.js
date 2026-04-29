@@ -25,10 +25,16 @@ messaging.onBackgroundMessage((payload) => {
 
     const data = payload.notification || payload.data || {};
     const title = data.title || 'New Update';
+    
     const options = {
         body: data.body || 'Check out what\'s new!',
+        
+        // The main full-color image shown next to the text
         icon: '/attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png',
-        badge: '/attached_assets/file_0000000087f072078bb72ddd1c8138a2_1763603473698.png',
+        
+        // Your newly assigned monochrome status bar badge
+        badge: '/Attached_assets/wbicon.png',
+        
         image: data.image || undefined,
         data: {
             url: data.click_action || data.url || '/'
